@@ -1,0 +1,161 @@
+.Add-heading{
+    /* width: 94px;
+    height: 19px;*/
+    color: #EF5443; 
+    font-family: Inter;
+}
+.Close-btn{
+    color: #EF5443; 
+    transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+}
+.Close-btn:hover{
+    cursor: pointer;
+    transform: scale(1.25); /* Enlarge button slightly on hover */
+}
+.heading-close-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
+    margin-bottom: -5px;
+    margin-top: 12px;
+    margin-right: 40px;
+}
+ 
+
+.Breakline3{
+    height: 1px;
+    background-color: #e5e2da;
+    margin-right: 65px;
+    margin-left: 70px;
+}
+.add-agent-wrapper2{
+
+    /* margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom:10px; */
+}
+.add-agent-wrapper3{
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 0px;
+    margin-bottom: -20px;
+}
+/* Modal Wrapper */
+.add-agent-wrapper {
+    display: flex;
+    flex-direction: column;
+   
+}
+
+/* Modal Section */
+.add-agent-section {
+    display: flex;
+    margin-bottom:15px ;
+    justify-content: space-between;
+}
+
+
+/* Input Fields Wrapper */
+/* .name-wrapper,
+.email-wrapper,
+.phone-wrapper,
+.password-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+} */
+.Input{
+    width: 320px;
+    height: 52px;
+    padding-left: 10px; 
+    border-radius: 10px;
+    border: 1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+
+}
+.Input:hover{
+    outline: none; /* Remove default browser outline */
+    border-color: #f44336; /* Change border color when input is selected */
+}
+.Input:focus {
+    outline: none; /* Remove default browser outline */
+    border-color: #f44336; /* Change border color when input is selected */
+}
+.add-agent-section-permissions-wrapper2{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Permissions Section */
+.permissions-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.permissions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+/* Switch Container */
+.switch-container {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* Switch Label */
+.switch-label-container {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* Update Button */
+/* .dialog-actions .MuiButton-contained {
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dialog-actions .MuiButton-contained:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+} */
+
+.Add-admin-btn{
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    width: 140px;
+    height: 45px;
+    margin-top: -10px;
+    font-size: 15px;
+    transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+}
+.Add-admin-btn:hover {
+    transform: scale(1.05); /* Enlarge button slightly on hover */
+}
+
+.Add-admin-btn:disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.Add-admin-btn-wrapper{
+    display: flex;
+    justify-content: end;
+    margin-right: 60px;
+    margin-bottom: 10px;
+
+}

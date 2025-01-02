@@ -1,0 +1,27 @@
+.footer-body {
+    width: 100%;
+    background: #334555;
+    display: flex;
+    align-items: center;
+
+    left: 0;
+    bottom: 0;
+    max-height: 100px;
+    margin-top: 20px;
+}
+
+.bottom-logo {
+    width: 152px;
+    margin-left: 130px;
+
+}
+
+.footer-text {
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: center;
+    color: #FFFFFF;
+    margin-left: 18px;
+}

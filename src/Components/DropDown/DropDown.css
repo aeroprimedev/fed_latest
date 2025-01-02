@@ -1,0 +1,120 @@
+/* .abc {
+  background-color: aqua;
+}
+
+.select-container {
+  position: relative;
+  width: 100%;
+}
+
+select {
+  width: 100%;
+  border: none;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19.36px;
+  text-align: left;
+  color: #334555;
+}
+
+.select-container::after {
+  position: absolute;
+
+  transform: translateY(-50%);
+  pointer-events: none;
+  max-height: 200px;
+}
+
+select:focus {
+  border-color: #ef5443;
+  outline: none;
+}
+
+option {}
+
+.Drop-Down-Options {
+  font-size: 12px;
+  height: 200px;
+  background-color: #ffff;
+}
+
+.Drop-Down-Options:hover {
+  background-color: #414428;
+} */
+
+.select-container {
+  position: relative;
+  /* Allows absolute positioning of dropdown */
+  width: 100%;
+  /* Full width of the container */
+  cursor: pointer;
+  /* Changes cursor to pointer on hover */
+}
+
+.dropdown {
+
+  transition: border-color 0.3s;
+  /* Smooth transition for border color */
+}
+
+.dropdown:hover {
+  border-color: #f8f8f8;
+  /* Change border color on hover */
+}
+
+.selected-option {
+  font-size: 16px;
+  font-weight: 700;
+  color: #334555;
+  font-family: Inter;
+}
+
+.dropdown-popup {
+  margin-top: 5px;
+  position: absolute;
+  /* Positioning outside of the container */
+  top: 100%;
+  /* Aligns with the bottom of the dropdown */
+  left: 0;
+  /* Aligns to the left */
+  right: 0;
+  /* Expands to the right */
+  background: white;
+  /* Background for the options */
+  border: 1px solid #ccc;
+  /* Border for the options container */
+  border-radius: 10px;
+  /* Rounded corners for the options container */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  /* Shadow for depth */
+  z-index: 1000;
+  /* Ensures it appears above other elements */
+  max-height: 250px;
+  /* Max height for the dropdown */
+  overflow-y: auto;
+  
+  /* Scrolls if content exceeds max height */
+}
+
+.dropdown-option {
+  padding: 10px;
+  /* Padding for each option */
+  font-size: 12px;
+  font-weight: 600;
+  color: #334555;
+  font-family: Inter;
+  cursor: pointer;
+  padding-left: 10px;
+ 
+  /* Pointer cursor for options */
+}
+
+.dropdown-option:hover {
+  background: #f0f0f0;
+  /* Highlight background on hover */
+}

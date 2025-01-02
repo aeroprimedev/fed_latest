@@ -1,0 +1,23 @@
+.register-btn-wrapper button {
+    background-color: #EF5443;
+    color: white;
+    border-radius: 10px;
+    width: 200px;
+    height: 45px;
+    transition: transform 0.2s ease-in-out;
+}
+.Break-line-0{
+    height: 1px;
+    background-color: #E5E2DA;
+    margin-bottom: 20px;
+}
+.Report-Dropdown {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    width: 190px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}

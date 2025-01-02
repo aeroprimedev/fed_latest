@@ -1,0 +1,49 @@
+/* .passenger-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .passenger-group {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .passenger-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .button-group button {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .button-group button.selected {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+  }
+  
+  .button-group button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .button-group button.selected:hover {
+    background-color: #0056b3;
+  }
+   */

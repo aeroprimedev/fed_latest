@@ -1,0 +1,30 @@
+.available-balance-wrapper {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 50px;
+    width: 950px;
+    margin-left: 300px;
+}
+
+.available-balance-wrapper .airline-balance-table-wrapper {
+    margin: 50px;
+  
+    display: flex;
+    justify-content: center;
+}
+
+.available-balance-wrapper .airline-balance-table-wrapper .airline-balance-table {
+    width: 400px;
+}
+.Current-Balance-heading{
+    font-size: 20px;
+    font-weight: 600;
+    color: #EF5443;
+    margin-bottom: 20px;
+    
+}
+.Break-line-cb{
+
+}

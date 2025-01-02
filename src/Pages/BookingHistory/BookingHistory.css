@@ -1,0 +1,137 @@
+/* .booking-history-wrapper {
+    background-color: #ffffff;
+    width: 1100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+  }
+  
+  .booking-history-wrapper .download-offline-bookings-btn-wrapper{
+    display: flex;
+        justify-content: flex-end;
+    width: 100%;
+  }
+
+  .download-offline-bookings-btn-wrapper .download-offline-bookings{
+    background-color: #EF5443;
+    border-radius: 10px;
+    margin: 20px;
+  }
+  .download-offline-bookings-btn-wrapper .download-offline-bookings:hover{
+    background-color: #e64a19;
+  }
+  
+  .booking-history-wrapper .heading {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #EF5443;
+    font-family: Inter;
+font-size: 18px;
+font-weight: 500;
+line-height: 21.78px;
+
+  
+  }
+  
+  .client-selection-section {
+    width: 260px;
+    margin: 20px;
+
+  }
+  .actions-wrapper .add-balance-btn{
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .actions-wrapper .add-balance-btn:hover{
+    background-color: #e64a19;
+  } */
+
+.booking-history-wrapper{
+ margin-top: 50px;
+ margin-left: 200px;
+ margin-right: 200px;
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+}
+.content {
+  flex-grow: 1; /* Push footer down when content grows */
+}
+.no-scroll {
+  overflow: hidden;
+}
+.head-btn-wrapper2{
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  /* margin: 10px; */
+  margin-bottom: 20px;
+}
+.Booking-heading{
+  font-size: 20px;
+    font-weight: 600;
+    color: #EF5443;
+}
+
+.download-offline-bookings-btn-wrapper{
+ 
+}
+.download-offline-bookings{
+  background-color: #EF5443;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  width: 291px;
+  height: 42px;
+  font-family: Inter;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18.15px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.download-offline-bookings:hover{
+  background-color: #EF5443;
+  transform: scale(1.05);
+}
+
+.view-details-btn{
+  background-color: #EF5443;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  font-family: Inter;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18.15px;
+  width: 147px;
+  height: 37px;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+.view-details-btn:hover{
+  background-color: #EF5443;
+  transform: scale(1.05);
+}
+
+.No-Records-head{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  height: 120px;
+  color: #EF5443;
+  font-weight: 500;
+  font-size: 25px;
+  transition: transform 0.2s ease-in-out;
+}
+.No-Records-head:hover{
+  transform: scale(1.05);
+}

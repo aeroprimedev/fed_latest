@@ -1,0 +1,88 @@
+.manage-airlines-wrapper {
+    /* background-color: #ffffff;
+    padding: 20px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px; */
+}
+
+
+
+
+
+.current-airlines-currency-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-airlines-currency {
+    display: flex;
+    align-items: center;
+    margin: 10px 20px;
+    gap: 30px;
+}
+
+.manage-airlines-wrapper .current-airlines-currency-wrapper .current-airlines-currency .current-airline {
+    font-weight: 500;
+     margin-right: 20px; 
+}
+
+.manage-airlines-wrapper .current-airlines-currency-wrapper .current-airlines-currency .current-currency {
+    /* width: 200px; */
+}
+
+.manage-airlines-wrapper .current-airlines-currency-wrapper .current-airlines-currency .delete-airline-wrapper {
+    /* margin-left: 20px; */
+}
+
+
+
+.manage-airlines-wrapper .add-airline-wrapper {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0px; */
+}
+
+.manage-airlines-wrapper .add-airline-wrapper .select-airline,
+.manage-airlines-wrapper .add-airline-wrapper .select-currency {
+    width: 200px;
+    margin: 10px 10px;
+}
+
+.add-airline-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    
+ }
+
+.Add-airline{
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ef5443;
+    color: #fff;
+    height: 45px;
+    width: 200px;
+    font-family: Inter;
+    font-size: 15px;
+    font-weight: 500;
+    transition: transform 0.2s ease-in-out;
+}
+.Add-airline:hover{
+    transform: scale(1.05);
+}
+.airlinr-currency-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

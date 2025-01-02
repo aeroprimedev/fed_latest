@@ -1,0 +1,73 @@
+/* 
+.Search-Container{
+    display: flex;
+  background-color: #fff;
+  box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  align-items: center;
+  height: 90px;
+  width: 1000px;
+  margin-top: 40px;
+
+}
+
+
+.Origin-Container{
+    flex: 1;
+  padding: 15px;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.Destination-Container{
+    flex: 1;
+    padding: 15px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon-plane{
+color:#EF5443;
+}
+.Depart-Date-Container{
+    flex: 1;
+    padding: 15px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.Arrival-Date-Container{
+    flex: 1;
+    padding: 15px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Calender-icon{
+  color:#EF5443;
+}   
+
+.PassengerDetail-Container{
+    flex: 1;
+    padding: 15px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Flight-Search-Submit-Button{
+    width: 122px;
+    height: 90px;
+    border-radius: 0px 10px 10px 0px;
+    background: #EF5443;
+    border: none;
+    color: #FFFFFF;
+} */

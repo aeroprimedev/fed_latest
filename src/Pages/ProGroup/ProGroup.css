@@ -1,0 +1,165 @@
+.Page-Wrapper{
+    
+}
+.Pro-group-heading{
+    color: #EF5443;
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.Airline-Dropdown{
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  width: 190px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-left: 200px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Airline-Dropdown:hover{
+    border: 1px solid #EF5443;  
+}
+.Airline-Dropdown:focus{
+    border: 1px solid #EF5443;  
+}
+
+.airliner-banner{
+    background-color: aliceblue;
+    height: 200px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+.Create-heading{
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24.2px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+
+}
+.Info-heading{
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    margin-top: 20px;
+
+}
+.Info-heading2{
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 40px;
+
+    
+}
+.Btn-dropdown-1{
+    display: flex;
+    align-items: center;
+    gap: 80px;
+
+}
+.Input-PNR1{
+    width: 220px;
+    height: 41px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+}
+.Input-PNR1:hover{
+    border: 1px solid #EF5443;
+}
+.Airline-Dropdown1:hover {
+    border: 1px solid #EF5443;
+}
+
+.Airline-Dropdown1{
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    width: 220px;
+    height: 27px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+.search-trip-section1{
+    gap: 30px;
+    display: flex;
+    align-items: center;
+
+}
+.Wrapper{
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+}
+.Wrapper2{
+    gap: 40px;
+    display: flex;
+    margin-left: 40px;
+}
+.Group-Type-Dropdown{
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    width: 280px;
+    height: 27px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+.Group-Name{
+    width: 220px;
+    height: 41px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+}
+.Group-Name:hover{
+    border: 1px solid #EF5443;
+}
+.Wrapper3{
+    display: flex;
+    gap: 35px;
+    margin-top: 30px;
+}
+.Input3{
+    width: 221px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #E5E2DA;
+    padding-left: 10px; 
+}
+.Remarks-Container{
+    margin-top: 30px;
+
+}
+.Input4{
+    width: 400px;
+    height: 86px;
+    border-radius: 10px;
+    opacity: 0px;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    padding-left: 10px;
+}
+.Terms{
+    margin-top: 30px;
+}
+.Terms-Text{
+    font-family: Inter;
+    font-size: 10px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    
+}

@@ -1,0 +1,45 @@
+.Signup-form-container{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  height: 100vh;
+  margin-left: 156px;
+  margin-top: 21px;
+}
+.Signup-tittle {
+    position: relative;
+    color: #EF5443;
+    max-width: 1000px;
+    height: 30px;
+  }
+
+.break-line{
+    width: 1000px;
+    height: 1px;
+    background-color: #E5E2DA;
+    
+  }
+.firstName, .lastName, .email, .confirmEmail, .agencyName, .address, .confirmPassword, .createPassword{
+   margin-top: 30px;
+   margin-right: 50px;
+   height: 50px;
+   padding-left: 30px;
+   width: 401px;
+   border-radius: 10px 10px 10px 10px;
+   background: #FFFFFF;
+   border: 1px solid #E5E2DA
+ }
+.Signup-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 189px;
+  height: 51px;
+  border-radius: 10px;
+  border: 1.5px solid #FFFFFF;
+  background: #EF5443;
+  color: white;
+  font-size: 18px;
+  margin-top: 40px;
+ }

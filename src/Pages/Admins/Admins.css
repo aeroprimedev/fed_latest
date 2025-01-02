@@ -1,0 +1,148 @@
+/* *{
+    overflow-x: hidden;
+} */
+
+ /* Wrapping container for the entire component  */
+.users-wrapper {
+  margin-top: 50px;
+  margin-left: 200px;
+  margin-right: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+  }
+  .head-btn-wrapper{
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* margin: 10px; */
+  /* margin-bottom: 20px; */
+  }
+
+  .search-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #EF5443;
+    pointer-events: none; /* This prevents the icon from blocking clicks on the input */
+  }
+  
+  .Admin-Search-btn {
+    padding-left: 40px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 45px;
+    transition: border-color 0.3s ease;
+  }
+  .Admin-Search-btn:focus {
+    outline: none; /* Remove the default browser outline */
+    border-color: #EF5443; /* Change this to the color you want on focus */
+  }
+
+
+
+  /* Custom dialog button styles */
+  .register-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+
+  
+  /* Styling for the Add Admin button */
+  .register-btn-wrapper button {
+    background-color: #EF5443;
+    color: white;
+    border-radius: 10px;
+    width:150px;
+    transition: transform 0.2s ease-in-out;
+  }
+  .register-btn-wrapper button:hover {
+    background-color: #EF5443;
+    transform: scale(1.05);
+  }
+  
+  .Admin-Heading {
+    font-size: 20px;
+    font-weight: 500;
+    color: #EF5443;
+  }
+  
+  /* Table container styling */
+  .MuiTableContainer-root {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  .css-apqrd9-MuiTableBody-root {
+    display: table-row-group;
+    border: 1px solid #E5E2DA;
+}
+  /* Custom table header styling */
+  .MuiTableHead-root {
+    background-color: #f5f5f5;
+  }
+  
+  /* Custom table header cell styling */
+  .MuiTableCell-head {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Table row hover effect */
+  .MuiTableRow-root:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Table cell padding and text alignment */
+  .MuiTableCell-root {
+    padding: 10px;
+    text-align: left;
+    color: #555;
+  }
+  
+  /* Enable/Disable switch */
+  .MuiFormControlLabel-root {
+    margin-left: 0;
+  }
+  
+  /* Custom Switch styling */
+  .MuiSwitch-root .MuiSwitch-switchBase.Mui-checked {
+    color: #ff5722;
+  }
+  
+  .MuiSwitch-root .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+    background-color: #ff5722;
+  }
+  
+  /* IconButton styling */
+  .MuiIconButton-root {
+    margin-right: 10px;
+    color: #ff5722;
+  }
+  
+  /* Search input styling */
+  .MuiOutlinedInput-root {
+    width: 300px;
+    /* margin-bottom: 20px; */
+  }
+  
+  /* Pagination styling */
+  .MuiPagination-root {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .MuiPaginationItem-root {
+    color: #ff5722;
+    font-weight: bold;
+  }
+ 

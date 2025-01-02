@@ -1,0 +1,33 @@
+.Confirm-Wrapper{
+    background-color: #ffffff;
+    min-width: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 30px;
+    border-radius: 20px;
+}
+.details-container {
+    box-shadow: 0 0 6px 0 rgba(136, 129, 129, 0.36);
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0px;
+  }
+.details-row {
+    display: flex;
+    margin: 8px 0px;
+}
+.detail {
+    width: 280px;
+    font-weight: 400;
+    color: #707271;
+}
+.detail-data {
+    font-weight: 550;
+    margin-left: 5px;
+    color: #707271;
+}
+

@@ -1,0 +1,116 @@
+/* .adjust-markup-wrapper {
+    background-color: #ffff;
+    padding: 20px;
+    width: 1150px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+
+.adjust-markup-wrapper .agent-details {
+    display: flex;
+    justify-content: center;
+}
+
+.adjust-markup-wrapper .agent-details .details-col {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 0px 100px;
+}
+
+.adjust-markup-wrapper .agent-details .details-col .details-field {
+    margin: 5px 0px;
+}
+
+.adjust-markup-wrapper .agent-details .details-col .details-field span {
+    font-weight: 700;
+}
+
+.adjust-markup-wrapper .adjust-markup-section {
+    margin: 50px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.adjust-markup-wrapper .adjust-markup-section .airline-dd {
+    width: 250px;
+    margin-bottom: 25px;
+}
+
+.adjust-markup-wrapper .current-airline-markup {
+    margin-bottom: 25px;
+}
+
+.adjust-markup-wrapper .current-airline-markup span {
+    font-weight: 700;
+}
+
+.adjust-markup-wrapper .adjust-markup-section .adjust-markup-section-element {
+    margin: 5px 20px;
+    margin-bottom: 25px;
+} */
+
+.agent-details{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    /* align-content: flex-end; */
+    align-items: center;
+    
+}
+.adjust-markup-section{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    /* align-content: flex-end; */
+    align-items: center;
+
+
+}
+.name-text{
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.78px;
+    text-align: left;
+    color: #334555;
+}
+.email-txt{
+    font-family: Inter;
+font-size: 18px;
+font-weight: 500;
+line-height: 21.78px;
+text-align: left;
+color: #334555;
+}
+.current-airline-markup{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px;
+    color: #EF5443;
+}
+.Input1{
+    width: 223px;
+    height: 52px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+    transition: border-color 0.3s ease;
+    margin-left: 1px;
+}
+.Input1:hover{
+    outline: none; /* Remove default browser outline */
+    border-color: #f44336; /* Change border color when input is selected */
+}
+.Input1:focus {
+    outline: none; /* Remove default browser outline */
+    border-color: #f44336; /* Change border color when input is selected */
+}

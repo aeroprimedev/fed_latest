@@ -1,0 +1,119 @@
+.deduct-balance-wrapper {
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.deduct-balance-wrapper .back-btn-wrapper{
+    display: flex;
+    justify-content: start;
+}
+
+.deduct-balance-wrapper .back-btn-wrapper .btn-wrapper{
+    width: fit-content;
+    cursor: pointer;
+}
+
+.deduct-balance-wrapper .back-btn-wrapper .back-btn{
+    height: 25px;
+}
+
+.deduct-balance-wrapper .agent-details {
+    display: flex;
+    justify-content: center;
+}
+
+.deduct-balance-wrapper .agent-details .details-col {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 0px 100px;
+}
+
+.deduct-balance-wrapper .agent-details .details-col .details-field {
+    margin: 5px 0px;
+}
+
+.deduct-balance-wrapper .agent-details .details-col .details-field span {
+    font-weight: 700;
+}
+
+.deduct-balance-wrapper .airline-balance-table-wrapper{
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.deduct-balance-wrapper .airline-balance-table-wrapper .airline-balance-table{
+    width: 500px;
+}
+
+.deduct-balance-wrapper .deduct-amount-section {
+    margin: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.deduct-balance-wrapper .deduct-amount-section .deduct-amount-section-element {
+    margin: 12px 20px;
+    width: 250px;
+}
+
+.deduct-balance-wrapper .deduct-amount-section .deduction-reason-section{
+    width: 250px;
+}
+
+.deduct-balance-wrapper .charts-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.deduct-balance-wrapper .charts-wrapper .credit-debit-chart-header{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.deduct-balance-wrapper .charts-wrapper .charts {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+}
+
+.deduct-balance-wrapper .charts-wrapper .chart {
+    margin: 0px 50px;
+}
+
+.deduct-balance-wrapper .charts-wrapper .chart .chart-header {
+    font-weight: 600;
+    margin: 0px 0px 20px 0px;
+}
+
+.deduct-balance-wrapper .table-wrapper {
+    margin: 50px 0px;
+}
+
+.deduct-balance-wrapper .table-wrapper .last-transactions-heading{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.deduct-balance-wrapper .table-wrapper .no-trnsactions-text{
+    font-weight: 500;
+}
+
+.deduct-balance-wrapper .pagination-wrapper{
+    display: flex;
+    justify-content: center;
+}

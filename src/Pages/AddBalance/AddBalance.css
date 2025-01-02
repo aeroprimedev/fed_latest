@@ -1,0 +1,186 @@
+.add-balance-wrapper {
+    background-color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 1000px;
+    margin-left: 220px;
+}
+
+.back-btn-wrapper{
+    display: flex;
+    justify-content: start;
+    width: 1000px;
+    margin-top: 20px;
+    
+}
+
+.add-balance-wrapper .back-btn-wrapper .btn-wrapper{
+    width: fit-content;
+    margin-right:10px;
+    color: #ef5443;
+    cursor: pointer;
+    margin-left: -35px;
+}
+
+.add-balance-wrapper .back-btn-wrapper .back-btn{
+    height: 25px;
+}
+.head-btn-wrapper-ub{
+    width: 1000px;
+}
+
+.add-balance-wrapper .agent-details {
+    display: flex;
+    justify-content: center;
+}
+
+.add-balance-wrapper .agent-details .details-col {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 0px 100px;
+}
+
+.add-balance-wrapper .agent-details .details-col .details-field {
+    margin: 5px 0px;
+}
+.details-field-ub{
+    font-size: 18px;
+    font-weight: 600;
+    color: #ef5443;
+}
+.details-field-ub span {
+    font-size: 15px;
+    font-weight: 500;
+    color: #334555;
+
+}
+.radio-selection-ub{
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+.add-balance-wrapper .airline-balance-table-wrapper{
+    margin-top: 30px;
+    /* width: 100%; */
+    /* display: flex;
+    justify-content: center; */
+}
+
+.add-balance-wrapper .airline-balance-table-wrapper .airline-balance-table{
+    width: 400px;
+}
+
+.add-balance-wrapper .add-amount-section {
+    margin: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-balance-wrapper .add-amount-section .add-amount-section-element {
+    margin: 12px 20px;
+    width: 220px;
+}
+
+.add-balance-wrapper .charts-wrapper {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.add-balance-wrapper .charts-wrapper .credit-debit-chart-header{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.add-balance-wrapper .charts-wrapper .charts {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+}
+
+.add-balance-wrapper .charts-wrapper .chart {
+    margin: 0px 50px;
+}
+
+.add-balance-wrapper .charts-wrapper .chart .chart-header {
+    font-weight: 600;
+    margin: 0px 0px 20px 0px;
+}
+
+.add-balance-wrapper .table-wrapper {
+  margin-bottom: 50px;
+  width: 1000px;
+}
+
+.add-balance-wrapper .table-wrapper .last-transactions-heading{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.add-balance-wrapper .table-wrapper .no-trnsactions-text{
+    font-weight: 500;
+}
+
+.add-balance-wrapper .pagination-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.table-btn-wrapper{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+}
+.agent-details-ub{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap:5px;
+}
+.Input-balance{
+width: 215px;
+height: 50px;
+padding-left: 10px;
+border-radius: 10px;
+border: 1px solid #b8b5af;
+background: #ffffff;
+outline: none;
+
+transition: border-color 0.3s ease;
+}
+.Input-balance:hover{
+outline: none;
+border-color: #f44336;
+}
+
+.Input-balance:focus{
+    outline: none;
+    border-color: #f44336;    
+}
+.add-amount-btn{
+    background-color: #f44336;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    width: 150px;
+    height: 45px;
+    margin-top: 10px;
+    font-size: 15px;
+    transition: transform 0.2s ease-in-out;
+}
+.add-amount-btn:hover{
+    transform: scale(1.05);
+}
+.add-amount-btn:disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}

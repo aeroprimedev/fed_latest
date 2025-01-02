@@ -1,0 +1,166 @@
+
+ .Pnr-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    margin-left: 156px;
+    margin-top: 21px;
+ }
+
+.Pnr-tittle {
+    color: #EF5443;
+    max-width: 1000px;
+    /* height: 70px;    */
+  }
+  .Break-line{
+    /* margin-top: 30px; */ 
+    height: 1px;
+    background-color: #E5E2DA; 
+  }
+  .Pnr-input{
+    margin-top: 45px;
+  }
+  .pnr-inputbox{
+    width: 279px;
+    height: 45px;
+    border-radius: 10px 0px 0px 10px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+
+  }
+  .pnr-submit-button{
+    width: 122px;
+    height: 48px;
+    border-radius: 0px 10px 10px 0px;
+    background: #EF5443;
+    border: none;
+    color: #FFFFFF;
+    
+  }
+
+  /* input[type="text"] {
+    width: 200px;
+    height: 20px;
+    padding-right: 50px;
+} */
+
+/* input[type="submit"] {
+    margin-left: -50px;
+    height: 25px;
+    width: 50px;
+    background: blue;
+    color: white;
+    border: 0;
+  
+} */
+
+  
+  .Booking-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    margin-left: 156px;
+    margin-top: 50px;
+  }
+  .Booking-tittle{
+    color: #EF5443;
+    max-width: 1000px;
+  
+  }
+  
+  .Breakline{
+    /* margin-top: 20px; */
+    width: 1000px;
+    height: 1px;
+    background-color: #E5E2DA; 
+  }
+/* 
+  #dropdown{
+width: 240px;
+height: 51px;
+padding-left: 10px;
+margin-top: 50px;
+border-radius: 10px;
+border: 1px solid #E5E2DA
+  } */
+
+  
+
+/* .selection-container{
+  display: flex;
+ 
+} */
+
+
+/* .flight-selection{
+  display: flex;
+  justify-items:row;
+} */
+/* .From{
+  margin-right: 30px;
+} */
+
+/* .way-radio{
+
+  display: flex;
+  width: 300px;
+  height: 51px;
+  margin-top: 62px;
+  margin-left: 130px;
+  justify-content: space-between; 
+}
+ */
+
+
+
+/* .radio-check{
+  color: #EF5443;
+} */
+
+/* .date-selection{
+
+  display: flex;
+  justify-content: space-between;
+} */
+
+
+.Recent-Booking-container{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  margin-left: 156px;
+  margin-top: 50px;
+  margin-bottom: 111px;
+
+}
+
+.Recent-Booking-tittle{
+  color: #EF5443;
+  max-width: 1000px;
+
+}
+
+/* .footer-landing{
+  position: fixed;
+  bottom: 114px;
+} */
+.LandingPage-container {
+  height: max-content;
+  position: relative;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+/* .react-datepicker__input-container input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+} */
+
