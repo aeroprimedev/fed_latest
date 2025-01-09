@@ -68,12 +68,19 @@ option {}
 }
 
 .selected-option {
-  font-size: 16px;
+  
+}
+.selected-option {
+  font-size: 15px;
   font-weight: 700;
   color: #334555;
   font-family: Inter;
+  white-space: nowrap; /* Prevents text wrapping */
+  overflow: hidden; /* Hides overflowing text */
+  text-overflow: ellipsis; /* Displays ellipsis (...) for truncated text */
+  max-width: 150px; /* Set a fixed width (adjust as needed) */
+  display: inline-block; /* Ensure the block behaves like an inline element */
 }
-
 .dropdown-popup {
   margin-top: 5px;
   position: absolute;
@@ -99,8 +106,19 @@ option {}
   overflow-y: auto;
   
   /* Scrolls if content exceeds max height */
+  max-height: 200px; /* Set the maximum height for the dropdown */
+  overflow-y: auto; /* Allow vertical scrolling */
+  scrollbar-width: none; /* For Firefox: Hide scrollbar */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge: Hide scrollbar */
 }
 
+.dropdown-popup::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera: Hide scrollbar */
+}
+
+/* .select-container-searching {
+border-color: #f00909;
+} */
 .dropdown-option {
   padding: 10px;
   /* Padding for each option */
@@ -110,7 +128,13 @@ option {}
   font-family: Inter;
   cursor: pointer;
   padding-left: 10px;
- 
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Show ellipsis (...) for truncated text */
+  max-width: 200px; /* Set a maximum width for options (adjust as needed) */
+  padding: 8px 12px; /* Add some padding for a better look */
+  cursor: pointer; /* Change cursor to pointer */
+  display: block; /* Ensure the text behaves like a block element */
   /* Pointer cursor for options */
 }
 

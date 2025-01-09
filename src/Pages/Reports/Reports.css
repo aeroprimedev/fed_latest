@@ -200,3 +200,211 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .reports-wrapper {
+    background-color: #ffffff;
+    margin-top: 50px;
+    margin-left: 85px;
+    /* margin-right: 300px; */
+    margin-bottom: 100px;
+    height: max-content;
+    min-height: 61vh;
+
+  }
+  
+  .Report-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #EF5443;
+    margin-bottom: 10px;
+  }
+  
+  .reports-wrapper .report-airline-section {
+    margin-top: 30px;
+  
+  }
+  
+  .report-selection-section {
+    display: flex;
+    margin-top: 30px;
+    justify-content: space-between;
+  }
+  
+  .report-client-selection-section {
+  
+  }
+  
+  .reports-wrapper .report-city-section {
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
+  }
+  
+  .reports-wrapper .report-origin-section {
+   
+  }
+  
+  .reports-wrapper .report-dates-section {
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
+  }
+  
+  .start-date-picker-section {
+  
+  }
+  
+  .reports-wrapper .end-date-picker-section {}
+  
+  
+  
+  .reports-wrapper .fetch-report-btn-wrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .reports-wrapper .fetch-report-btn-wrapper .fetch-btn {
+    background-color: #EF5443;
+    border-radius: 10px;
+    color: #ffffff;
+    width: 220px;
+    height: 45px;
+    border: none;
+  }
+  
+  .reports-wrapper .download-report-btn-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: start;
+    height: 40px;
+    border: none;
+  
+  }
+  
+  .reports-wrapper .download-report-btn-wrapper .downloadIcon {
+    height: 25px;
+    margin-right: 10px;
+    background-color: #EF5443;
+  
+  }
+  
+  .reports-wrapper .download-report-btn-wrapper .download-btn {
+    background-color: #EF5443;
+    border-radius: 10px;
+    height: 40px;
+    width: 190px;
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .react-datepicker-popper {
+    z-index: 1000;
+  }
+  
+  .react-datepicker {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* Header (Month and Year) */
+  .react-datepicker__header {
+    background-color: #fff;
+    border-bottom: none;
+    padding-top: 10px;
+  }
+  
+  .react-datepicker__current-month {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .return-date-selection:disabled {
+    color: #ccc;
+    background-color: #dacecb;
+  }
+  
+  /* Navigation arrows */
+  .react-datepicker__navigation {
+    top: 20px;
+  }
+  
+  .react-datepicker__navigation-icon::before {
+    border-color: #ff5630;
+  }
+  
+  /* Weekday names */
+  .react-datepicker__day-names {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .react-datepicker__day-name {
+    font-weight: 600;
+    color: #666;
+  }
+  
+  /* Days */
+  .react-datepicker__day {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+  }
+  
+  /* Selected day */
+  .react-datepicker__day--selected,
+  .react-datepicker__day--keyboard-selected {
+    background-color: #ff5630;
+    color: #fff;
+    border-radius: 8px;
+  }
+  
+  /* Today’s date */
+  .react-datepicker__day--today {
+    border: 1px solid #ff5630;
+    background-color: #ffff;
+  
+    color: #ff5630;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+  
+  
+  .css-1lzspe0-MuiSvgIcon-root{
+    color: #EF5443;
+  }
+  .css-23p0if-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+    border: 1px solid #EF5443;
+  }
+  
+  .No-Records{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-weight: 500;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

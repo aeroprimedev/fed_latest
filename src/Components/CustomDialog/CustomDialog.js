@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Backdrop } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -43,6 +43,27 @@ const DeleteButton = styled(Button)({
 
 
 const CustomDialog = ({ open, onClose, onConfirm, loggedInUserDetails, selectedUserInfo }) => {
+  const [actionConfirmed, setActionConfirmed] = useState(false);
+
+  const handleConfirm = () => {
+    onConfirm();
+    setActionConfirmed(true);
+    onClose();
+    setTimeout(() => {
+      setActionConfirmed(false);
+    }, 1000);
+  };
+
+  const getDialogMessage = () => {
+    if (loggedInUserDetails?.role === "admin") {
+      return selectedUserInfo?.active
+        ? "Do you want to disable this user? Disabled Admin cannot make transactions"
+        : "Do you want to enable this user? Enabled Admin can make transactions";
+    }
+    return selectedUserInfo?.isActive
+      ? "Do you want to disable this user? Disabled Agent cannot make transactions"
+      : "Do you want to enable this user? Enabled Agent can make transactions";
+  };
 
   return (
 
@@ -59,20 +80,20 @@ const CustomDialog = ({ open, onClose, onConfirm, loggedInUserDetails, selectedU
       <StyledDialogTitle id="alert-dialog-title">Are you sure?</StyledDialogTitle>
       <DialogContent>
         <StyledDialogContentText id="alert-dialog-description">
-          {loggedInUserDetails?.role === "admin" && selectedUserInfo?.active ? (
-            "Do you really want to disable this user? Disabled Admin cannot make transactions."
-          ) : loggedInUserDetails?.role === "agent" && selectedUserInfo?.isActive ? (
-            "Do you want to disable this user? Disabled Agent cannot make transactions."
-          ) : loggedInUserDetails?.role === "agent" && !selectedUserInfo?.isActive ? (
-            "Do you want to enable this user? Enabled Agent can make transactions."
-          ) : (
-            "Do you really want to enable this user? Enabled Admin can make transactions."
-          )}
+          {/* {`${(loggedInUserDetails?.role === "admin" &&
+            selectedUserInfo?.active) ||
+            selectedUserInfo?.isActive
+            ? "Do you want to disable this user? Disabled Agent cannot make transactions"
+            : "Do you want to enable this user? Enabled Agent can make transactions"
+            }`} */}
+             {actionConfirmed
+            ? "Action confirmed! Closing the dialog..."
+            : getDialogMessage()}
         </StyledDialogContentText>
       </DialogContent>
       <DialogActions style={{ justifyContent: 'center' }}>
         <CancelButton onClick={onClose}>Cancel</CancelButton>
-        <DeleteButton onClick={onConfirm} autoFocus>
+        <DeleteButton  onClick={handleConfirm} autoFocus>
           Confirm
         </DeleteButton>
       </DialogActions>

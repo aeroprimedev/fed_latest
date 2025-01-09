@@ -250,9 +250,18 @@ const AgentsScreen = () => {
   const handleDisableUser = () => {
     if (loggedInUserDetails?.role === "admin") {
       handleDisableAgentForAdminLogin();
+      setSelectedUserInfo({
+        ...selectedUserInfo,
+        active: !selectedUserInfo.active, // Toggle the active status
+      });
     } else {
       handleEditAgentForAgentLogin();
+      setSelectedUserInfo({
+        ...selectedUserInfo,
+        active: !selectedUserInfo.isActive, // Toggle the active status
+      });
     }
+   
   };
 
   const handleDisableAgentForAdminLogin = () => {
@@ -457,6 +466,15 @@ const AgentsScreen = () => {
     }
   };
 
+  const handleButtonClickSubAgent = (clientId, id) => {
+    if (visibleRowId === id) {
+      setVisibleRowId(null);
+    } else {
+      fetchCurrentUserAirlines(clientId);
+      setVisibleRowId(id);
+    }
+  };
+
   const fetchCurrentUserAirlines = (clientId) => {
     const headers = {
       "Content-Type": " application/json",
@@ -492,6 +510,7 @@ const AgentsScreen = () => {
   const filteredAgents = agentListForAdminRows?.filter((row) =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
 
   if (loggedInUserDetails?.role === "admin") {
     return (
@@ -503,7 +522,7 @@ const AgentsScreen = () => {
             onClose={handleClose}
             onConfirm={handleDisableUser}
             loggedInUserDetails={{ role: "admin" }}
-            selectedUserInfo={{ active: true }}
+            selectedUserInfo={selectedUserInfo}
 
           />
 
@@ -807,7 +826,7 @@ const AgentsScreen = () => {
       </div>
     );
   }
-
+  
   return (
     <div className="users-wrapper">
       <div>
@@ -815,8 +834,8 @@ const AgentsScreen = () => {
           open={showDialog}
           onClose={handleClose}
           onConfirm={handleDisableUser}
-          loggedInUserDetails={{ role: "admin" }}
-          selectedUserInfo={{ active: true }}
+          loggedInUserDetails={{ role: "agent" }}
+          selectedUserInfo={selectedUserInfo}
         />
         {isEditAgentOpen && (
           <EditAgent
@@ -879,9 +898,11 @@ const AgentsScreen = () => {
             <TableBody>
               {agentListForAgentRows?.map((row) => {
                 if (row.isSuperAgent === 1) {
+                  // console.log(row.name);
                   return (
                     <TableRow
                       key={row.name}
+                     
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
@@ -944,20 +965,25 @@ const AgentsScreen = () => {
 
                         <div>
                           <Button
-                            onClick={() => handleButtonClick(row.clientId)}
+                            onClick={() => {
+                              console.log("hiii", visibleRowId, row.id, row.clientId)
+                              handleButtonClickSubAgent(row.clientId,  row.id)}
+                             
+                            }
                             startIcon={
-                              visibleRowId === row.clientId ? (
+                              visibleRowId === row.id ? (
                                 <ExpandLessIcon />
                               ) : (
                                 <ExpandMoreIcon />
                               )
                             }
                           >
-                            {visibleRowId === row.clientId
+                            {visibleRowId === row.id
                               ? "Hide Wallet Balance"
                               : "Show Wallet Balance"}
                           </Button>
-                          {visibleRowId === row.clientId && (
+                          {visibleRowId === row.id && (
+                            
                             <TableContainer component={Paper}>
                               <Table
                                 sx={{ minWidth: 350 }}
@@ -1060,13 +1086,13 @@ const AgentsScreen = () => {
                             }
                           />
                         )}
-                        <CustomDialog
+                        {/* <CustomDialog
                           open={showDialog}
                           onClose={handleClose}
                           onConfirm={handleDisableUser}
                           loggedInUserDetails={{ role: "admin" }}
-                          selectedUserInfo={{ active: true }}
-                        />
+                          selectedUserInfo={selectedUserInfo}
+                        /> */}
                       </TableCell>
                       <TableCell align="left">
                         {loggedInUserDetails.emailId !== row.email &&
@@ -1175,7 +1201,7 @@ const AgentsScreen = () => {
           </Table>
         </TableContainer>
       </div>
-      <Dialog
+      {/* <Dialog
         open={showDialog}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -1198,9 +1224,10 @@ const AgentsScreen = () => {
             Agree
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div >
   );
+
 };
 
 export default AgentsScreen;

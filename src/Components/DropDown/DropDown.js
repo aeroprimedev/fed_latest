@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./DropDown.css"; // Import the CSS file
+import React, { useState, useEffect, useRef } from "react";
+import "./DropDown.css";
 import { abc } from "../../Styling/DropDown/DropDown";
 import { abcd } from "../../Styling/DropDown/DropDown";
 
@@ -10,9 +10,31 @@ const Dropdown = ({
   onChange,
   optionLabelKey = "label",
   optionValueKey = "value",
-  placeholder = "Select an option..."
+  placeholder = "Select an option...",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const optionsRef = useRef(null);
+  const selectedIndexRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+      setSearchQuery("");
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const getOptionStyling = () => {
     if (name === "abc") {
@@ -35,22 +57,79 @@ const Dropdown = ({
   const handleSelect = (option) => {
     onChange(option[optionValueKey] || option);
     setIsOpen(false); // Close the dropdown when an option is selected
+    setSearchQuery("");
   };
 
+  const handleKeyDown = (e) => {
+    const key = e.key.toLowerCase();
+
+    // Handle backspace key
+    if (key === "backspace") {
+      setSearchQuery(searchQuery.slice(0, -1)); // Remove the last character on backspace
+    } else {
+      // Append other characters to the search query
+      setSearchQuery((prevSearch) => prevSearch + key);
+    }
+  };
+
+  const filteredOptions = options.filter((option) => {
+    const label = typeof option === "object" ? option[optionLabelKey] : option;
+    return label.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  useEffect(() => {
+    if (isOpen && optionsRef.current && selectedIndexRef.current != null) {
+      const selectedOption =
+        optionsRef.current.children[selectedIndexRef.current];
+      if (selectedOption) {
+        selectedOption.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+  }, [searchQuery, isOpen]);
+
   return (
-    <div className="select-container">
+    <div 
+    className="select-container"
+    // className={`select-container ${searchQuery ? "select-container-searching" : ""}`} 
+    ref={dropdownRef}>
       <div
         style={getStyling()}
         className="dropdown"
         onClick={() => setIsOpen(!isOpen)}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
       >
-        <div className="selected-option">
-          {value ? (options.find(option => option[optionValueKey] === value)?.[optionLabelKey] || value) : placeholder}
-        </div>
+        {/* <div className="selected-option">
+          {value
+            ? options.find((option) => option[optionValueKey] === value)?.[
+                optionLabelKey
+              ] || value
+            : placeholder}
+        </div> */}
+         <div
+        className="selected-option"
+       
+        title={
+          value
+            ? options.find((option) => option[optionValueKey] === value)?.[
+                optionLabelKey
+              ] || value
+            : placeholder
+        } // Show full text on hover
+      >
+        {value
+          ? options.find((option) => option[optionValueKey] === value)?.[
+              optionLabelKey
+            ] || value
+          : placeholder}
+      </div>
       </div>
       {isOpen && (
-        <div className="dropdown-popup">
-          {options.map((option, index) => {
+        <div 
+       className="dropdown-popup"
+         ref={optionsRef}
+         >
+          {filteredOptions.map((option, index) => {
             const displayText =
               optionLabelKey && typeof option === "object"
                 ? option[optionLabelKey]
@@ -66,6 +145,7 @@ const Dropdown = ({
                 className="dropdown-option"
                 key={index}
                 onClick={() => handleSelect(option)} // Selects one option at a time
+                title={displayText} // Show full text on hover
               >
                 {displayText}
               </div>
@@ -78,8 +158,6 @@ const Dropdown = ({
 };
 
 export default Dropdown;
-
-
 
 // import { useState } from 'react';
 // function Dropdown() {
@@ -102,8 +180,6 @@ export default Dropdown;
 //   const [isOpen, setIsOpen] = useState(false);
 
 //   // Function to fetch data from API
- 
-
 
 //   const handleSelect = (option) => {
 //     setSelectedOption(option);

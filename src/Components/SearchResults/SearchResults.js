@@ -2589,11 +2589,16 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       className="Book-btn"
                                       variant="contained"
                                       // color="secondary"
-                                      onClick={() =>
-                                        setShowOneWayFlexiFareCard(prevIndex =>
-                                          prevIndex === index ? null : index
-                                        )
-                                      }
+                                      onClick={() => {
+                                        if(flightClassList.length === 1 ){
+                                          setoneWayTripDetails(
+                                            JSON.parse(JSON.stringify(list))
+                                          );
+                                          handleShow();
+                                        }else{
+                                        }
+                                        
+                                      }}
                                     >
                                       {passengerFareInfoList?.fareInfoList
                                         ?.farePkgInfoList &&
@@ -2626,8 +2631,49 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       <div className="total-fare1">
                                         <span className="currency1">{list?.currencyCode}</span>
                                         <span className="amount1">{list?.totalAmount}</span>
+                                        {/* <span className="">Book</span> */}
                                       </div>
+                                      {flightClassList.length === 1 ? (
+                                        <div></div> 
+                                      ) : (
+                                        <Radio
+                                          checked={
+                                            list?.flightNumber ===
+                                            oneWayTripDetails?.flightNumber &&
+                                            list?.resBookDesigCode ===
+                                            oneWayTripDetails?.resBookDesigCode &&
+                                            list?.flightNumber_RT ===
+                                            oneWayTripDetails?.flightNumber_RT
+                                          }
+                                          onChange={() =>
+                                            setoneWayTripDetails(
+                                              JSON.parse(JSON.stringify(list))
+                                            )
+                                          }
+                                          value="a"
+                                          name="radio-buttons"
+                                          inputProps={{ "aria-label": "A" }}
+                                          // disabled={loggedInUserDetails?.role === "admin"}
+
+                                          sx={{
+                                            color: '#EF5443', // Unchecked radio button color
+                                            '&.Mui-checked': {
+                                              color: '#EF5443', // Checked radio button color
+                                            },
+                                            '&:hover': {
+                                              color: '#FF9800', // Color on hover
+                                              transform: 'scale(1.1)', // Slight scale on hover
+                                              transition: 'transform 0.3s ease, color 0.3s ease', // Smooth transition
+                                            },
+                                          }}
+                                        />
+                                      )}
+                                   
+                                   
+                                   
+                                  
                                     </button>
+
                                     <div className="caret-wrapper">
                                       <span
                                         className={`caret ${showOneWayFlexiFareCard === index
@@ -2825,26 +2871,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       <span className="currency2">{list?.currencyCode}</span>
                                       <span className="amount2">{list?.totalAmount}</span>
                                     </div>
-                                    <div className="Book-button">
-
-                                      {flightClassList.length === 1 ? (
-                                        <button
-                                          className="Book-btn3"
-                                          variant="contained"
-                                          // color="secondary"
-                                          disabled={
-                                            loggedInUserDetails?.role !== "admin" &&
-                                            loggedInUserDetails?.can_create_booking !== 1
-                                          }
-                                          onClick={() => {
-                                            setoneWayTripDetails(
-                                              JSON.parse(JSON.stringify(list))
-                                            );
-                                            handleShow();
-                                          }}
-                                        >
-                                          BOOK
-                                        </button>
+                                    {flightClassList.length === 1 ? (
+                                        <div></div>
                                       ) : (
                                         <Radio
                                           checked={
@@ -2878,6 +2906,9 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                           }}
                                         />
                                       )}
+                                    <div className="Book-button">
+
+                                     
 
                                     </div>
                                   </div>
@@ -2994,12 +3025,12 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     {list.flightDuration}
                                   </div>
                                   <div className="line-plane">
-
+                                  <div className="line-seperator"></div>  
                                     <FlightIcon
                                       className="right-plane"
-                                      sx={{ transform: 'rotate(270deg)' }}
+                                      sx={{ transform: 'rotate(90deg)' }}
                                     />
-                                    <div className="line-seperator"></div>
+                                   
                                   </div>
                                   <div className="stop">{`${Number(list.stops) !== 0
                                     ? `${list.stops} stop`
@@ -3045,11 +3076,11 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     className="Book-btn"
                                     variant="contained"
                                     // color="secondary"
-                                    onClick={() =>
-                                      setShowTwoWayFlexiFareCard(prevIndex =>
-                                        prevIndex === index ? null : index
-                                      )
-                                    }
+                                    // onClick={() =>
+                                    //   setShowTwoWayFlexiFareCard(prevIndex =>
+                                    //     prevIndex === index ? null : index
+                                    //   )
+                                    // }
                                   >
 
                                     {passengerFareInfoList?.fareInfoList
@@ -3084,11 +3115,68 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
                                     {`${list?.currencyCode} ${list?.totalAmount}`}
                                   </div> */}
+                                     <Radio
+                                        checked={
+                                          list?.flightNumber ===
+                                          twoWayTripDetails?.flightNumber &&
+                                          list?.resBookDesigCode ===
+                                          twoWayTripDetails?.resBookDesigCode &&
+                                          list?.flightNumber_RT ===
+                                          twoWayTripDetails?.flightNumber_RT
+                                        }
+                                        onChange={() =>
+                                          setTwoWayTripDetails(
+                                            JSON.parse(JSON.stringify(list))
+                                          )
+                                        }
+                                        value="a"
+                                        name="radio-buttons"
+                                        inputProps={{ "aria-label": "A" }}
+                                        // disabled={loggedInUserDetails?.role === "admin"}
+
+                                        sx={{
+                                          color: '#EF5443', // Unchecked radio button color
+                                          '&.Mui-checked': {
+                                            color: '#EF5443', // Checked radio button color
+                                          },
+                                          '&:hover': {
+                                            color: '#FF9800', // Color on hover
+                                            transform: 'scale(1.1)', // Slight scale on hover
+                                            transition: 'transform 0.3s ease, color 0.3s ease', // Smooth transition
+                                          },
+                                        }}
+                                      />
                                     <div className="total-fare1">
                                       <span className="currency1">{list?.currencyCode}</span>
                                       <span className="amount1">{list?.totalAmount}</span>
+                                      <span className="">Book</span>
                                     </div>
+                                 
                                   </button>
+
+                                  {/* {flightClassList.length === 1 ? (
+                                      <button
+                                        className="Book-btn3"
+                                        variant="contained"
+                                        // color="secondary"
+                                        disabled={
+                                          loggedInUserDetails?.role !== "admin" &&
+                                          loggedInUserDetails?.can_create_booking !== 1
+                                        }
+                                        onClick={() =>
+                                          setTwoWayTripDetails(
+                                            JSON.parse(JSON.stringify(list))
+                                          )
+                                        }
+                                      >
+                                        BOOK
+                                      </button>
+                                    ) : (
+                                     
+                                    )}
+                                 */}
+                                
+                                
                                   <div className="caret-wrapper">
                                     <span
                                       className={`caret ${showTwoWayFlexiFareCard === index
@@ -3285,56 +3373,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     <span className="amount2">{list?.totalAmount}</span>
                                   </div>
                                   <div className="Book-button1">
-                                    {flightClassList.length === 1 ? (
-                                      <button
-                                        className="Book-btn3"
-                                        variant="contained"
-                                        // color="secondary"
-                                        disabled={
-                                          loggedInUserDetails?.role !== "admin" &&
-                                          loggedInUserDetails?.can_create_booking !== 1
-                                        }
-                                        onClick={() =>
-                                          setTwoWayTripDetails(
-                                            JSON.parse(JSON.stringify(list))
-                                          )
-                                        }
-                                      >
-                                        BOOK
-                                      </button>
-                                    ) : (
-                                      <Radio
-                                        checked={
-                                          list?.flightNumber ===
-                                          twoWayTripDetails?.flightNumber &&
-                                          list?.resBookDesigCode ===
-                                          twoWayTripDetails?.resBookDesigCode &&
-                                          list?.flightNumber_RT ===
-                                          twoWayTripDetails?.flightNumber_RT
-                                        }
-                                        onChange={() =>
-                                          setTwoWayTripDetails(
-                                            JSON.parse(JSON.stringify(list))
-                                          )
-                                        }
-                                        value="a"
-                                        name="radio-buttons"
-                                        inputProps={{ "aria-label": "A" }}
-                                        // disabled={loggedInUserDetails?.role === "admin"}
-
-                                        sx={{
-                                          color: '#EF5443', // Unchecked radio button color
-                                          '&.Mui-checked': {
-                                            color: '#EF5443', // Checked radio button color
-                                          },
-                                          '&:hover': {
-                                            color: '#FF9800', // Color on hover
-                                            transform: 'scale(1.1)', // Slight scale on hover
-                                            transition: 'transform 0.3s ease, color 0.3s ease', // Smooth transition
-                                          },
-                                        }}
-                                      />
-                                    )}
+                                  
 
                                   </div>
                                 </div>
@@ -3481,13 +3520,12 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                         {twoWayTripDetails?.flightDuration}
                       </div>
                       <div className="line-plane1">
-                        <div className="line-seperator2"></div>
+                      <div className="line-seperator1"></div>
                         <FlightIcon
-
                           className="right-plane1"
-                          sx={{ transform: 'rotate(270deg)' }}
+                          sx={{ transform: 'rotate(90deg)' }}
                         />
-                        <div className="line-seperator1"></div>
+                        <div className="line-seperator2"></div>
                       </div>
                       <div className="stops1">
                         {Number(twoWayTripDetails?.stops) === 0

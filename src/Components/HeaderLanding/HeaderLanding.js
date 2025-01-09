@@ -126,9 +126,9 @@ const HeaderLanding = ({ fetchUserDetails, setFetchUserDetails }) => {
                 <a href="/availableBalance">Current Balance</a>
               </li>
             )}
-              <li className="list">
+              {/* <li className="list">
                 <a href="/ProGroup">Pro Group</a>
-              </li>
+              </li> */}
             
           </ul>
         </nav>

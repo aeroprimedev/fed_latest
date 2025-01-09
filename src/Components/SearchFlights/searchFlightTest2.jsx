@@ -3,6 +3,7 @@ import "./SearchFlights.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DropDown from "../DropDown/DropDown";
+import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -25,7 +26,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
-
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SearchIcon from "@mui/icons-material/Search";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -35,7 +36,25 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         fontWeight: 500,
     },
 }));
-
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+      paddingRight: "30px",
+      borderColor: "#ddd",
+      "&:hover .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#EF5443",
+      },
+      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#EF5443",
+      },
+    },
+    "& .MuiInputLabel-root": {
+      color: "#666",
+    },
+    "& .MuiSelect-icon": {
+      color: "#f44336",
+    },
+  }));
 // Custom Styled Radio Button
 const CustomRadio = styled(Radio)(({ theme }) => ({
     "&.Mui-checked": {
@@ -58,7 +77,11 @@ const CustomRadio = styled(Radio)(({ theme }) => ({
         backgroundColor: "#fff",
     },
 }));
-
+const PlaceholderTypography = styled('div')(({ theme }) => ({
+    color: "#888",
+    fontSize: "16px",
+  }));
+  
 // Custom Label Styling
 const CustomFormControlLabel = styled(FormControlLabel)({
     "& .MuiFormControlLabel-label": {
@@ -290,8 +313,8 @@ export function SearchFlightsTest2({ setSearchResult }) {
 
     const handleSelection = (type, value) => {
         if (type === "adult") setSelectedAdult(value);
-        if (type === "child") setSelectedChild(value);
-        if (type === "infant") setSelectedInfant(value);
+        if (type === "child") setSelectedChild(selectedChild === value ? null : value);
+        if (type === "infant") setSelectedInfant(selectedInfant === value ? null : value);
     };
 
     const handleApply = () => {
@@ -423,8 +446,8 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             {loggedInUserDetails?.airlineCodes?.length > 0 ? (
                                 <>
                                     <div className="Airline-Trip-Container">
-                                        <div className="airline-dropdown">
-                                            <DropDown
+                                        <div className="airline-dropdown-1">
+                                            {/* <DropDown
                                                 name="abc"
                                                 options={airlineOptions}
                                                 value={airline}
@@ -433,7 +456,69 @@ export function SearchFlightsTest2({ setSearchResult }) {
                                             />
                                             <i className="icon-arrow">
                                                 <ExpandMoreIcon />
-                                            </i>
+                                            </i> */}
+                                         <StyledFormControl fullWidth>
+          <Select
+            id="demo-simple-select"
+            value={airline || ""}
+            onChange={(event) => handleAirlineChange(event.target.value)}
+            name="Airline"
+            displayEmpty
+            renderValue={(selected) => {
+              if (!selected) {
+                return <PlaceholderTypography>Airline</PlaceholderTypography>;
+              }
+              return selected;
+            }}
+            style={{
+              color: "#000",
+              fontSize: "15px",
+              width: "230px",
+              height: "50px",
+              cursor: "pointer",
+            }}
+            IconComponent={(props) => (
+              <ExpandMoreIcon
+                {...props}
+                style={{
+                  color: "#ff5722",
+                  marginRight: "8px",
+                }}
+              />
+            )}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  border: "1px solid #E5E2DA",
+                  boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+                  marginTop: "8px",
+                  borderRadius: "6px",
+                  maxHeight: "200px",
+                  overflow: "hidden",
+                },
+              },
+              MenuListProps: {
+                style: {
+                  padding: 0,
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                },
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+              },
+            }}
+          >
+           
+            {airlineOptions?.map((airline) => (
+              <MenuItem key={airline} value={airline}>
+                {airline}
+              </MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>   
                                         </div>
 
                                         <div className="search-trip-section">
@@ -477,6 +562,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                                         <div className="Destination-Selection">
                                             <DropDown
                                                 name="abcd"
+                                                className="Origin-Selection-dropdown-1"
                                                 options={destinationOptions}
                                                 value={destination}
                                                 onChange={handleDestinationChange}

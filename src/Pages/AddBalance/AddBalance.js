@@ -98,6 +98,10 @@ const AddBalanceScreen = () => {
   const [agentDetails, setAgentDetails] = useState(null);
   const [transactionType, setTransactionType] = useState("all");
 
+  const [updateReasonList, setUpdateReasonList] = useState(null);
+  const [updateReason, setUpdateReason] = useState(null);
+  const [updateOtherReason, setOtherUpdateReason] = useState(null);
+
   const [currentUserAirlines, setCurrentUserAirlines] = useState(null);
   const [selectedAirline, setSelectedAirline] = useState(null);
   const [airline, setAirline] = useState(null);
@@ -116,6 +120,7 @@ const AddBalanceScreen = () => {
 
   useEffect(() => {
     fetchCurrentUserAirlines();
+    fetchUpdateAmountReasonList();
   }, [location?.state?.agentDetails?.clientId]);
 
   useEffect(() => {
@@ -285,6 +290,29 @@ const AddBalanceScreen = () => {
         fetchAgentsListForAdmin();
         fetchChartData();
         navigate("/agents");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          localStorage.clear();
+          window.location.href = "/";
+        }
+      });
+  };
+  const fetchUpdateAmountReasonList = () => {
+    const headersForUserAPI = {
+      Authorization: localStorage.getItem("AuthToken"),
+    };
+    axios
+      .get(
+        "http://stg-api.aeroprime.in/crm-service/agent/getReasonListForAmountAddition",
+        {
+          headers: headersForUserAPI,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setUpdateReasonList(response.data);
+        }
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -539,7 +567,87 @@ const AddBalanceScreen = () => {
             ></input>
           </StyledFormControl>
         </div>
-       
+        <div className="add-amount-section-element">
+          <StyledFormControl fullWidth>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={updateReason}
+              onChange={(event) => setUpdateReason(event.target.value)}
+              name="Reason"
+              displayEmpty
+              renderValue={(selected) => {
+                if (!selected) {
+                  return <PlaceholderTypography>Reason</PlaceholderTypography>;
+                }
+                return selected;
+              }}
+              style={{
+                color: "#000",
+                fontSize: "15px",
+                width: "230px",
+                height: "50px",
+              
+              }}
+                IconComponent={(props) => (
+                  <ExpandMoreIcon
+                    {...props}
+                    style={{
+                      color: "#ff5722",
+                      marginRight: "8px",
+                    }}
+                  />
+                )}
+                
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      border: "1px solid #E5E2DA",
+                      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+                      marginTop: "8px",
+                      borderRadius: "6px",
+                      maxHeight: "200px",
+                      overflow: "hidden",
+                    },
+                  },
+                  MenuListProps: {
+                    style: {
+                      padding: 0,
+                      maxHeight: "200px",
+                      overflowY: "auto",
+                      scrollbarWidth: "none",
+                      msOverflowStyle: "none",
+                    },
+                    "&::-webkit-scrollbar": {
+                      display: "none",
+                    },
+                  },
+                }}  
+            >
+              {updateReasonList?.map((reason) => (
+                <MenuItem value={reason}>
+                  {reason[0].toUpperCase() + reason.slice(1)}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+          </div>
+          <div className="add-amount-section-element">
+          {updateReason === "Other" && (
+            <div className="deduct-amount-section-element-textfield">
+              <FormControl fullWidth>
+                <input
+                  type="text"
+                  className="Input-balance"
+                  placeholder="Mention Other Reason"
+                  value={updateOtherReason}
+                  fullWidth
+                  onChange={(event) => setOtherUpdateReason(event.target.value)}
+                ></input>
+              </FormControl>
+            </div>
+          )}
+        </div>
           <button
             className="add-amount-btn"
             variant="contained"

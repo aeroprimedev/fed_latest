@@ -2101,10 +2101,10 @@ const BookingDetails = ({
                   Booking has been created. Unfortunately, PNR has not been
                   confirmed yet!!
                 </div>
-                <div className="success-msg-subheader">
+                {/* <div className="success-msg-subheader">
                   Please try confirming your PNR after sometime from Search PNR
                   screen!!
-                </div>
+                </div> */}
               </div>
             )}
             {isOfflineBooking && (

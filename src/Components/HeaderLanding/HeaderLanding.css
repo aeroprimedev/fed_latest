@@ -109,3 +109,116 @@
   transform: scale(1.15);
   /* Enlarge button slightly on hover */
 }
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .header-body-landing {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-bottom: 3px;
+    border-style: solid;
+    border-color: #E5E2DA;
+    height: 100px;
+  }
+  
+  .logo-container {}
+  
+  .logo-container .logo {
+    height: 57px;
+  
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+  
+    padding: unset;
+    display: flex;
+    gap: 20px;
+    /* Increase gap between nav items for better spacing */
+  }
+  
+  .navbar .list {
+    text-decoration: none;
+  }
+  
+  .navbar a {
+    font-weight: 600;
+    text-decoration: none;
+    color: #334555;
+  
+  }
+  
+  .navbar a:hover {
+    color: #ef5443;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-right: 17px;
+  }
+  
+  .nav-username {
+    font-size: 18px;
+    font-weight: 400;
+  
+  }
+  
+  .nav-username span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ef5443;
+    /* Make the user's name or email bold and in a different color */
+  }
+  
+  .nav-username span1 {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  
+  .nav-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logout-btn {
+    background-color: #ef5443;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 8px 16px;
+    transition: transform 0.2s ease-in-out;
+    /* Smooth transition for hover effect */
+  }
+  
+  .logout-btn:hover {
+    /* background-color: #ed4633; */
+    transform: scale(1.15);
+    /* Enlarge button slightly on hover */
+  
+  }
+  
+  .Currency-btn {
+    background-color: white;
+    border: none;
+    width: 62px;
+    height: 55px;
+  
+  }
+  
+  .currency-logo {
+    width: 55px;
+    height: 50px;
+    transition: transform 0.2s ease-in-out;
+    /* Smooth transition for hover effect */
+  }
+  
+  .currency-logo:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+    /* Enlarge button slightly on hover */
+  }
+}
