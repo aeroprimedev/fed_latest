@@ -21,7 +21,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-left: -20px;
   }
+  
   
   .search-pnr-wrapper .search-pnr .search-pnr-element-wrapper {
     display: flex;

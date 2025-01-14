@@ -902,7 +902,6 @@ const AgentsScreen = () => {
                   return (
                     <TableRow
                       key={row.name}
-                     
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
@@ -937,7 +936,7 @@ const AgentsScreen = () => {
                             <IconButton
                               aria-label="edit-agent"
                               color="primary"
-                              onClick={() => handleEditAgentOpen(row.clientId)}
+                              onClick={() => handleEditAgentOpen(row.id)}
                               disabled={
                                 loggedInUserDetails?.can_create_sub_agent !== 1
                               }
@@ -1035,7 +1034,7 @@ const AgentsScreen = () => {
           </Table>
         </TableContainer>
       </div>
-      <div className="sub-Agent-heading">SUB SUPER AGENTS</div>
+      <div className="sub-Agent-heading">SUB AGENTS</div>
 
       <div>
         <TableContainer

@@ -486,8 +486,9 @@
   display: flex;
   gap: 10px;
 }
-
-
+.Input-bd.error {
+  border: 1px solid red; /* Highlight red border for error */
+}
 .Input-bd {
   width: 200px;
   height: 50px;
@@ -649,7 +650,9 @@
   font-weight: 400;
   box-shadow: 0px 4px 4px 0px #00000040;
 }
-
+.Input-bd-name.error {
+  border: 1px solid red; /* Red border for error state */
+}
 .Input-bd-name:focus {
   border: 1px solid#ef5443;
   /* Change border color when focused */

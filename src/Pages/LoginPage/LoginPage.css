@@ -100,9 +100,11 @@
     flex-direction: column;
     align-items: start;
     justify-content: start;
-    height: 100vh;
-    margin-left: 156px;
-    margin-top: 21px;
+    height: 61vh;
+    margin-left: 170px;
+    margin-top: 30px;
+   
+    
 }
 
 .login-title {
@@ -185,3 +187,93 @@ margin-top: 50px;
 /* span{
     color:#EF5443;
 } */
+
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .login-form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    height: 100vh;
+    margin-left: 156px;
+    margin-top: 21px;
+}
+
+.login-title {
+    position: relative;
+    color: #EF5443;
+    font-family: Inter;
+font-size: 25px;
+font-weight: 500;
+margin-top: 50px;
+  }
+
+.break-line{
+    height: 1px;
+    background-color: #E5E2DA;
+    
+  }
+
+.login-Username, .login-Password{
+  margin-top: 50px;
+  height: 50px;
+  padding-left: 30px;
+  width: 401px;
+  border-radius: 10px 10px 10px 10px;
+  background: #FFFFFF;
+  border: 1px solid #E5E2DA; 
+  outline:none
+ }
+.login-Username:focus{
+  outline: none;
+  border: 1px solid #ef5443;
+}
+.login-Password:focus{
+  outline: none;
+  border: 1px solid #ef5443;
+}
+.login-Password{
+  margin-left: 30px;
+ }
+
+.forgot-password {  
+  position: absolute;
+  top: 295px;
+  left: 915px;
+}
+  .forgot-password a:hover{
+    color:#00ACCA;
+    text-decoration: none;
+
+  }
+
+.login-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 189px;
+  height: 51px;
+  border-radius: 10px;
+  border: 1.5px solid #FFFFFF;
+  background: #EF5443;
+  color: white;
+  font-size: 18px;
+  margin-top: 50px;
+ }
+
+/* .signup-link-container {
+    margin-top:40px;
+  } */
+  
+.signup-link {
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.78px;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: none;
+
+  }
+}

@@ -565,7 +565,7 @@ const Reports = () => {
                 style={{
                   color: "#000",
                   fontSize: "15px",
-                  // width: "400px",
+                  width: "400px",
                   height: "55px"
                 }}
                 IconComponent={(props) => (
@@ -654,7 +654,7 @@ const Reports = () => {
               style={{
                 color: "#000",
                 fontSize: "15px",
-                // width: "400px",
+                width: "400px",
                 height: "55px",
               }}
               IconComponent={(props) => (

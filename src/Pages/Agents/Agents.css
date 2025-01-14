@@ -121,7 +121,7 @@
     background-color: #EF5443;}
 
 .users-wrapper .MuiTableCell-root {
-    padding: 20px 30px; /* Adjusted padding to reduce overall table size */
+    /* Adjusted padding to reduce overall table size */
 }
 
 /* Pagination styles */

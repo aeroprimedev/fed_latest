@@ -1615,14 +1615,7 @@ const BookingDetails = ({
                 <FormControl fullWidth>
                   <input
                     //  className={`Input-bd ${isFocused ? "focused" : ""}`}
-                    className="Input-bd"
-                    type="email"
-                    placeholder="Email ID*"
-                    value={email}
-                    fullWidth
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                    error={
+                    className={`Input-bd ${
                       showInputErrors &&
                       (!email ||
                         !String(email)
@@ -1630,7 +1623,24 @@ const BookingDetails = ({
                           ?.match(
                             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                           ))
-                    }
+                        ? "error"
+                        : ""
+                    }`}
+                    type="email"
+                    placeholder="Email ID*"
+                    value={email}
+                    fullWidth
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                    // error={
+                    //   showInputErrors &&
+                    //   (!email ||
+                    //     !String(email)
+                    //       ?.toLowerCase()
+                    //       ?.match(
+                    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    //       ))
+                    // }
                   ></input>
                 </FormControl>
                 {/* <FormControl fullWidth>
@@ -1700,16 +1710,18 @@ const BookingDetails = ({
                 <div className="mobile-no-wrapper">
                   <FormControl fullWidth>
                     <input
-                      className="Input-bd"
+                    className={`Input-bd ${
+                      showInputErrors && (!mobileNo || mobileNo?.length !== 10) ? "error" : ""
+                    }`}
                       type="number"
                       placeholder="Mobile Number"
                       value={mobileNo}
                       fullWidth
                       onChange={(event) => setMobileNo(event.target.value)}
                       required
-                      error={
-                        showInputErrors && (!mobileNo || mobileNo?.length !== 10)
-                      }
+                      // error={
+                      //   showInputErrors && (!mobileNo || mobileNo?.length !== 10)
+                      // }
                     ></input>
                   </FormControl>
                 </div>
@@ -1799,15 +1811,24 @@ const BookingDetails = ({
                         <div className="firstName-bd">
                           <FormControl fullWidth>
                             <input
-                              error={
+                              // error={
+                              //   showInputErrors &&
+                              //   (passengerDetailList[pax]?.passengerTypeCode !==
+                              //     "INFT"
+                              //     ? !passengerDetailList[pax]?.fname
+                              //     : !passengerDetailList[pax]?.name)
+                              // }
+                              
+                              // className="Input-bd-name"
+                              className={`Input-bd-name ${
                                 showInputErrors &&
-                                (passengerDetailList[pax]?.passengerTypeCode !==
-                                  "INFT"
+                                (passengerDetailList[pax]?.passengerTypeCode !== "INFT"
                                   ? !passengerDetailList[pax]?.fname
                                   : !passengerDetailList[pax]?.name)
-                              }
+                                  ? "error"
+                                  : ""
+                              }`}
                               required
-                              className="Input-bd-name"
                               type="text"
                               placeholder="First Name"
                               value={passengerDetailList[pax].fname}
@@ -1829,15 +1850,23 @@ const BookingDetails = ({
                       <div className="lastName-wrapper-bd">
                         <FormControl fullWidth>
                           <input
-                            error={
+                            // error={
+                            //   showInputErrors &&
+                            //   (passengerDetailList[pax]?.passengerTypeCode !==
+                            //     "INFT"
+                            //     ? !passengerDetailList[pax]?.lname
+                            //     : !passengerDetailList[pax]?.surname)
+                            // }
+                            // className="Input-bd-name"
+                            className={`Input-bd-name ${
                               showInputErrors &&
-                              (passengerDetailList[pax]?.passengerTypeCode !==
-                                "INFT"
+                              (passengerDetailList[pax]?.passengerTypeCode !== "INFT"
                                 ? !passengerDetailList[pax]?.lname
                                 : !passengerDetailList[pax]?.surname)
-                            }
+                                ? "error"
+                                : ""
+                            }`}
                             required
-                            className="Input-bd-name"
                             type="text"
                             placeholder="Last Name"
                             value={passengerDetailList[pax].lname}
