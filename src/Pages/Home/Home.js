@@ -135,7 +135,7 @@ const Home = () => {
 
       </div>
 
-      {showFooter && <Footer />}
+      {/* {showFooter && <Footer />} */}
 
     </div>
   );

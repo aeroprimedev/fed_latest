@@ -26,7 +26,7 @@ const GroupHistory = () => {
           <ExpandMoreIcon />
           </i>
         </div>
-        <div className="register-btn-wrapper">
+        <div className="register-btn-wrapper1">
           <Button
           variant="contained"
           >

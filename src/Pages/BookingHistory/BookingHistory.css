@@ -52,7 +52,7 @@ line-height: 21.78px;
   .actions-wrapper .add-balance-btn:hover{
     background-color: #e64a19;
   } */
-
+@media (min-width: 1440px){
 .booking-history-wrapper{
  margin-top: 50px;
  margin-left: 200px;
@@ -134,4 +134,90 @@ line-height: 21.78px;
 }
 .No-Records-head:hover{
   transform: scale(1.05);
+}
+}
+@media (min-width: 1024px) and (max-width: 1439px){
+  .booking-history-wrapper{
+    margin-top: 50px;
+    margin-left: 130px;
+    /* margin-right: 200px; */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+   }
+   .content {
+     flex-grow: 1; /* Push footer down when content grows */
+   }
+   .no-scroll {
+     overflow: hidden;
+   }
+   .head-btn-wrapper2{
+     display: flex;
+     align-items: end;
+     justify-content: space-between;
+     /* margin: 10px; */
+     margin-bottom: 20px;
+   }
+   .Booking-heading{
+     font-size: 20px;
+       font-weight: 600;
+       color: #EF5443;
+   }
+   
+   .download-offline-bookings-btn-wrapper{
+    
+   }
+   .download-offline-bookings{
+     background-color: #EF5443;
+     border: none;
+     color: #fff;
+     border-radius: 10px;
+     width: 291px;
+     height: 42px;
+     font-family: Inter;
+     font-size: 15px;
+     font-weight: 400;
+     line-height: 18.15px;
+     cursor: pointer;
+     transition: transform 0.2s ease-in-out;
+   }
+   .download-offline-bookings:hover{
+     background-color: #EF5443;
+     transform: scale(1.05);
+   }
+   
+   .view-details-btn{
+     background-color: #EF5443;
+     border: none;
+     color: #fff;
+     border-radius: 10px;
+     font-family: Inter;
+     font-size: 15px;
+     font-weight: 400;
+     line-height: 18.15px;
+     width: 147px;
+     height: 37px;
+     transition: transform 0.2s ease-in-out;
+     cursor: pointer;
+   }
+   .view-details-btn:hover{
+     background-color: #EF5443;
+     transform: scale(1.05);
+   }
+   
+   .No-Records-head{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border-radius: 20px;
+     height: 120px;
+     color: #EF5443;
+     font-weight: 500;
+     font-size: 25px;
+     transition: transform 0.2s ease-in-out;
+   }
+   .No-Records-head:hover{
+     transform: scale(1.05);
+   }
 }

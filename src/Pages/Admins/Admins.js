@@ -267,7 +267,7 @@ const Admins = () => {
   );
 
   return (
-    <div className="users-wrapper">
+    <div className="users-wrapper1">
       <div>
         {isModalOpen && (
           <EditAdmin

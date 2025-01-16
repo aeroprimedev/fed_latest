@@ -20,3 +20,28 @@
     left: 110px;
 
 }
+
+@media (min-width: 1024px) and (max-width: 1439px){
+    .header-body-login{
+        position: relative;
+        width: 169vh;
+        height: 100px;
+        top: 0px;
+        gap: 0px;
+        opacity: 0px;
+        border-width: 1px, 0px, 4px, 0px;
+        border-style: solid;
+        border-color: #E5E2DA;
+    
+    
+    }
+    
+    .logo-login{
+        position: absolute;
+        width: 250px;
+        /* height: 57px; */
+        top: 24px;
+        left: 65px;
+    
+    }
+}

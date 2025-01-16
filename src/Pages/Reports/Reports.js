@@ -50,7 +50,7 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 
 const CustomDatePicker = styled(DatePicker)({
   "& .MuiInputBase-root": {
-    width: "400px",
+    width: "300px",
     height: "50px",
   },
   "& .MuiInputBase-input": {
@@ -474,7 +474,7 @@ const Reports = () => {
   return (
     <div className="reports-wrapper">
       <div className="Report-heading">REPORTS</div>
-      <div className="Break-line"></div>
+      <div className="Break-line-rp"></div>
       <div className="report-airline-section">
         <StyledFormControl fullWidth>
           <Select
@@ -565,7 +565,7 @@ const Reports = () => {
                 style={{
                   color: "#000",
                   fontSize: "15px",
-                  width: "400px",
+                  width: "300px",
                   height: "55px"
                 }}
                 IconComponent={(props) => (
@@ -585,7 +585,7 @@ const Reports = () => {
                       marginTop: "8px",
                       borderRadius: "6px",
                       maxHeight: "200px",
-                      maxWidth: "400px",
+                      maxWidth: "300px",
                       overflow: "hidden",
                     },
                   },
@@ -593,7 +593,7 @@ const Reports = () => {
                     style: {
                       padding: 0,
                       maxHeight: "200px",
-                      maxWidth: "400px",
+                      maxWidth: "300px",
                       overflowY: "auto",
                       scrollbarWidth: "none",
                       msOverflowStyle: "none",
@@ -654,7 +654,7 @@ const Reports = () => {
               style={{
                 color: "#000",
                 fontSize: "15px",
-                width: "400px",
+                width: "300px",
                 height: "55px",
               }}
               IconComponent={(props) => (
@@ -716,7 +716,7 @@ const Reports = () => {
               style={{
                 color: "#000",
                 fontSize: "15px",
-                width: "400px",
+                width: "300px",
                 height: "50px",
               }}
               IconComponent={(props) => (
@@ -761,7 +761,7 @@ const Reports = () => {
                 style={{
                   color: "#000",
                   fontSize: "15px",
-                  width: "400px",
+                  width: "300px",
                   height: "50px",
                 }}
                 IconComponent={(props) => (
@@ -807,7 +807,7 @@ const Reports = () => {
                 style={{
                   color: "#000",
                   fontSize: "15px",
-                  width: "400px",
+                  width: "300px",
                   height: "50px",
                 }}
                 IconComponent={(props) => (

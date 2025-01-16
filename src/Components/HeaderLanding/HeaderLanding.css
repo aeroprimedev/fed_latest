@@ -114,17 +114,18 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    border-bottom: 3px;
-    border-style: solid;
-    border-color: #E5E2DA;
+    border-bottom: 2px solid #E5E2DA;   
     height: 100px;
-    margin-right: 25px;
+    min-width: max-content;
+    /* margin-right: 25px; */
   }
   
-  .logo-container {}
+  .logo-container {
+    margin-right: 15px;
+  }
   
   .logo-container .logo {
-    height: 57px;
+    height: 52px;
   
   }
   
@@ -133,7 +134,8 @@
   
     padding: unset;
     display: flex;
-    gap: 20px;
+    gap: 15px;
+    margin-right: 10px;
     /* Increase gap between nav items for better spacing */
   }
   
@@ -142,10 +144,10 @@
   }
   
   .navbar a {
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
     color: #334555;
-  
+    font-size: 15px;  
   }
   
   .navbar a:hover {
@@ -155,8 +157,9 @@
   .header-right {
     display: flex;
     align-items: center;
-    gap: 18px;
-    margin-right: 17px;
+    gap: 15px;
+    margin-left: 20px;
+    margin-right: 10px;
   }
   
   .nav-username {
@@ -180,7 +183,7 @@
   .nav-logout {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
   }
   
   .logout-btn {
