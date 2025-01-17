@@ -1802,8 +1802,8 @@ const BookingDetails = ({
                                   )}
                                 >
 
-                                  <MenuItem value="Mrs.">Mrs.</MenuItem>
-                                  <MenuItem value="Mr.">Mr.</MenuItem>
+                                  <MenuItem value="MRS">Mrs.</MenuItem>
+                                  <MenuItem value="MR">Mr.</MenuItem>
                                 </Select>
                               </StyledFormControl>
                             </div>
@@ -2100,6 +2100,7 @@ const BookingDetails = ({
               BOOK NOW
             </button>
           </div>
+         
         )
       }
       {
