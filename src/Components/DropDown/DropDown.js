@@ -10,7 +10,7 @@ const Dropdown = ({
   onChange,
   optionLabelKey = "label",
   optionValueKey = "value",
-  placeholder = "Select an option...",
+  placeholder,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -88,10 +88,11 @@ const Dropdown = ({
   }, [searchQuery, isOpen]);
 
   return (
-    <div 
-    className="select-container"
-    // className={`select-container ${searchQuery ? "select-container-searching" : ""}`} 
-    ref={dropdownRef}>
+    <div
+      className="select-container"
+      // className={`select-container ${searchQuery ? "select-container-searching" : ""}`}
+      ref={dropdownRef}
+    >
       <div
         style={getStyling()}
         className="dropdown"
@@ -99,36 +100,26 @@ const Dropdown = ({
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        {/* <div className="selected-option">
+        
+        <div
+          className="selected-option"
+          title={
+            value
+              ? options.find((option) => option[optionValueKey] === value)?.[
+                  optionLabelKey
+                ] || value
+              : placeholder
+          } // Show full text on hover
+        >
           {value
             ? options.find((option) => option[optionValueKey] === value)?.[
                 optionLabelKey
               ] || value
             : placeholder}
-        </div> */}
-         <div
-        className="selected-option"
-       
-        title={
-          value
-            ? options.find((option) => option[optionValueKey] === value)?.[
-                optionLabelKey
-              ] || value
-            : placeholder
-        } // Show full text on hover
-      >
-        {value
-          ? options.find((option) => option[optionValueKey] === value)?.[
-              optionLabelKey
-            ] || value
-          : placeholder}
-      </div>
+        </div>
       </div>
       {isOpen && (
-        <div 
-       className="dropdown-popup"
-         ref={optionsRef}
-         >
+        <div className="dropdown-popup" ref={optionsRef}>
           {filteredOptions.map((option, index) => {
             const displayText =
               optionLabelKey && typeof option === "object"

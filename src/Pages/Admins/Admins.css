@@ -150,8 +150,8 @@
   @media (min-width: 1024px) and (max-width: 1439px){
     .users-wrapper1 {
       margin-top: 50px;
-      margin-left: 120px;
-      margin-right: -75px;
+      margin-left: 100px;
+      margin-right:80px;
       display: flex;
       flex-direction: column;
       margin-bottom: 100px;

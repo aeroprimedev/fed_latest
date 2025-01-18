@@ -557,6 +557,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                         name="abcd"
                         className="Origin-Selection-dropdown"
                         options={originList}
+                        placeholder="Origin"
                         value={origin}
                         onChange={handleOriginChange}
                         optionLabelKey={null}
@@ -569,9 +570,10 @@ export function SearchFlightsTest2({ setSearchResult }) {
                     <div className="Destination-Selection">
                       <DropDown
                         name="abcd"
-                        className="Origin-Selection-dropdown-1"
+                        className={`Origin-Selection-dropdown-1 ${!origin ? 'disabled' : ''}`} 
                         options={destinationOptions}
                         value={destination}
+                        placeholder="Destination"
                         onChange={handleDestinationChange}
                         optionLabelKey={null} // Options are strings
                         optionValueKey={null} // Options are strings

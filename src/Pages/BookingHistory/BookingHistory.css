@@ -139,8 +139,8 @@ line-height: 21.78px;
 @media (min-width: 1024px) and (max-width: 1439px){
   .booking-history-wrapper{
     margin-top: 50px;
-    margin-left: 130px;
-    /* margin-right: 200px; */
+    margin-left: 100px;
+    margin-right: 100px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
