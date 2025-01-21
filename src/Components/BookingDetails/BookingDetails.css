@@ -1,3 +1,4 @@
+@media (min-width: 1440px){
 .booking-details-wrapper {
   display: flex;
   flex-direction: column;
@@ -801,3 +802,809 @@
   color: #EF5443;
 
 }
+}
+@media (min-width: 1024px) and (max-width: 1439px){
+  .booking-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-bottom: 40px;
+    margin-left: 80px;
+  }
+  
+  
+  .booking-details-wrapper .flight-cards {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+  }
+  
+  .booking-details-wrapper .flight-cards-col {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .flight-card-wrapper-booking-details {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    height: 170px;
+    width: 800px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.36);
+    margin: 20px 15px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .flight-card-wrapper-booking-details:hover {
+    transform: scale(1.02);
+    background-color: #f8f8f8
+  }
+  
+  .ticket-head {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px dashed #EF5443;
+    /* padding-bottom: 5px; */
+  
+  }
+  
+  .depart-head-wrapper {
+    color: #ffff;
+    background-color: #334555;
+    padding: 5px;
+    border-bottom-right-radius: 30px;
+    width: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 30px;
+    height: 20px;
+  }
+  
+  .depart-head {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: Inter;
+  }
+  
+  .ticket-head-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .icon-plane-bd {
+    color: #EF5443;
+    margin-right: 10px;
+  
+  }
+  
+  .depart-arrival-city-wrapper-bd {
+    display: flex;
+    flex-direction: row;
+  
+  }
+  
+  .flight-depart-city-name {
+    color: #334555;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19.36px;
+    text-align: left;
+  
+  
+  }
+  
+  .dash {
+    color: #334555;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+  
+  .flight-arrival-city-name {
+    color: #334555;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19.36px;
+    text-align: left;
+  }
+  
+  .depart-head-seperator {
+    width: 2px;
+    border-right: 2px solid #334555;
+    height: 30px;
+    margin: 5px;
+  }
+  
+  .flight-date {
+    display: flex;
+    align-items: center;
+    font-family: Inter;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 14.52px;
+    text-align: left;
+    color: #334555;
+    margin-top: 2px;
+  }
+  
+  .bd-ticket-wrapper {
+    display: flex;
+    flex-direction: column;
+  
+  }
+  
+  .bd-flight-name-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #707271;
+    margin-right: 10px;
+    /* width: 220px; */
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  
+  
+  .fare-bd {
+    color: #EF5443;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding: 10px;
+    gap: 5px;
+  }
+  
+  .currency-code-bd {
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 600;
+  }
+  
+  .total-amount-bd {
+    font-size: 25px;
+    font-family: Inter;
+    font-weight: 600;
+  }
+  
+  .fare-header-seperator {}
+  
+  .fare-header-bd {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 35px;
+    color: #EF5443;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 600;
+    border-bottom: 1px dashed #666666;
+  }
+  
+  .Price-Summary-bd {
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  
+  .Price-Summary-bd-wrapper {
+    background-color: #334555;
+    color: #ffff;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+  }
+  
+  .fare-section-bd {
+    border-radius: 20px;
+  
+    max-height: fit-content;
+    width: fit-content;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.36);
+    margin: 20px 15px;
+    /* padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    transition: background-color 0.4s ease;
+  }
+  
+  .fare-section-bd:hover {
+    transform: scale(1.02);
+    background-color: #f8f8f8;
+  }
+  
+  .fare-section .header {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .fare-section .fare {
+    font-size: 25px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+  
+  .booking-details-wrapper .flight-cards .fare-section .fare .rupeeSvg {
+    height: 25px;
+    margin-top: 3px;
+    margin-right: 3px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper {
+    display: flex;
+    border-radius: 5px;
+    height: 150px;
+    width: fit-content;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.36);
+    margin: 20px 15px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-name-details {
+    border-right: 1px solid #e2e2e2;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Rubik-Regular";
+    font-size: 13px;
+    color: #333333;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-name-details .flight-logo img {
+    height: 20px;
+    width: 20px;
+  }
+  
+  .T5-logo-bd {
+    height: 70px;
+    width: 80px;
+  }
+  
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-name-details .seperator {
+    margin: 5px 0px;
+    border-top: 1px solid #e2e2e2;
+    width: 100%;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .booking-class-section {
+    border-right: 1px solid #e2e2e2;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Rubik-Regular";
+    font-size: 13px;
+    color: #333333;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-right: 1px solid #e2e2e2;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-left,
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-left .flight-city-code {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-right .flight-city-code {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-code {
+    color: #999999;
+    font-size: 18px;
+    font-family: "Rubik-Regular";
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-time {
+    color: #333333;
+    font-weight: 700;
+    font-size: 20px;
+    font-family: "Rubik-Medium";
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-left .flight-city-time {
+    margin-left: 5px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-right .flight-city-time {
+    margin-right: 5px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-name {
+    font-family: "Rubik-Regular";
+    color: #666666;
+    font-size: 12px;
+    display: flex;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-left .flight-city-name {
+    justify-content: right;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-right .flight-city-name {
+    justify-content: left;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-seperator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 20px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-seperator .line-seperator {
+    width: 80px;
+    border-bottom: 1px solid #cacaca;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .duration-stop {
+    border-left: 1px solid #cacaca;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10px;
+    padding-left: 10px;
+    height: 50px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-seperator .duration {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: "Rubik-Regular";
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flight-city-details .flight-city-seperator .stop {
+    font-size: 10px;
+    font-family: "Rubik-Medium";
+    /* font-weight: 600; */
+  }
+  
+  .flexi-selection-bd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .header-bd {
+    display: flex;
+    justify-content: center;
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    align-items: center;
+    color: #334555;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 24px;
+  }
+  
+  .header-sub-bd {
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px;
+  }
+  
+  .flexi-features-bd {}
+  
+  .booking-details-wrapper .flight-card-wrapper .flexi-selection {
+    padding: 5px;
+    width: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .feature-bd {
+    font-size: 10px;
+    margin: 3px 0px;
+  }
+  
+  .feature-bd img {
+    width: 12px;
+    margin-right: 5px;
+  }
+  
+  .booking-details-wrapper .flight-card-wrapper .flexi-selection .header {
+    font-weight: 500;
+  }
+  
+  .Contact-Details-bd-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    width: 70%;
+    /* Make sure the width is consistent */
+    padding: 10px;
+  }
+  
+  .Contact-Details-bd {
+    margin-top: 30px;
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+  
+    color: #ef5443;
+  }
+  
+  .booking-details-wrapper .contact-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .Contact-Details-bd-seperator {
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 850px;
+    background-color: #e5e2da;
+  }
+  
+  .email-no-wrapper-bd {
+    display: flex;
+    gap: 50px;
+    width: 800px;
+  }
+  
+  .email-no-wrapper-bd .mobileNo-wrapper-bd {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .email-no-wrapper-bd .mobileNo-wrapper-bd .country-code-bd {
+    /* width: 100px; */
+  }
+  
+  .email-wrapper {
+    display: flex;
+    gap: 10px;
+  }
+  .Input-bd.error {
+    border: 1px solid red; /* Highlight red border for error */
+  }
+  .Input-bd {
+    width: 200px;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: -1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+    color: #707271;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  
+  .Input-bd:focus {
+    border: 1px solid#ef5443;
+    /* Change border color when focused */
+    outline: none;
+    /* Remove default outline */
+  }
+  
+  .Input-bd:hover {
+    border: 1px solid #ef5443;
+  }
+  
+  .email-bd {
+    width: 200px;
+    height: 51px;
+    border: none;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    outline: none;
+    padding: 10px;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    color: #707271;
+  }
+  
+  
+  .email-bd:focus {
+    outline: none;
+    border: none;
+    /*   Ensure no border appears */
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  
+  .mobile-no-wrapper {}
+  
+  .mobile-no {
+    width: 150px;
+    height: 51px;
+    border: none;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    outline: none;
+    padding: 10px;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    color: #707271;
+  }
+  
+  .mobile-no:focus {
+    outline: none;
+    border: none;
+    /*   Ensure no border appears */
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  
+  
+  .booking-details-wrapper .contact-wrapper .header {
+    font-weight: 600;
+  }
+  
+  .booking-details-wrapper .contact-wrapper .email-wrapper,
+  .booking-details-wrapper .contact-wrapper .mobileNo-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .birthdate-wrapper {
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  
+  .booking-details-wrapper .contact-wrapper .mobileNo-wrapper .country-code {
+    width: 100px;
+  }
+  
+  .booking-details-wrapper .contact-wrapper .email-wrapper {
+    width: 300px;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    width: 70%;
+    padding: 10px;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details {
+    display: flex;
+    flex-direction: column;
+  
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .header-pax {
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    color: #ef5443;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .details-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .firstName-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+  
+  }
+  
+  .lastName-wrapper-bd {
+    margin-top: 7px;
+    margin-right: 20px;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .passport-number {
+    margin-right: 15px;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .lastName-wrapper,
+  .booking-details-wrapper .pax-details-wrapper .pax-details .nationality {
+    display: flex;
+  }
+  
+  .Input-bd-name {
+    width: 200px;
+    height: 45px;
+    padding-left: 10px;
+    border-radius: -1px;
+    border: 1px solid #E5E2DA;
+    background: #FFFFFF;
+    color: #707271;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  .Input-bd-name.error {
+    border: 1px solid red; /* Red border for error state */
+  }
+  .Input-bd-name:focus {
+    border: 1px solid#ef5443;
+    /* Change border color when focused */
+    outline: none;
+    /* Remove default outline */
+  }
+  
+  .Input-bd-name:hover {
+    border: 1px solid #ef5443;
+  }
+  
+  .passport-date {
+    height: 60px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .nationality {}
+  
+  .booking-details-wrapper .pax-details-wrapper .pax-details .firstName-wrapper .title {}
+  
+  .booking-details-wrapper .success-wrapper,
+  .booking-details-wrapper .error-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .booking-details-wrapper .success-wrapper .success-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    font-weight: 500;
+    color: #006c2c;
+  }
+  
+  .booking-details-wrapper .success-wrapper .success-pending-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    font-weight: 500;
+    color: #ffa630;
+  }
+  
+  .booking-details-wrapper .success-wrapper .success-pending-msg .success-msg-subheader {
+    font-size: 20px;
+  }
+  
+  .booking-details-wrapper .error-wrapper .success-icon,
+  .booking-details-wrapper .error-wrapper .error-icon {
+    margin-top: 50px;
+    height: 80px;
+  }
+  
+  .booking-details-wrapper .error-wrapper .error-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    font-weight: 500;
+    color: #d20f46;
+  }
+  
+  .booking-details-wrapper .success-wrapper .section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  
+  .booking-details-wrapper .success-wrapper .pnr,
+  .booking-details-wrapper .success-wrapper .ref {
+    font-weight: 500;
+    font-size: 20px;
+  }
+  
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax {
+    display: flex;
+    font-size: 15px;
+    margin: 10px;
+  }
+  
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .pax {
+    font-weight: 500;
+  }
+  
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .pax,
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .pax-name,
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .pax-type,
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .passport,
+  .booking-details-wrapper .success-wrapper .booked-pax-wrapper .booked-pax .gender {
+    margin-right: 20px;
+  }
+  
+  
+  .Book-btn-bd-wrapper {
+    margin-left: 450px;
+    margin-top: 30px;
+    margin-bottom: 100px;
+  }
+  
+  .Book-btn-bd {
+    width: 180px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #EF5443;
+    font-family: Inter;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 18.15px;
+    text-align: left;
+    color: #FFFFFF;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .Book-btn-bd:hover {
+    background-color: #EF5443;
+    transform: scale(1.05);
+  }
+  
+  .Review-Flight-Details-wrapper {
+    margin-top: 60px;
+    display: flex;
+    gap: 30px;
+    border-bottom: 2px solid #ef5443;
+    width: 800px;
+    margin-left: 10px;
+    height: 70px;
+    padding-left: 20px;
+    align-items: center;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.36);
+  }
+  
+  .Review-Flight-Details {
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24.2px;
+    text-align: left;
+    color: #EF5443;
+  
+  }
+  }
