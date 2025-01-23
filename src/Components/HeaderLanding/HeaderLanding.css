@@ -116,7 +116,7 @@
     justify-content: space-around;
     border-bottom: 2px solid #E5E2DA;   
     height: 100px;
-    min-width: max-content;
+    width: 121%;
     /* margin-right: 25px; */
   }
   

@@ -2628,15 +2628,12 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                           ?.farePkgInfoList[2]?.selected !== "true" && (
                                           <div className="header1">(Standard)</div>
                                         )}
-                                      <div className="total-fare1">
-                                        <span className="currency1">{list?.currencyCode}</span>
-                                        <span className="amount1">{list?.totalAmount}</span>
-                                        {/* <span className="">Book</span> */}
-                                      </div>
+                                     
                                       {flightClassList.length === 1 ? (
                                         <div></div> 
                                       ) : (
                                         <Radio
+                                        className="check-btn"
                                           checked={
                                             list?.flightNumber ===
                                             oneWayTripDetails?.flightNumber &&
@@ -2656,20 +2653,30 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                           // disabled={loggedInUserDetails?.role === "admin"}
 
                                           sx={{
-                                            color: '#EF5443', // Unchecked radio button color
+                                            color: '#ffffff', // Unchecked radio button color (white)
                                             '&.Mui-checked': {
-                                              color: '#EF5443', // Checked radio button color
+                                              color: '#ffffff', // Checked radio button color (white)
                                             },
                                             '&:hover': {
-                                              color: '#FF9800', // Color on hover
+                                              color: '#ffffff', // Color on hover
                                               transform: 'scale(1.1)', // Slight scale on hover
                                               transition: 'transform 0.3s ease, color 0.3s ease', // Smooth transition
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                              fontSize: '18px', // Reduce size of the radio button
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                              fontSize: '18px', // Reduce size of the radio button
                                             },
                                           }}
                                         />
                                       )}
                                    
-                                   
+                                   <div className="total-fare1">
+                                        <span className="currency1">{list?.currencyCode}</span>
+                                        <span className="amount1">{list?.totalAmount}</span>
+                                        {/* <span className="">Book</span> */}
+                                      </div>
                                    
                                   
                                     </button>
@@ -3135,21 +3142,24 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                         // disabled={loggedInUserDetails?.role === "admin"}
 
                                         sx={{
-                                          color: '#EF5443', // Unchecked radio button color
+                                          color: '#ffffff', // Unchecked radio button color
                                           '&.Mui-checked': {
-                                            color: '#EF5443', // Checked radio button color
+                                            color: '#ffffff', // Checked radio button color
                                           },
                                           '&:hover': {
-                                            color: '#FF9800', // Color on hover
+                                            color: '#ffffff', // Color on hover
                                             transform: 'scale(1.1)', // Slight scale on hover
                                             transition: 'transform 0.3s ease, color 0.3s ease', // Smooth transition
                                           },
+                                          '& .MuiSvgIcon-root': {
+                                              fontSize: '18px', // Reduce size of the radio button
+                                            },
                                         }}
                                       />
                                     <div className="total-fare1">
                                       <span className="currency1">{list?.currencyCode}</span>
                                       <span className="amount1">{list?.totalAmount}</span>
-                                      <span className="">Book</span>
+                                      {/* <span className="">Book</span> */}
                                     </div>
                                  
                                   </button>
