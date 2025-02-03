@@ -2043,10 +2043,16 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
   const handleSelection = (type, count) => {
     if (type === "adult") {
       setSelectedAdult(count);
+      if (selectedInfant > count) {
+        setSelectedInfant(count);
+      }
     } else if (type === "child") {
-      setSelectedChild(count);
+      setSelectedChild(selectedChild === count ? null : count);
     } else if (type === "infant") {
-      setSelectedInfant(count);
+      setSelectedInfant(selectedInfant === count ? null : count);
+      if (count <= selectedAdult) {
+        setSelectedInfant(selectedInfant === count ? null : count);
+      }
     }
   };
 
@@ -2356,7 +2362,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
     setSelectedValue(value);
   };
 
-  console.log(tripType)
+  
 
   const returnSearchResultContent = () => {
     if (showNoFlightsMessage) {
@@ -2588,6 +2594,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     <button
                                       className="Book-btn"
                                       variant="contained"
+                                      disabled={
+                                        loggedInUserDetails?.role !== "admin" &&
+                                        loggedInUserDetails?.can_create_booking !== 1
+                                      }
                                       // color="secondary"
                                       onClick={() => {
                                         if(flightClassList.length === 1 ){
@@ -3088,6 +3098,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     //     prevIndex === index ? null : index
                                     //   )
                                     // }
+                                    disabled={
+                                      loggedInUserDetails?.role !== "admin" &&
+                                      loggedInUserDetails?.can_create_booking !== 1
+                                    }
                                   >
 
                                     {passengerFareInfoList?.fareInfoList
@@ -3685,6 +3699,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 setDateLabel1(
                   date ? date.toLocaleDateString() : "Departure Date"
                 );
+                if (returnDate && date > returnDate) {
+                  setReturnDate(null);
+                  setDateLabel2("Select Return Date");
+                }
               }}
               customInput={
                 <button className="calender-button1">
@@ -3703,6 +3721,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 setReturnDate(date);
                 setDateLabel2(date ? date.toLocaleDateString() : "Return Date");
               }}
+              minDate={departureDate}
+              dayClassName={(date) =>
+                date < departureDate ? "disabled-date" : ""
+              }
               customInput={
                 <button
                   className={`calender-button2 ${tripType !== "ROUND_TRIP" ? "disabled" : ""
@@ -3723,7 +3745,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 </button>
               }
               dateFormat="MM/dd/yyyy"
-              minDate={departureDate}
+             
             />
           </div>
           <div className="Passenger-Selection1">
@@ -3749,7 +3771,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                   <div className="passenger-type">
                     <label>ADULTS (16y+)</label>
                     <div className="passenger-buttons">
-                      {Array.from({ length: 10 }, (_, i) => (
+                      {Array.from({ length: 9 }, (_, i) => (
                         <button
                           key={i}
                           className={selectedAdult === i + 1 ? "selected" : ""}
@@ -3764,7 +3786,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                   <div className="passenger-type">
                     <label>CHILDREN (2Y - 12Y)</label>
                     <div className="passenger-buttons">
-                      {Array.from({ length: 6 }, (_, i) => (
+                      {Array.from({ length: 9 }, (_, i) => (
                         <button
                           key={i}
                           className={selectedChild === i + 1 ? "selected" : ""}
@@ -3779,7 +3801,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                   <div className="passenger-type">
                     <label>INFANTS (below 2y)</label>
                     <div className="passenger-buttons">
-                      {Array.from({ length: 6 }, (_, i) => (
+                      {Array.from({ length: 9 }, (_, i) => (
                         <button
                           key={i}
                           className={selectedInfant === i + 1 ? "selected" : ""}

@@ -18,7 +18,10 @@
   margin-top: 30px;
 
 }
-
+.wrapper-reports{
+  display: flex;
+  align-items: center;
+}
 .report-selection-section {
   display: flex;
   margin-top: 30px;
@@ -27,7 +30,7 @@
 }
 
 .report-client-selection-section {
-
+  /* margin-top: 30px; */
 }
 
 .reports-wrapper .report-city-section {

@@ -91,6 +91,7 @@ const CustomFormControlLabel = styled(FormControlLabel)({
     fontFamily: "Inter",
   },
 });
+
 const CustomDatePicker = styled(DatePicker)({
   "& .MuiInputBase-root": {
     width: "400px",
@@ -139,7 +140,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
   // const currentDate = new Date();
   // currentDate.setHours(0, 0, 0, 0); // Set time to midnight for accurate comparison
 
-  console.log(loggedInUserDetails);
+  // console.log(loggedInUserDetails);
 
   function getAirlineAndOption() {
     if (loggedInUserDetails && loggedInUserDetails.airlineCodes) {
@@ -201,7 +202,10 @@ export function SearchFlightsTest2({ setSearchResult }) {
   // Replace standard apostrophe with a more typographically correct one
   //     return formatter.format(date).replace("'", "’");
   //   };
-
+  const filterSpecificDates = (date) => {
+    const day = date.getDate();
+    return day >= 10 && day <= 20;
+  };
   const handleOriginChange = (value) => {
     setOrigin(value);
   };
@@ -311,12 +315,29 @@ export function SearchFlightsTest2({ setSearchResult }) {
       });
   };
 
-  const handleSelection = (type, value) => {
-    if (type === "adult") setSelectedAdult(value);
-    if (type === "child")
-      setSelectedChild(selectedChild === value ? null : value);
-    if (type === "infant")
-      setSelectedInfant(selectedInfant === value ? null : value);
+  // const handleSelection = (type, value) => {
+  //   if (type === "adult") setSelectedAdult(value);
+  //   if (type === "child")
+  //     setSelectedChild(selectedChild === value ? null : value);
+  //   if (type === "infant")
+  //     setSelectedInfant(selectedInfant === value ? null : value);
+  // };
+  const handleSelection = (type, count) => {
+    if (type === "adult") {
+      setSelectedAdult(count);
+      // Automatically adjust infant count if it exceeds adult count
+      if (selectedInfant > count) {
+        setSelectedInfant(count);
+      }
+    } else if (type === "child") {
+      setSelectedChild(selectedChild === count ? null : count);
+    } else if (type === "infant") {
+      // Ensure infants do not exceed the number of adults
+     
+      if (count <= selectedAdult) {
+        setSelectedInfant(selectedInfant === count ? null : count);
+      }
+    }
   };
 
   const handleApply = () => {
@@ -590,7 +611,15 @@ export function SearchFlightsTest2({ setSearchResult }) {
                         onChange={(date) => {
                           setDepartureDate(date);
                           setDateLabel1(formatDate(date)); // Format date on change
+                          console.log(setDateLabel1);
+                          // Reset return date if it's before the new departure date
+                          if (returnDate && date > returnDate) {
+                            setReturnDate(null);
+                            setDateLabel2("Select Return Date");
+                          }
+
                         }}
+                        // filterDate={filterSpecificDates} // Apply filter here
                         customInput={
                           <button className="calender-button">
                             <span className="date-label">
@@ -612,6 +641,11 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             setReturnDate(date);
                             setDateLabel2(formatDate(date));
                           }}
+                          minDate={departureDate}
+                          // filterDate={filterSpecificDates} // Apply filter here    
+                          dayClassName={(date) =>
+                            date < departureDate ? "disabled-date" : ""
+                          }
                           customInput={
                             <button
                               className={`calender-button ${
@@ -638,7 +672,8 @@ export function SearchFlightsTest2({ setSearchResult }) {
                         />
                       </div>
                     </div>
-
+                  
+{/* 
                     <div className="Passenger-Selection">
                       <div className="Pax">
                         {totalTravelers > 0 ? (
@@ -681,7 +716,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             <div className="passenger-type">
                               <label>CHILDREN (2Y - 12Y)</label>
                               <div className="passenger-buttons">
-                                {Array.from({ length: 6 }, (_, i) => (
+                                {Array.from({ length: 9 }, (_, i) => (
                                   <button
                                     key={i}
                                     className={
@@ -700,7 +735,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             <div className="passenger-type">
                               <label>INFANTS (below 2y)</label>
                               <div className="passenger-buttons">
-                                {Array.from({ length: 6 }, (_, i) => (
+                                {Array.from({ length: 8 }, (_, i) => (
                                   <button
                                     key={i}
                                     className={
@@ -725,7 +760,78 @@ export function SearchFlightsTest2({ setSearchResult }) {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div> */}
+                    <div className="Passenger-Selection">
+  <div className="Pax">
+    {totalTravelers > 0 ? (
+      <span
+        className="total-passenger"
+        onClick={() => setShowPassengerSelection(!showPassengerSelection)}
+      >
+        {`${totalTravelers} Traveler${totalTravelers > 1 ? "s" : ""}`}
+      </span>
+    ) : (
+      <button
+        className="open-passenger-selection"
+        onClick={() => setShowPassengerSelection(!showPassengerSelection)}
+      >
+        Select Passengers
+      </button>
+    )}
+    {showPassengerSelection && (
+      <div className="passenger-selection-container">
+        <div className="passenger-type">
+          <label>ADULTS (16y+)</label>
+          <div className="passenger-buttons">
+            {Array.from({ length: 9 }, (_, i) => (
+              <button
+                key={i}
+                className={selectedAdult === i + 1 ? "selected" : ""}
+                onClick={() => handleSelection("adult", i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="passenger-type">
+          <label>CHILDREN (2Y - 12Y)</label>
+          <div className="passenger-buttons">
+            {Array.from({ length: 9 }, (_, i) => (
+              <button
+                key={i}
+                className={selectedChild === i + 1 ? "selected" : ""}
+                onClick={() => handleSelection("child", i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="passenger-type">
+          <label>INFANTS (below 2y)</label>
+          <div className="passenger-buttons">
+            {Array.from({ length: 9 }, (_, i) => (
+              <button
+                key={i}
+                className={selectedInfant === i + 1 ? "selected" : ""}
+                onClick={() => handleSelection("infant", i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button className="apply-button" onClick={handleApply}>
+          Apply
+        </button>
+      </div>
+    )}
+  </div>
+</div>
                     {/* <div className="Search-Button">
                 <button
                   className="Search-button"

@@ -343,11 +343,18 @@ const Reports = () => {
       loggedInUserDetails?.role === "admin"
         ? `http://stg-api.aeroprime.in/crm-service/download/${reportType}?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&clientId=${clientCode}`
         : `http://stg-api.aeroprime.in/crm-service/download/${reportType}?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&clientId=${clientCode}&agentId=${selectedClient?.id}`;
+    let failedBookingReportUrl =
+        loggedInUserDetails?.role === "admin"
+          ? `http://stg-api.aeroprime.in/crm-service/download/${reportType}?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&origin=${originCode}&destination=${destinationCode}&tripType=All&clientId=${clientCode}`
+          : `http://stg-api.aeroprime.in/crm-service/download/${reportType}?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&origin=${originCode}&destination=${destinationCode}&tripType=All&clientId=${clientCode}&agentId=${selectedClient?.id}`;
     if (reportType === "bookingReport") {
       window.open(bookingReportUrl, "_blank", "noreferrer");
     }
     if (reportType === "transactionReport") {
       window.open(transactionReportUrl, "_blank", "noreferrer");
+    }
+    if (reportType === "failureReport") {
+      window.open(failedBookingReportUrl, "_blank", "noreferrer");
     }
   };
 
@@ -374,13 +381,35 @@ const Reports = () => {
         }&pageSize=10`
         : `http://stg-api.aeroprime.in/crm-service/user/transactionDetails?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&clientId=${clientCode}&agentId=${selectedClient?.id
         }&pageNo=${pageNumber ? pageNumber : page}&pageSize=10`;
+    let failedBookingReportUrl =
+      loggedInUserDetails?.role === "admin"
+          ? `http://stg-api.aeroprime.in/crm-service/user/failureDetails?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&origin=${originCode}&destination=${destinationCode}&tripType=All&clientId=${clientCode}&pageNo=${
+              pageNumber ? pageNumber : page
+            }&pageSize=10`
+          : `http://stg-api.aeroprime.in/crm-service/user/failureDetails?startDate=${startDt}&endDate=${endDate}&airlineCode=${airline}&origin=${originCode}&destination=${destinationCode}&tripType=All&clientId=${clientCode}&agentId=${
+              selectedClient?.id
+            }&pageNo=${pageNumber ? pageNumber : page}&pageSize=10`;    
+            let fetchReportsUrl;
+
+            switch (reportType) {
+              case "bookingReport":
+                fetchReportsUrl = bookingReportUrl;
+                break;
+              case "transactionReport":
+                fetchReportsUrl = transactionReportUrl;
+                break;
+              case "failureReport":
+                fetchReportsUrl = failedBookingReportUrl;
+                break;
+              default:
+                return;
+            }
+               
     axios
-      .get(
-        reportType === "bookingReport"
-          ? bookingReportUrl
-          : transactionReportUrl,
-        { headers: { Authorization: localStorage.getItem("AuthToken") } }
-      )
+      // 
+      .get(fetchReportsUrl, {
+        headers: { Authorization: localStorage.getItem("AuthToken") },
+      }) 
       .then((response) => {
         setTableData(response.data.data);
         setTotalResults(response.data.totalCount);
@@ -407,7 +436,8 @@ const Reports = () => {
     airlineCode,
     paxFirstName,
     paxLastName,
-    flightDate
+    flightDate,
+    agentName
   ) {
     return {
       referenceID,
@@ -422,6 +452,7 @@ const Reports = () => {
       paxFirstName,
       paxLastName,
       flightDate,
+      agentName
     };
   }
 
@@ -438,7 +469,8 @@ const Reports = () => {
       data.airlineCode,
       data.paxFirstName,
       data.paxLastName,
-      data.flightDate
+      data.flightDate,
+      data.agentName
     );
   });
 
@@ -625,7 +657,7 @@ const Reports = () => {
             </StyledFormControl>
           </div>
         )}
-
+<div className="wrapper-reports">
         <div className="report-type-dd-section">
           <StyledFormControl fullWidth>
             <Select
@@ -739,7 +771,7 @@ const Reports = () => {
           </StyledFormControl>
         </div>
       )}
-
+</div>
       {reportType === "bookingReport" && (
         <div className="report-city-section">
           <div className="report-origin-section">
@@ -905,8 +937,9 @@ const Reports = () => {
             >
               <Table aria-label="simple table">
                 <TableHead>
-                  {reportType === "bookingReport" ? (
+                  {/* {reportType === "bookingReport" ? (
                     <TableRow>
+                      <StyledTableCell align="left">Agent</StyledTableCell>
                       <StyledTableCell align="left">Ticket Id</StyledTableCell>
                       <StyledTableCell align="left">PNR No</StyledTableCell>
                       <StyledTableCell align="left">Pax Name</StyledTableCell>
@@ -922,7 +955,7 @@ const Reports = () => {
                           })`}
                       </StyledTableCell>
                     </TableRow>
-                  ) : (
+                  ):(
                     <TableRow>
                       <StyledTableCell align="left">
                         {`Amount (In ${loggedInUserDetails?.role === "admin"
@@ -936,7 +969,65 @@ const Reports = () => {
                       <StyledTableCell align="left">Remarks</StyledTableCell>
                       <StyledTableCell align="left">Airline Code</StyledTableCell>
                     </TableRow>
-                  )}
+                  )} */}
+                  {reportType === "bookingReport" && (
+                  <TableRow>
+                   
+                    <StyledTableCell align="left">Ticket Id</StyledTableCell>
+                    <StyledTableCell align="left">PNR No</StyledTableCell>
+                    <StyledTableCell align="left">Pax Name</StyledTableCell>
+                    <StyledTableCell align="left">Origin</StyledTableCell>
+                    <StyledTableCell align="left">Destination</StyledTableCell>
+                    <StyledTableCell align="left">Airline Code</StyledTableCell>
+                    <StyledTableCell align="left">Flight Date</StyledTableCell>
+                    <StyledTableCell align="left">Trip Type</StyledTableCell>
+                    <StyledTableCell align="left">
+                      {`Amount (In ${
+                        loggedInUserDetails?.role === "admin"
+                          ? selectedClient?.currencyCode
+                          : loggedInUserDetails?.currencyCode
+                      })`}
+                    </StyledTableCell>
+                    {/* <StyledTableCell align="left">Invoice No</StyledTableCell> */}
+                  </TableRow>
+                )}
+                {reportType === "transactionReport" && (
+                  <TableRow>
+                    <StyledTableCell align="left">
+                      {`Amount (In ${
+                        loggedInUserDetails?.role === "admin"
+                          ? selectedClient?.currencyCode
+                          : loggedInUserDetails?.currencyCode
+                      })`}
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      Transaction Date
+                    </StyledTableCell>
+                    <StyledTableCell align="left">Remarks</StyledTableCell>
+                    <StyledTableCell align="left">Airline Code</StyledTableCell>
+                  </TableRow>
+                )}
+                    {reportType === "failureReport" && (
+                  <TableRow>
+                    <StyledTableCell align="left">Agent</StyledTableCell>
+                    <StyledTableCell align="left">Ticket Id</StyledTableCell>
+                    <StyledTableCell align="left">PNR No</StyledTableCell>
+                    <StyledTableCell align="left">Pax Name</StyledTableCell>
+                    <StyledTableCell align="left">Origin</StyledTableCell>
+                    <StyledTableCell align="left">Destination</StyledTableCell>
+                    <StyledTableCell align="left">Airline Code</StyledTableCell>
+                    <StyledTableCell align="left">Flight Date</StyledTableCell>
+                    <StyledTableCell align="left">Trip Type</StyledTableCell>
+                    <StyledTableCell align="left">
+                      {`Amount (In ${
+                        loggedInUserDetails?.role === "admin"
+                          ? selectedClient?.currencyCode
+                          : loggedInUserDetails?.currencyCode
+                      })`}
+                    </StyledTableCell>
+                    {/* <StyledTableCell align="left">Invoice No</StyledTableCell> */}
+                  </TableRow>
+                )}
                 </TableHead>
                 <TableBody>
                   {reportType === "bookingReport" &&
@@ -958,7 +1049,7 @@ const Reports = () => {
                         <TableCell align="left">{row.airlineCode}</TableCell>
                         <TableCell align="left">{row.flightDate}</TableCell>
                         <TableCell align="left">
-                          {row.tripType === "ONE_WAY" ? "One Way" : "Return Trip"}
+                          {row.tripType === "ONE_WAY" ? "One Way" : "Round Trip"}
                         </TableCell>
                         <TableCell align="left">{row.amount}</TableCell>
                       </TableRow>
@@ -977,6 +1068,32 @@ const Reports = () => {
                         <TableCell align="left">{row.airlineCode}</TableCell>
                       </TableRow>
                     ))}
+                      {reportType === "failureReport" &&
+                  BookingReportrows?.map((row) => (
+                    <TableRow
+                      key={row.referenceID}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell align="left">{row.agentName}</TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.referenceID}
+                      </TableCell>
+                      <TableCell align="left">{row.bookingID}</TableCell>
+                      <TableCell align="left">
+                        {row.paxName ??
+                          `${row.paxFirstName ?? ""} ${row.paxLastName ?? ""}`}
+                      </TableCell>
+                      <TableCell align="left">{row.origin}</TableCell>
+                      <TableCell align="left">{row.destination}</TableCell>
+                      <TableCell align="left">{row.airlineCode}</TableCell>
+                      <TableCell align="left">{row.flightDate}</TableCell>
+                      <TableCell align="left">
+                        {row.tripType === "ONE_WAY" ? "One Way" : "Round Trip"}
+                      </TableCell>
+                      <TableCell align="left">{row.amount}</TableCell>
+                      {/* <TableCell align="left">{row.invoiceNO}</TableCell> */}
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>

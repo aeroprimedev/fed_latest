@@ -1133,7 +1133,7 @@ const AgentsScreen = () => {
                             </IconButton>
                           )}
 
-                        <div>
+                        {/* <div>
                           <Button
                             onClick={() => handleButtonClick(row.clientId)}
                             startIcon={
@@ -1190,7 +1190,7 @@ const AgentsScreen = () => {
                               </Table>
                             </TableContainer>
                           )}
-                        </div>
+                        </div> */}
                       </TableCell>
                     </TableRow>
                   );

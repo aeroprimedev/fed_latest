@@ -2625,7 +2625,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
                         {showOneWayFlexiFareCard === index && (
                           <div className="flight-section-details">
-                          <h1> </h1
+                          <h1> </h1>
                             <div className="flexi-fare-card">
                               <div className="header">Standard</div>
                               <div className="flexi-features">

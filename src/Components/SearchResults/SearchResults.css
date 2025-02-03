@@ -60,6 +60,8 @@
 .search-result-wrapper .search-result-cards-wrapper {
     display: flex;
     justify-content: center;
+    height: inherit;
+
 }
 
 .search-result-wrapper .search-result-col {
@@ -612,6 +614,7 @@
 .Book-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     padding-left: 2px;
     background-color: #EF5443;
     border: none;
@@ -622,7 +625,12 @@
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
 }
-
+.Book-btn:disabled,
+.Book-btn.disabled {
+  background-color: #ccc !important; /* Grey out the button */
+  cursor: not-allowed !important; /* Change cursor */
+  opacity: 0.6;
+}
 .Book-btn:hover {
     transform: scale(1.03);
     background-color: #e64a19;
@@ -1018,7 +1026,7 @@
 .airline-dropdown1 {
     border-radius: 10px;
     height: 27px;
-    width: 180px;
+    width: 200px;
     padding: 10px;
     margin-bottom: 15px;
     display: flex;
@@ -1507,7 +1515,8 @@ background-color: #EF5443;
         display: flex;
         justify-content: center;
         margin-left: 180px;
-
+        height: inherit;
+    
     }
     
     .search-result-wrapper .search-result-col {
@@ -2060,6 +2069,7 @@ background-color: #EF5443;
     .Book-btn {
         display: flex;
         align-items: center;
+        justify-content: center;
         padding-left: 2px;
         background-color: #EF5443;
         border: none;
@@ -2070,7 +2080,12 @@ background-color: #EF5443;
         cursor: pointer;
         transition: transform 0.2s ease-in-out;
     }
-    
+.Book-btn:disabled,
+.Book-btn.disabled {
+  background-color: #ccc !important; /* Grey out the button */
+  cursor: not-allowed !important; /* Change cursor */
+  opacity: 0.6;
+}
     .Book-btn:hover {
         transform: scale(1.03);
         background-color: #e64a19;
