@@ -1446,6 +1446,9 @@ background-color: #EF5443;
     transform: scale(1.05);
     background-color: #ffff;
 }
+.react-datepicker__day--selected:not([aria-disabled=true]):hover{
+    background-color: #e64a19;
+}
 }
 
 @media (min-width: 1024px) and (max-width: 1439px){
@@ -1461,7 +1464,9 @@ background-color: #EF5443;
         margin-left: 175px;
 
     }
-    
+    .react-datepicker__day--selected:not([aria-disabled=true]):hover{
+        background-color: #e64a19;
+      }
     .search-result-wrapper {
         height: 100vh;
     }
