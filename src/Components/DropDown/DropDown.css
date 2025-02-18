@@ -87,9 +87,9 @@ option {}
   /* Positioning outside of the container */
   top: 100%;
   /* Aligns with the bottom of the dropdown */
-  left: 0;
+  left: -5px;
   /* Aligns to the left */
-  right: 0;
+  right: 10px;
   /* Expands to the right */
   background: white;
   /* Background for the options */
@@ -122,12 +122,12 @@ border-color: #f00909;
 .dropdown-option {
   padding: 10px;
   /* Padding for each option */
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #334555;
   font-family: Inter;
   cursor: pointer;
-  padding-left: 10px;
+  padding-left: 5px;
   white-space: nowrap; /* Prevent text wrapping */
   overflow: hidden; /* Hide overflowing text */
   text-overflow: ellipsis; /* Show ellipsis (...) for truncated text */
