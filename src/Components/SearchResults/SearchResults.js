@@ -3713,6 +3713,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 </button>
               }
               dateFormat="dd/mm/yy"
+              minDate={new Date()}// Prevent past dates
+              dayClassName={(date) =>
+                date < new Date().setHours(0, 0, 0, 0) ? "disabled-date" : ""
+              }
             />
             <DatePicker
               disabled={tripType !== "ROUND_TRIP"}
@@ -3723,7 +3727,9 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
               }}
               minDate={departureDate}
               dayClassName={(date) =>
-                date < departureDate ? "disabled-date" : ""
+                date < (departureDate || new Date()).setHours(0, 0, 0, 0)
+                ? "disabled-date"
+                : ""
               }
               customInput={
                 <button

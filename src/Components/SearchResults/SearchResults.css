@@ -11,7 +11,7 @@
 }
 
 .search-result-wrapper {
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .search-result-wrapper .search-flights-wrapper {
@@ -60,7 +60,7 @@
 .search-result-wrapper .search-result-cards-wrapper {
     display: flex;
     justify-content: center;
-    height: inherit;
+    /* height: inherit; */
 
 }
 

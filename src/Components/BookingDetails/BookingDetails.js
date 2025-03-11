@@ -1787,7 +1787,7 @@ const BookingDetails = ({
                                     fontFamily: "Inter",
                                     fontSize: "14px",
                                     fontWeight: "400",
-                                    width: "100px",
+                                    width: "110px",
                                     height: "50px",
                                     boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
                                   }}
@@ -1802,8 +1802,8 @@ const BookingDetails = ({
                                   )}
                                 >
 
-                                  <MenuItem value="MRS">Mrs.</MenuItem>
-                                  <MenuItem value="MR">Mr.</MenuItem>
+                                  <MenuItem value="Mrs">Mrs.</MenuItem>
+                                  <MenuItem value="Mr">Mr.</MenuItem>
                                 </Select>
                               </StyledFormControl>
                             </div>

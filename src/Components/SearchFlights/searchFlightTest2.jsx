@@ -95,7 +95,7 @@ const CustomFormControlLabel = styled(FormControlLabel)({
 const CustomDatePicker = styled(DatePicker)({
   "& .MuiInputBase-root": {
     width: "400px",
-    height: "50px",
+    height: "60px",
   },
   "& .MuiInputBase-input": {
     color: "#000",
@@ -611,7 +611,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                         onChange={(date) => {
                           setDepartureDate(date);
                           setDateLabel1(formatDate(date)); // Format date on change
-                          console.log(setDateLabel1);
+                          // console.log(setDateLabel1);
                           // Reset return date if it's before the new departure date
                           if (returnDate && date > returnDate) {
                             setReturnDate(null);
@@ -631,6 +631,10 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             </i>
                           </button>
                         }
+                        minDate={new Date()}// Prevent past dates
+                        dayClassName={(date) =>
+                          date < new Date().setHours(0, 0, 0, 0) ? "disabled-date" : ""
+                        }
                       />
 
                       <div className="return-date-selection">
@@ -641,10 +645,12 @@ export function SearchFlightsTest2({ setSearchResult }) {
                             setReturnDate(date);
                             setDateLabel2(formatDate(date));
                           }}
-                          minDate={departureDate}
+                          minDate={departureDate || new Date()} // Ensures returnDate can't be before departure
                           // filterDate={filterSpecificDates} // Apply filter here    
                           dayClassName={(date) =>
-                            date < departureDate ? "disabled-date" : ""
+                            date < (departureDate || new Date()).setHours(0, 0, 0, 0)
+                             ? "disabled-date"
+                             : ""
                           }
                           customInput={
                             <button

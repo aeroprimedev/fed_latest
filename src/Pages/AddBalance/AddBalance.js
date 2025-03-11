@@ -279,6 +279,7 @@ const AddBalanceScreen = () => {
         `http://stg-api.aeroprime.in/crm-service/payment/updateCredits`,
         {
           clientId: location?.state?.agentDetails?.clientId,
+          reason: updateReason === "Other" ? updateOtherReason : updateReason,
           payment: Number(amount),
           airlineCode: airline,
         },
@@ -643,11 +644,12 @@ const AddBalanceScreen = () => {
                   value={updateOtherReason}
                   fullWidth
                   onChange={(event) => setOtherUpdateReason(event.target.value)}
+                  
                 ></input>
               </FormControl>
             </div>
           )}
-        </div>
+        
           <button
             className="add-amount-btn"
             variant="contained"
@@ -657,7 +659,7 @@ const AddBalanceScreen = () => {
           >
             Update Amount
           </button>
-        
+          </div>
         <Dialog
           open={showDialog}
           onClose={handleDialogClose}
