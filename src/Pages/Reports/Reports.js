@@ -972,7 +972,7 @@ const Reports = () => {
                   )} */}
                   {reportType === "bookingReport" && (
                   <TableRow>
-                   
+                    <StyledTableCell align="left">Agent Name</StyledTableCell>
                     <StyledTableCell align="left">Ticket Id</StyledTableCell>
                     <StyledTableCell align="left">PNR No</StyledTableCell>
                     <StyledTableCell align="left">Pax Name</StyledTableCell>
@@ -1036,6 +1036,7 @@ const Reports = () => {
                         key={row.referenceID}
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
+                        <TableCell align="left">{row.agentName}</TableCell>
                         <TableCell component="th" scope="row">
                           {row.referenceID}
                         </TableCell>

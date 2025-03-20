@@ -20,7 +20,8 @@ import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CancelSharpIcon from "@mui/icons-material/CancelSharp";
-
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,7 +29,7 @@ const MenuProps = {
     PaperProps: {
         style: {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
+            width: 100,
         },
     },
 };
@@ -64,7 +65,7 @@ const AdjustMarkup = ({ open, onClose, rowData }) => {
     const [currentAirlineMarkup, setCurrentAirlineMarkup] = useState(null);
     const [markup, setMarkup] = useState(null);
     const [showDialog, setShowDialog] = useState(false);
-
+    const [showCancelSuccessToast, setShowCancelSuccessToast] = useState(false);
     const agentList = useSelector((state) => state.agentList.agentList);
 
     const loggedInUserDetails = useSelector(
@@ -148,10 +149,26 @@ const AdjustMarkup = ({ open, onClose, rowData }) => {
                 },
                 { headers }
             )
+            // .then((response) => {
+            //     handleDialogClose();
+            //     fetchAgentsListForAdmin();
+            //     setShowCancelSuccessToast(true);
+            //     navigate("/agents");
+            // })
             .then((response) => {
-                handleDialogClose();
-                fetchAgentsListForAdmin();
-                navigate("/agents");
+                if (response.status === 200) {
+                    // ✅ Update currentAirlineMarkup with the new markup value
+                    setCurrentAirlineMarkup((prev) => ({
+                        ...prev,
+                        markupValue: Number(markup), // Update with new value
+                    }));
+                    // ✅ Show success toast
+                    setShowCancelSuccessToast(true);
+
+                    // ✅ Close the modal automatically
+                    handleDialogClose();
+                    // onClose();  // 🚀 This will close the main modal
+                }
             })
             .catch((error) => {
                 if (error.response.status === 401) {
@@ -206,6 +223,20 @@ const AdjustMarkup = ({ open, onClose, rowData }) => {
                                             </span>
                                         </div>
                                     )}
+                                                 <Snackbar
+                                                    open={showCancelSuccessToast}
+                                                    autoHideDuration={3000}
+                                                    onClose={() => setShowCancelSuccessToast(false)}
+                                                  >
+                                                    <Alert
+                                                      onClose={() => setShowCancelSuccessToast(false)}
+                                                      severity="success"
+                                                      variant="filled"
+                                                      sx={{ width: "100%" }}
+                                                    >
+                                                      Markup Rate Updated!!
+                                                    </Alert>
+                                                  </Snackbar>
                                 <div className="adjust-markup-section">
                                     <div className="airline-dd">
                                         <StyledFormControl fullWidth>

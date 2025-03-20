@@ -2515,7 +2515,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   </div>
                                   <div className="flight-info">
                                     <div className="flight-name">{list.flightName}</div>
-                                    <div className="flight-number">Code - {`${list.flightNumber}${list?.flightNumber_RT
+                                    <div className="flight-number">Flight No. - {`${list.flightNumber}${list?.flightNumber_RT
                                       ? ` / ${list?.flightNumber_RT}`
                                       : ""
                                       }`}
@@ -3003,7 +3003,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                 </div>
                                 <div className="flight-info">
                                   <div className="flight-name">{list.flightName}</div>
-                                  <div className="flight-number">Code - {`${list.flightNumber}${list?.flightNumber_RT
+                                  <div className="flight-number">Flight No. - {`${list.flightNumber}${list?.flightNumber_RT
                                     ? ` / ${list?.flightNumber_RT}`
                                     : ""
                                     }`}

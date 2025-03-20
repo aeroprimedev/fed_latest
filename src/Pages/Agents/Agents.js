@@ -741,6 +741,9 @@ const AgentsScreen = () => {
                                 size="small"
                                 className="adjust-markup-btn"
                                 onClick={() => handleOpenAdjustMarkup(row)}
+                                disabled={
+                                  loggedInUserDetails?.can_add_balance !== 1
+                                }
                               >
                                 Adjust Markup
                               </Button>
