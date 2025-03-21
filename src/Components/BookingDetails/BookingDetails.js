@@ -588,6 +588,7 @@ const BookingDetails = ({
           departureDateTimeUTC:
             oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
           flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
+          codeshare: oneWayTripDetails?.flightSegment?.codeshare,
           flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
           ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
           sector: oneWayTripDetails?.flightSegment?.sector,
@@ -625,6 +626,8 @@ const BookingDetails = ({
             oneWayTripDetails?.flightSegment_Connecting?.departureDateTimeUTC,
           flightNumber:
             oneWayTripDetails?.flightSegment_Connecting?.flightNumber,
+          codeshare: 
+            oneWayTripDetails?.flightSegment?.codeshare,
           flightSegmentID:
             oneWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
           ondControlled:
@@ -656,6 +659,8 @@ const BookingDetails = ({
         departureDateTimeUTC:
           oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
         flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
+        codeshare: 
+              oneWayTripDetails?.flightSegment?.codeshare,
         flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
         ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
         sector: oneWayTripDetails?.flightSegment?.sector,
@@ -793,6 +798,7 @@ const BookingDetails = ({
             departureDateTimeUTC:
               twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
             flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
+            codeshare: twoWayTripDetails?.flightSegment?.codeshare,
             flightSegmentID:
               twoWayTripDetails?.flightSegment?.flightSegmentID,
             ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
@@ -831,6 +837,8 @@ const BookingDetails = ({
                 ?.departureDateTimeUTC,
             flightNumber:
               twoWayTripDetails?.flightSegment_Connecting?.flightNumber,
+            codeshare: 
+              twoWayTripDetails?.flightSegment?.codeshare,  
             flightSegmentID:
               twoWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
             ondControlled:
@@ -861,6 +869,7 @@ const BookingDetails = ({
           departureDateTimeUTC:
             twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
           flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
+          codeshare: twoWayTripDetails?.flightSegment?.codeshare,
           flightSegmentID: twoWayTripDetails?.flightSegment?.flightSegmentID,
           ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
           sector: twoWayTripDetails?.flightSegment?.sector,
@@ -1135,7 +1144,7 @@ const BookingDetails = ({
                       {oneWayTripDetails?.flightName}
                     </div>
                     <div className="flight-number">
-                      {`${oneWayTripDetails.flightNumber}${oneWayTripDetails?.flightNumber_RT
+                      {`${oneWayTripDetails.flightNumber}${oneWayTripDetails?.flightNumber_RTA
                         ? ` / ${oneWayTripDetails?.flightNumber_RT}`
                         : ""
                         }`}
