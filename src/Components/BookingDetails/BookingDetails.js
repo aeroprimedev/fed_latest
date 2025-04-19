@@ -11,7 +11,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import FlightIcon from '@mui/icons-material/Flight';
+import FlightIcon from "@mui/icons-material/Flight";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import Dialog from "@mui/material/Dialog";
@@ -24,10 +24,10 @@ import flyArystan from "../../Assets/fly_arystan.png";
 import TurkAirlines from "../../Assets/turk_airlines.png";
 import salam from "../../Assets/salam.jpeg";
 // import rupeeSvg from "../../assets/rupee-sign.svg";
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import successGIF from "../../Assets/successicon.gif";
 import errorGIF from "../../Assets/fail-icon.gif";
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,7 +44,6 @@ import dayjs from "dayjs";
 
 import { useDispatch } from "react-redux";
 import { updateLoggedInUserDetails } from "../../store/slices/loggedInUserDetailsSlice";
-
 
 const countryCodeArray = [
   { country: "Afghanistan", code: "93", iso: "AF" },
@@ -289,7 +288,6 @@ const countryCodeArray = [
   { country: "Zimbabwe", code: "263", iso: "ZW" },
 ];
 
-
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     // borderRadius: "10px",
@@ -318,7 +316,7 @@ const MenuProps = {
   },
 };
 
-const PlaceholderTypography = styled('div')(({ theme }) => ({
+const PlaceholderTypography = styled("div")(({ theme }) => ({
   color: "#707271",
   fontSize: "14px",
 }));
@@ -326,16 +324,12 @@ const PlaceholderTypography = styled('div')(({ theme }) => ({
 const CustomDatePicker = styled(DatePicker)({
   "& .MuiInputBase-root": {
     width: "250px",
-
   },
   "& .MuiInputBase-input": {
     color: "#ef5443",
     fontSize: "13px",
   },
 });
-
-
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -357,14 +351,6 @@ const BookingDetails = ({
   setFetchUserDetails,
   securityToken,
 }) => {
-
-  console.log("one way", oneWayTripDetails)
-  console.log("two way", twoWayTripDetails)
-  console.log("passenger", passengerTypeQuantityList)
-  console.log("airline", airline)
-  console.log("logg", loggedInUserDetails)
-  console.log("setfetch", setFetchUserDetails)
-  console.log("Security", securityToken)
   const [passengerDetailList, setPassengerDetailList] = useState(null);
   const [email, setEmail] = useState(null);
   const [code, setCode] = useState("+91");
@@ -384,6 +370,8 @@ const BookingDetails = ({
   const [isOfflineBooking, setIsOfflineBooking] = useState(false);
 
   const dispatch = useDispatch();
+
+  
 
   useEffect(() => {
     let passengerDetailsArray = {};
@@ -492,25 +480,26 @@ const BookingDetails = ({
     const reqBody = {};
     reqBody.booking = oneWayTripDetails?.connectingFlight
       ? [
-        {
-          cabin: [oneWayTripDetails?.cabin],
-          resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
-          resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
-          resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
-        },
-        {
-          cabin: [oneWayTripDetails?.cabin],
-          resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
-          resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
-          resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
-        },
-      ]
+          {
+            cabin: [oneWayTripDetails?.cabin],
+            resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
+            resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
+            resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
+          },
+          {
+            cabin: [oneWayTripDetails?.cabin_Connecting],
+            resBookDesigCode: [oneWayTripDetails?.resBookDesigCode_Connecting],
+            resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity_Connecting],
+            resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode_Connecting],
+          },
+
+        ]
       : {
-        cabin: [oneWayTripDetails?.cabin],
-        resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
-        resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
-        resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
-      };
+          cabin: [oneWayTripDetails?.cabin],
+          resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
+          resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
+          resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
+        };
 
     let fareInfo = Array.isArray(oneWayTripDetails?.passengerFareInfoList)
       ? oneWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
@@ -518,38 +507,37 @@ const BookingDetails = ({
 
     reqBody.fareInfo = oneWayTripDetails?.connectingFlight
       ? [
-        {
-          cabin: [fareInfo[0]?.cabin],
-          cabinClassCode: [fareInfo[0]?.cabinClassCode],
-          fareGroupName: [fareInfo[0]?.fareGroupName],
-          fareReferenceCode: fareInfo[0]?.fareReferenceCode,
-          fareReferenceID: fareInfo[0]?.fareReferenceID,
-          fareReferenceName: fareInfo[0]?.fareReferenceName,
-          flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
-          resBookDesigCode: fareInfo[0]?.resBookDesigCode,
-        },
-        {
-          cabin: [fareInfo[1]?.cabin],
-          cabinClassCode: [fareInfo[1]?.cabinClassCode],
-          fareGroupName: [fareInfo[1]?.fareGroupName],
-          fareReferenceCode: fareInfo[1]?.fareReferenceCode,
-          fareReferenceID: fareInfo[1]?.fareReferenceID,
-          fareReferenceName: fareInfo[1]?.fareReferenceName,
-          flightSegmentSequence: fareInfo[1]?.flightSegmentSequence,
-          resBookDesigCode: fareInfo[1]?.resBookDesigCode,
-        },
-      ]
+          {
+            cabin: [fareInfo[0]?.cabin],
+            cabinClassCode: [fareInfo[0]?.cabinClassCode],
+            fareGroupName: [fareInfo[0]?.fareGroupName],
+            fareReferenceCode: fareInfo[0]?.fareReferenceCode,
+            fareReferenceID: fareInfo[0]?.fareReferenceID,
+            fareReferenceName: fareInfo[0]?.fareReferenceName,
+            flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
+            resBookDesigCode: fareInfo[0]?.resBookDesigCode,
+          },
+          {
+            cabin: [fareInfo[0]?.cabin],
+            cabinClassCode: [fareInfo[0]?.cabinClassCode],
+            fareGroupName: [fareInfo[0]?.fareGroupName],
+            fareReferenceCode: fareInfo[0]?.fareReferenceCode,
+            fareReferenceID: fareInfo[0]?.fareReferenceID,
+            fareReferenceName: fareInfo[0]?.fareReferenceName,
+            flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
+            resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
+          },
+        ]
       : {
-        cabin: [fareInfo?.cabin],
-        cabinClassCode: [fareInfo?.cabinClassCode],
-        fareGroupName: [fareInfo?.fareGroupName],
-        fareReferenceCode: fareInfo?.fareReferenceCode,
-        fareReferenceID: fareInfo?.fareReferenceID,
-        fareReferenceName: fareInfo?.fareReferenceName,
-        flightSegmentSequence: fareInfo?.flightSegmentSequence,
-        resBookDesigCode: fareInfo?.resBookDesigCode,
-      };
-
+          cabin: [fareInfo?.cabin],
+          cabinClassCode: [fareInfo?.cabinClassCode],
+          fareGroupName: [fareInfo?.fareGroupName],
+          fareReferenceCode: fareInfo?.fareReferenceCode,
+          fareReferenceID: fareInfo?.fareReferenceID,
+          fareReferenceName: fareInfo?.fareReferenceName,
+          flightSegmentSequence: fareInfo?.flightSegmentSequence,
+          resBookDesigCode: fareInfo?.resBookDesigCode,
+        };
     let selectedFarePkg = [];
     fareInfo?.farePkgInfoList?.forEach((pkg) => {
       if (pkg?.selected === "true") {
@@ -564,7 +552,77 @@ const BookingDetails = ({
 
     reqBody.flightSegment = oneWayTripDetails?.connectingFlight
       ? [
-        {
+          {
+            ...oneWayTripDetails?.flightSegment,
+            airline: [
+              {
+                code: [oneWayTripDetails?.flightSegment?.airline?.code],
+                companyFullName: [
+                  oneWayTripDetails?.flightSegment?.airline?.companyFullName,
+                ],
+              },
+            ],
+            arrivalAirport: JSON.parse(
+              JSON.stringify(oneWayTripDetails?.flightSegment?.arrivalAirport)
+            ),
+            arrivalDateTime: oneWayTripDetails?.flightSegment?.arrivalDateTime,
+            arrivalDateTimeUTC:
+              oneWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
+            departureAirport: JSON.parse(
+              JSON.stringify(oneWayTripDetails?.flightSegment?.departureAirport)
+            ),
+            departureDateTime:
+              oneWayTripDetails?.flightSegment?.departureDateTime,
+            departureDateTimeUTC:
+              oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
+            flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
+            codeshare: oneWayTripDetails?.flightSegment?.codeshare,
+            flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
+            ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
+            sector: oneWayTripDetails?.flightSegment?.sector,
+          },
+          {
+            ...oneWayTripDetails?.flightSegment_Connecting,
+            airline: [
+              {
+                code: [
+                  oneWayTripDetails?.flightSegment_Connecting?.airline?.code,
+                ],
+                companyFullName: [
+                  oneWayTripDetails?.flightSegment_Connecting?.airline
+                    ?.companyFullName,
+                ],
+              },
+            ],
+            arrivalAirport: JSON.parse(
+              JSON.stringify(
+                oneWayTripDetails?.flightSegment_Connecting?.arrivalAirport
+              )
+            ),
+            arrivalDateTime:
+              oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
+            arrivalDateTimeUTC:
+              oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
+            departureAirport: JSON.parse(
+              JSON.stringify(
+                oneWayTripDetails?.flightSegment_Connecting?.departureAirport
+              )
+            ),
+            departureDateTime:
+              oneWayTripDetails?.flightSegment_Connecting?.departureDateTime,
+            departureDateTimeUTC:
+              oneWayTripDetails?.flightSegment_Connecting?.departureDateTimeUTC,
+            flightNumber:
+              oneWayTripDetails?.flightSegment_Connecting?.flightNumber,
+            codeshare: oneWayTripDetails?.flightSegment?.codeshare,
+            flightSegmentID:
+              oneWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
+            ondControlled:
+              oneWayTripDetails?.flightSegment_Connecting?.ondControlled,
+            sector: oneWayTripDetails?.flightSegment_Connecting?.sector,
+          },
+        ]
+      : {
           ...oneWayTripDetails?.flightSegment,
           airline: [
             {
@@ -592,79 +650,7 @@ const BookingDetails = ({
           flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
           ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
           sector: oneWayTripDetails?.flightSegment?.sector,
-        },
-        {
-          ...oneWayTripDetails?.flightSegment_Connecting,
-          airline: [
-            {
-              code: [
-                oneWayTripDetails?.flightSegment_Connecting?.airline?.code,
-              ],
-              companyFullName: [
-                oneWayTripDetails?.flightSegment_Connecting?.airline
-                  ?.companyFullName,
-              ],
-            },
-          ],
-          arrivalAirport: JSON.parse(
-            JSON.stringify(
-              oneWayTripDetails?.flightSegment_Connecting?.arrivalAirport
-            )
-          ),
-          arrivalDateTime:
-            oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
-          arrivalDateTimeUTC:
-            oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
-          departureAirport: JSON.parse(
-            JSON.stringify(
-              oneWayTripDetails?.flightSegment_Connecting?.departureAirport
-            )
-          ),
-          departureDateTime:
-            oneWayTripDetails?.flightSegment_Connecting?.departureDateTime,
-          departureDateTimeUTC:
-            oneWayTripDetails?.flightSegment_Connecting?.departureDateTimeUTC,
-          flightNumber:
-            oneWayTripDetails?.flightSegment_Connecting?.flightNumber,
-          codeshare: 
-            oneWayTripDetails?.flightSegment?.codeshare,
-          flightSegmentID:
-            oneWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
-          ondControlled:
-            oneWayTripDetails?.flightSegment_Connecting?.ondControlled,
-          sector: oneWayTripDetails?.flightSegment_Connecting?.sector,
-        },
-      ]
-      : {
-        ...oneWayTripDetails?.flightSegment,
-        airline: [
-          {
-            code: [oneWayTripDetails?.flightSegment?.airline?.code],
-            companyFullName: [
-              oneWayTripDetails?.flightSegment?.airline?.companyFullName,
-            ],
-          },
-        ],
-        arrivalAirport: JSON.parse(
-          JSON.stringify(oneWayTripDetails?.flightSegment?.arrivalAirport)
-        ),
-        arrivalDateTime: oneWayTripDetails?.flightSegment?.arrivalDateTime,
-        arrivalDateTimeUTC:
-          oneWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-        departureAirport: JSON.parse(
-          JSON.stringify(oneWayTripDetails?.flightSegment?.departureAirport)
-        ),
-        departureDateTime:
-          oneWayTripDetails?.flightSegment?.departureDateTime,
-        departureDateTimeUTC:
-          oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
-        flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
-        codeshare: 
-              oneWayTripDetails?.flightSegment?.codeshare,
-        flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
-        ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
-        sector: oneWayTripDetails?.flightSegment?.sector,
-      };
+        };
 
     // if (oneWayTripDetails?.flightNumber_RT) {
     //   reqBody.flightSegment.flightNumber_RT =
@@ -696,66 +682,66 @@ const BookingDetails = ({
     if (twoWayTripDetails) {
       reqBody.booking_RT = twoWayTripDetails?.connectingFlight
         ? [
-          {
-            cabin: [twoWayTripDetails?.cabin],
-            resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
-            resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
-            resBookDesigStatusCode: [
-              twoWayTripDetails?.resBookDesigStatusCode,
-            ],
-          },
-          {
-            cabin: [twoWayTripDetails?.cabin],
-            resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
-            resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
-            resBookDesigStatusCode: [
-              twoWayTripDetails?.resBookDesigStatusCode,
-            ],
-          },
-        ]
+            {
+              cabin: [twoWayTripDetails?.cabin],
+              resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
+              resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
+              resBookDesigStatusCode: [
+                twoWayTripDetails?.resBookDesigStatusCode,
+              ],
+            },
+            {
+              cabin: [twoWayTripDetails?.cabin],
+              resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
+              resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
+              resBookDesigStatusCode: [
+                twoWayTripDetails?.resBookDesigStatusCode,
+              ],
+            },
+          ]
         : {
-          cabin: [twoWayTripDetails?.cabin],
-          resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
-          resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
-          resBookDesigStatusCode: [twoWayTripDetails?.resBookDesigStatusCode],
-        };
+            cabin: [twoWayTripDetails?.cabin],
+            resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
+            resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
+            resBookDesigStatusCode: [twoWayTripDetails?.resBookDesigStatusCode],
+          };
       let fareInfo_RT = Array.isArray(twoWayTripDetails?.passengerFareInfoList)
         ? twoWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
         : twoWayTripDetails?.passengerFareInfoList?.fareInfoList;
 
       reqBody.fareInfo_RT = twoWayTripDetails?.connectingFlight
         ? [
-          {
-            cabin: [fareInfo_RT[0]?.cabin],
-            cabinClassCode: [fareInfo_RT[0]?.cabinClassCode],
-            fareGroupName: [fareInfo_RT[0]?.fareGroupName],
-            fareReferenceCode: fareInfo_RT[0]?.fareReferenceCode,
-            fareReferenceID: fareInfo_RT[0]?.fareReferenceID,
-            fareReferenceName: fareInfo_RT[0]?.fareReferenceName,
-            flightSegmentSequence: fareInfo_RT[0]?.flightSegmentSequence,
-            resBookDesigCode: fareInfo_RT[0]?.resBookDesigCode,
-          },
-          {
-            cabin: [fareInfo_RT[1]?.cabin],
-            cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
-            fareGroupName: [fareInfo_RT[1]?.fareGroupName],
-            fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
-            fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
-            fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
-            flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
-            resBookDesigCode: fareInfo_RT[1]?.resBookDesigCode,
-          },
-        ]
+            {
+              cabin: [fareInfo_RT[0]?.cabin],
+              cabinClassCode: [fareInfo_RT[0]?.cabinClassCode],
+              fareGroupName: [fareInfo_RT[0]?.fareGroupName],
+              fareReferenceCode: fareInfo_RT[0]?.fareReferenceCode,
+              fareReferenceID: fareInfo_RT[0]?.fareReferenceID,
+              fareReferenceName: fareInfo_RT[0]?.fareReferenceName,
+              flightSegmentSequence: fareInfo_RT[0]?.flightSegmentSequence,
+              resBookDesigCode: fareInfo_RT[0]?.resBookDesigCode,
+            },
+            {
+              cabin: [fareInfo_RT[1]?.cabin],
+              cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
+              fareGroupName: [fareInfo_RT[1]?.fareGroupName],
+              fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
+              fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
+              fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
+              flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
+              resBookDesigCode: fareInfo_RT[1]?.resBookDesigCode,
+            },
+          ]
         : {
-          cabin: [fareInfo_RT?.cabin],
-          cabinClassCode: [fareInfo_RT?.cabinClassCode],
-          fareGroupName: [fareInfo_RT?.fareGroupName],
-          fareReferenceCode: fareInfo_RT?.fareReferenceCode,
-          fareReferenceID: fareInfo_RT?.fareReferenceID,
-          fareReferenceName: fareInfo_RT?.fareReferenceName,
-          flightSegmentSequence: fareInfo_RT?.flightSegmentSequence,
-          resBookDesigCode: fareInfo_RT?.resBookDesigCode,
-        };
+            cabin: [fareInfo_RT?.cabin],
+            cabinClassCode: [fareInfo_RT?.cabinClassCode],
+            fareGroupName: [fareInfo_RT?.fareGroupName],
+            fareReferenceCode: fareInfo_RT?.fareReferenceCode,
+            fareReferenceID: fareInfo_RT?.fareReferenceID,
+            fareReferenceName: fareInfo_RT?.fareReferenceName,
+            flightSegmentSequence: fareInfo_RT?.flightSegmentSequence,
+            resBookDesigCode: fareInfo_RT?.resBookDesigCode,
+          };
 
       let selectedFarePkg = [];
       fareInfo_RT?.farePkgInfoList?.forEach((pkg) => {
@@ -772,7 +758,80 @@ const BookingDetails = ({
 
       reqBody.flightSegment_RT = twoWayTripDetails?.connectingFlight
         ? [
-          {
+            {
+              airline: [
+                {
+                  code: [twoWayTripDetails?.flightSegment?.airline?.code],
+                  companyFullName: [
+                    twoWayTripDetails?.flightSegment?.airline?.companyFullName,
+                  ],
+                },
+              ],
+              arrivalAirport: JSON.parse(
+                JSON.stringify(twoWayTripDetails?.flightSegment?.arrivalAirport)
+              ),
+              arrivalDateTime:
+                twoWayTripDetails?.flightSegment?.arrivalDateTime,
+              arrivalDateTimeUTC:
+                twoWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
+              departureAirport: JSON.parse(
+                JSON.stringify(
+                  twoWayTripDetails?.flightSegment?.departureAirport
+                )
+              ),
+              departureDateTime:
+                twoWayTripDetails?.flightSegment?.departureDateTime,
+              departureDateTimeUTC:
+                twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
+              flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
+              codeshare: twoWayTripDetails?.flightSegment?.codeshare,
+              flightSegmentID:
+                twoWayTripDetails?.flightSegment?.flightSegmentID,
+              ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
+              sector: twoWayTripDetails?.flightSegment?.sector,
+            },
+            {
+              airline: [
+                {
+                  code: [
+                    twoWayTripDetails?.flightSegment_Connecting?.airline?.code,
+                  ],
+                  companyFullName: [
+                    twoWayTripDetails?.flightSegment_Connecting?.airline
+                      ?.companyFullName,
+                  ],
+                },
+              ],
+              arrivalAirport: JSON.parse(
+                JSON.stringify(
+                  twoWayTripDetails?.flightSegment_Connecting?.arrivalAirport
+                )
+              ),
+              arrivalDateTime:
+                twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
+              arrivalDateTimeUTC:
+                twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
+              departureAirport: JSON.parse(
+                JSON.stringify(
+                  twoWayTripDetails?.flightSegment_Connecting?.departureAirport
+                )
+              ),
+              departureDateTime:
+                twoWayTripDetails?.flightSegment_Connecting?.departureDateTime,
+              departureDateTimeUTC:
+                twoWayTripDetails?.flightSegment_Connecting
+                  ?.departureDateTimeUTC,
+              flightNumber:
+                twoWayTripDetails?.flightSegment_Connecting?.flightNumber,
+              codeshare: twoWayTripDetails?.flightSegment?.codeshare,
+              flightSegmentID:
+                twoWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
+              ondControlled:
+                twoWayTripDetails?.flightSegment_Connecting?.ondControlled,
+              sector: twoWayTripDetails?.flightSegment_Connecting?.sector,
+            },
+          ]
+        : {
             airline: [
               {
                 code: [twoWayTripDetails?.flightSegment?.airline?.code],
@@ -784,14 +843,11 @@ const BookingDetails = ({
             arrivalAirport: JSON.parse(
               JSON.stringify(twoWayTripDetails?.flightSegment?.arrivalAirport)
             ),
-            arrivalDateTime:
-              twoWayTripDetails?.flightSegment?.arrivalDateTime,
+            arrivalDateTime: twoWayTripDetails?.flightSegment?.arrivalDateTime,
             arrivalDateTimeUTC:
               twoWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
             departureAirport: JSON.parse(
-              JSON.stringify(
-                twoWayTripDetails?.flightSegment?.departureAirport
-              )
+              JSON.stringify(twoWayTripDetails?.flightSegment?.departureAirport)
             ),
             departureDateTime:
               twoWayTripDetails?.flightSegment?.departureDateTime,
@@ -799,81 +855,10 @@ const BookingDetails = ({
               twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
             flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
             codeshare: twoWayTripDetails?.flightSegment?.codeshare,
-            flightSegmentID:
-              twoWayTripDetails?.flightSegment?.flightSegmentID,
+            flightSegmentID: twoWayTripDetails?.flightSegment?.flightSegmentID,
             ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
             sector: twoWayTripDetails?.flightSegment?.sector,
-          },
-          {
-            airline: [
-              {
-                code: [
-                  twoWayTripDetails?.flightSegment_Connecting?.airline?.code,
-                ],
-                companyFullName: [
-                  twoWayTripDetails?.flightSegment_Connecting?.airline
-                    ?.companyFullName,
-                ],
-              },
-            ],
-            arrivalAirport: JSON.parse(
-              JSON.stringify(
-                twoWayTripDetails?.flightSegment_Connecting?.arrivalAirport
-              )
-            ),
-            arrivalDateTime:
-              twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
-            arrivalDateTimeUTC:
-              twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
-            departureAirport: JSON.parse(
-              JSON.stringify(
-                twoWayTripDetails?.flightSegment_Connecting?.departureAirport
-              )
-            ),
-            departureDateTime:
-              twoWayTripDetails?.flightSegment_Connecting?.departureDateTime,
-            departureDateTimeUTC:
-              twoWayTripDetails?.flightSegment_Connecting
-                ?.departureDateTimeUTC,
-            flightNumber:
-              twoWayTripDetails?.flightSegment_Connecting?.flightNumber,
-            codeshare: 
-              twoWayTripDetails?.flightSegment?.codeshare,  
-            flightSegmentID:
-              twoWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
-            ondControlled:
-              twoWayTripDetails?.flightSegment_Connecting?.ondControlled,
-            sector: twoWayTripDetails?.flightSegment_Connecting?.sector,
-          },
-        ]
-        : {
-          airline: [
-            {
-              code: [twoWayTripDetails?.flightSegment?.airline?.code],
-              companyFullName: [
-                twoWayTripDetails?.flightSegment?.airline?.companyFullName,
-              ],
-            },
-          ],
-          arrivalAirport: JSON.parse(
-            JSON.stringify(twoWayTripDetails?.flightSegment?.arrivalAirport)
-          ),
-          arrivalDateTime: twoWayTripDetails?.flightSegment?.arrivalDateTime,
-          arrivalDateTimeUTC:
-            twoWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-          departureAirport: JSON.parse(
-            JSON.stringify(twoWayTripDetails?.flightSegment?.departureAirport)
-          ),
-          departureDateTime:
-            twoWayTripDetails?.flightSegment?.departureDateTime,
-          departureDateTimeUTC:
-            twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
-          flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
-          codeshare: twoWayTripDetails?.flightSegment?.codeshare,
-          flightSegmentID: twoWayTripDetails?.flightSegment?.flightSegmentID,
-          ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
-          sector: twoWayTripDetails?.flightSegment?.sector,
-        };
+          };
 
       // if (twoWayTripDetails?.flightNumber_RT) {
       //   reqBody.flightSegment.flightNumber_RT =
@@ -925,6 +910,202 @@ const BookingDetails = ({
         }
       });
   };
+
+  // const handleBooking = () => {
+  //   setShowLoader(true);
+  //   handleCloseConfirmationDialog();
+
+  //   const reqBody = {};
+
+  //   // Booking details - One Way
+  //   const buildBookingArray = (details) => [
+  //     console.log("details", details),
+  //     {
+  //       cabin: [details?.cabin],
+  //       resBookDesigCode: [details?.resBookDesigCode],
+  //       resBookDesigQuantity: [details?.resBookDesigQuantity],
+  //       resBookDesigStatusCode: [details?.resBookDesigStatusCode],
+  //     },
+  //     {
+  //       cabin: [details?.cabin],
+  //       resBookDesigCode: [details?.resBookDesigCode],
+  //       resBookDesigQuantity: [details?.resBookDesigQuantity],
+  //       resBookDesigStatusCode: [details?.resBookDesigStatusCode],
+  //     },
+  //   ];
+
+  //   reqBody.booking = oneWayTripDetails?.connectingFlight
+  //     ? buildBookingArray(oneWayTripDetails)
+  //     : {
+  //         cabin: [oneWayTripDetails?.cabin],
+  //         resBookDesigCode: [oneWayTripDetails?.resBookDesigCode],
+  //         resBookDesigQuantity: [oneWayTripDetails?.resBookDesigQuantity],
+  //         resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
+  //       };
+
+  //   // Fare Info - One Way
+  //   let fareInfo = Array.isArray(oneWayTripDetails?.passengerFareInfoList)
+  //     ? oneWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
+  //     : oneWayTripDetails?.passengerFareInfoList?.fareInfoList;
+
+  //   const mapFareInfo = (info) => ({
+  //     cabin: [info?.cabin],
+  //     cabinClassCode: [info?.cabinClassCode],
+  //     fareGroupName: [info?.fareGroupName],
+  //     fareReferenceCode: info?.fareReferenceCode,
+  //     fareReferenceID: info?.fareReferenceID,
+  //     fareReferenceName: info?.fareReferenceName,
+  //     flightSegmentSequence: info?.flightSegmentSequence,
+  //     resBookDesigCode: info?.resBookDesigCode,
+  //   });
+
+  //   reqBody.fareInfo = oneWayTripDetails?.connectingFlight
+  //     ? [mapFareInfo(fareInfo[0]), mapFareInfo(fareInfo[1])]
+  //     : mapFareInfo(fareInfo);
+
+  //   const selectedFarePkg = fareInfo?.farePkgInfoList?.filter(
+  //     (pkg) => pkg?.selected === "true"
+  //   );
+
+  //   if (selectedFarePkg?.length > 0) {
+  //     reqBody.fareInfo.farePkgInfoList = selectedFarePkg;
+  //     reqBody.fareInfo.fareBaggageAllowance = fareInfo?.fareBaggageAllowance;
+  //   }
+
+  //   // Flight Segment - One Way
+  //   const mapFlightSegment = (segment) => ({
+  //     ...segment,
+  //     airline: [
+  //       {
+  //         code: [segment?.airline?.code],
+  //         companyFullName: [segment?.airline?.companyFullName],
+  //       },
+  //     ],
+  //     arrivalAirport: JSON.parse(JSON.stringify(segment?.arrivalAirport)),
+  //     departureAirport: JSON.parse(JSON.stringify(segment?.departureAirport)),
+  //     arrivalDateTime: segment?.arrivalDateTime,
+  //     arrivalDateTimeUTC: segment?.arrivalDateTimeUTC,
+  //     departureDateTime: segment?.departureDateTime,
+  //     departureDateTimeUTC: segment?.departureDateTimeUTC,
+  //     flightNumber: segment?.flightNumber,
+  //     codeshare: segment?.codeshare,
+  //     flightSegmentID: segment?.flightSegmentID,
+  //     ondControlled: segment?.ondControlled,
+  //     sector: segment?.sector,
+  //   });
+
+  //   reqBody.flightSegment = oneWayTripDetails?.connectingFlight
+  //     ? [
+  //         mapFlightSegment(oneWayTripDetails?.flightSegment),
+  //         mapFlightSegment(oneWayTripDetails?.flightSegment_Connecting),
+  //       ]
+  //     : mapFlightSegment(oneWayTripDetails?.flightSegment);
+
+  //   // Traveler and Infant List
+  //   let travellerList = [];
+  //   let infantList = [];
+
+  //   Object.values(passengerDetailList)?.forEach((details) => {
+  //     if (details?.passengerTypeCode === "INFT") {
+  //       infantList.push(details);
+  //     } else {
+  //       travellerList.push({
+  //         ...details,
+  //         email,
+  //         areaCode: code,
+  //         mobileNo,
+  //       });
+  //     }
+  //   });
+
+  //   reqBody.airTravelerList = travellerList;
+  //   reqBody.airlineCode = oneWayTripDetails?.flightSegment?.airline?.code;
+
+  //   if (infantList.length > 0) {
+  //     reqBody.infantDetails = infantList;
+  //   }
+
+  //   // Two Way Trip Details
+  //   if (twoWayTripDetails) {
+  //     reqBody.booking_RT = twoWayTripDetails?.connectingFlight
+  //       ? buildBookingArray(twoWayTripDetails)
+  //       : {
+  //           cabin: [twoWayTripDetails?.cabin],
+  //           resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
+  //           resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
+  //           resBookDesigStatusCode: [twoWayTripDetails?.resBookDesigStatusCode],
+  //         };
+
+  //     let fareInfo_RT = Array.isArray(twoWayTripDetails?.passengerFareInfoList)
+  //       ? twoWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
+  //       : twoWayTripDetails?.passengerFareInfoList?.fareInfoList;
+
+  //     reqBody.fareInfo_RT = twoWayTripDetails?.connectingFlight
+  //       ? [mapFareInfo(fareInfo_RT[0]), mapFareInfo(fareInfo_RT[1])]
+  //       : mapFareInfo(fareInfo_RT);
+
+  //     const selectedFarePkg_RT = fareInfo_RT?.farePkgInfoList?.filter(
+  //       (pkg) => pkg?.selected === "true"
+  //     );
+
+  //     if (selectedFarePkg_RT?.length > 0) {
+  //       reqBody.fareInfo_RT.farePkgInfoList = selectedFarePkg_RT;
+  //       reqBody.fareInfo_RT.fareBaggageAllowance =
+  //         fareInfo_RT?.fareBaggageAllowance;
+  //     }
+
+  //     reqBody.flightSegment_RT = twoWayTripDetails?.connectingFlight
+  //       ? [
+  //           mapFlightSegment(twoWayTripDetails?.flightSegment),
+  //           mapFlightSegment(twoWayTripDetails?.flightSegment_Connecting),
+  //         ]
+  //       : mapFlightSegment(twoWayTripDetails?.flightSegment);
+  //   }
+
+  //   // Final API Call
+  //   axios
+  //     .post(
+  //       `http://stg-api.aeroprime.in/airline-service/createTicket?airlineCode=${airline}`,
+  //       reqBody,
+  //       {
+  //         headers: {
+  //           Authorization: localStorage.getItem("AuthToken"),
+  //           Accept: "application/json",
+  //           securityToken: `${securityToken}`,
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       if (response?.data?.success === true) {
+  //         setBookingResponse(response.data);
+  //         if (response.data.isOfflineBooking === true) {
+  //           setIsOfflineBooking(true);
+  //           setShowLoader(false);
+  //         } else {
+  //           handleConfirmPNR(
+  //             response?.data?.data?.airBookingList?.airReservation
+  //               ?.bookingReferenceIDList?.referenceID,
+  //             response?.data?.data?.airBookingList?.ticketInfo?.totalAmount
+  //               ?.value
+  //           );
+  //         }
+  //         getLoggedInUserDetails();
+  //       } else {
+  //         handleCloseConfirmationDialog();
+  //         setShowBookingFail(true);
+  //         setShowLoader(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       handleCloseConfirmationDialog();
+  //       setShowBookingFail(true);
+  //       setShowLoader(false);
+  //       if (error.response?.status === 401) {
+  //         localStorage.clear();
+  //         window.location.href = "/";
+  //       }
+  //     });
+  // };
 
   const getLoggedInUserDetails = () => {
     const reqBody = {
@@ -1081,17 +1262,17 @@ const BookingDetails = ({
       <div className="Review-Flight-Details-wrapper">
         <Box
           sx={{
-            borderRadius: '50%',
-            background: 'white',
-            border: '2px solid #ef5443', // Circular ring
-            padding: '8px', // Space for the icon
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            borderRadius: "50%",
+            background: "white",
+            border: "2px solid #ef5443", // Circular ring
+            padding: "8px", // Space for the icon
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             marginRight: 1,
           }}
         >
-          <FlightIcon sx={{ color: '#ef5443', transform: 'rotate(90deg)' }} />
+          <FlightIcon sx={{ color: "#ef5443", transform: "rotate(90deg)" }} />
         </Box>
         <div className="Review-Flight-Details">REVIEW FLIGHT DETAILS</div>
       </div>
@@ -1132,8 +1313,13 @@ const BookingDetails = ({
                     {oneWayTripDetails.flightName === "FLY ARYSTAN" && (
                       <img src={flyArystan} alt="flight-icon" />
                     )}
-                    {oneWayTripDetails.flightName === "Turkmenistan Airlines" && (
-                      <img className="T5-logo-bd" src={TurkAirlines} alt="flight-icon" />
+                    {oneWayTripDetails.flightName ===
+                      "Turkmenistan Airlines" && (
+                      <img
+                        className="T5-logo-bd"
+                        src={TurkAirlines}
+                        alt="flight-icon"
+                      />
                     )}
                     {oneWayTripDetails.flightName === "SalamAir" && (
                       <img src={salam} alt="flight-icon" />
@@ -1144,10 +1330,11 @@ const BookingDetails = ({
                       {oneWayTripDetails?.flightName}
                     </div>
                     <div className="flight-number">
-                      {`${oneWayTripDetails.flightNumber}${oneWayTripDetails?.flightNumber_RTA
-                        ? ` / ${oneWayTripDetails?.flightNumber_RT}`
-                        : ""
-                        }`}
+                      {`${oneWayTripDetails.flightNumber}${
+                        oneWayTripDetails?.flightNumber_RTA
+                          ? ` / ${oneWayTripDetails?.flightNumber_RT}`
+                          : ""
+                      }`}
                     </div>
                     <div className="seperator" />
                     <div className="cabin">{oneWayTripDetails?.cabin}</div>
@@ -1155,10 +1342,10 @@ const BookingDetails = ({
                       Class - {oneWayTripDetails?.resBookDesigCode}
                     </div>
                     <div className="design-code">
-                      Seats Available - {oneWayTripDetails?.resBookDesigQuantity}
+                      Seats Available -{" "}
+                      {oneWayTripDetails?.resBookDesigQuantity}
                     </div>
                   </div>
-
                 </div>
                 <div className="flight-city-details">
                   <div className="flight-city-left">
@@ -1170,13 +1357,13 @@ const BookingDetails = ({
                         }
                       </div> */}
                     <div className="flight-city-code">
-
                       <span className="flight-city-time">
                         {oneWayTripDetails?.departureTime}
                       </span>
                     </div>
                     <div className="flight-city-name">
-                      {oneWayTripDetails?.departureCity},({oneWayTripDetails?.departureCityCode})
+                      {oneWayTripDetails?.departureCity},(
+                      {oneWayTripDetails?.departureCityCode})
                     </div>
                   </div>
                   <div className="flight-city-seperator">
@@ -1187,16 +1374,18 @@ const BookingDetails = ({
                       <div className="line-seperator"></div>
                       <FlightIcon
                         className="right-plane"
-                        sx={{ transform: 'rotate(90deg)' }}
+                        sx={{ transform: "rotate(90deg)" }}
                       />
                     </div>
-                    <div className="stop">{`${Number(oneWayTripDetails.stops) !== 0
-                      ? `${oneWayTripDetails.stops} stop`
-                      : "Non stop"
-                      } ${oneWayTripDetails?.stopOverCity
+                    <div className="stop">{`${
+                      Number(oneWayTripDetails.stops) !== 0
+                        ? `${oneWayTripDetails.stops} stop`
+                        : "Non stop"
+                    } ${
+                      oneWayTripDetails?.stopOverCity
                         ? `via ${oneWayTripDetails?.stopOverCity}`
                         : ""
-                      }`}</div>
+                    }`}</div>
                   </div>
                   <div className="flight-city-right">
                     {/* <div className="flight-city-name">
@@ -1210,79 +1399,78 @@ const BookingDetails = ({
                       <span className="flight-city-time">
                         {oneWayTripDetails?.arrivalTime}
                       </span>
-
                     </div>
                     <div className="flight-city-name">
-                      {oneWayTripDetails?.arrivalCity},({oneWayTripDetails?.arrivalCityCode})
+                      {oneWayTripDetails?.arrivalCity},(
+                      {oneWayTripDetails?.arrivalCityCode})
                     </div>
                   </div>
-
                 </div>
                 {OneWayFareInfoList?.farePkgInfoList && (
                   <div className="flexi-selection-bd">
                     {OneWayFareInfoList?.farePkgInfoList[0]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Standard Plus</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {OneWayFareInfoList?.farePkgInfoList[0]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Standard Plus</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {OneWayFareInfoList?.farePkgInfoList[0]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {OneWayFareInfoList?.farePkgInfoList[1]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Comfort</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {OneWayFareInfoList?.farePkgInfoList[1]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Comfort</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {OneWayFareInfoList?.farePkgInfoList[1]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {OneWayFareInfoList?.farePkgInfoList[2]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Comfort Plus</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {OneWayFareInfoList?.farePkgInfoList[2]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Comfort Plus</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {OneWayFareInfoList?.farePkgInfoList[2]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {OneWayFareInfoList?.farePkgInfoList[0]?.selected !==
                       "true" &&
                       OneWayFareInfoList?.farePkgInfoList[1]?.selected !==
-                      "true" &&
+                        "true" &&
                       OneWayFareInfoList?.farePkgInfoList[2]?.selected !==
-                      "true" && (
+                        "true" && (
                         <div className="flexi-selection-bd">
                           <div className="header-bd">
                             <div className="header-sub-bd">Standard</div>
@@ -1332,13 +1520,26 @@ const BookingDetails = ({
                 <div className="bd-flight-name-details">
                   <div className="flight-logo">
                     {twoWayTripDetails.flightName === "FLY ARYSTAN" && (
-                      <img className="T5-logo-bd" src={flyArystan} alt="flight-icon" />
+                      <img
+                        className="T5-logo-bd"
+                        src={flyArystan}
+                        alt="flight-icon"
+                      />
                     )}
-                    {twoWayTripDetails.flightName === "Turkmenistan Airlines" && (
-                      <img className="T5-logo-bd" src={TurkAirlines} alt="flight-icon" />
+                    {twoWayTripDetails.flightName ===
+                      "Turkmenistan Airlines" && (
+                      <img
+                        className="T5-logo-bd"
+                        src={TurkAirlines}
+                        alt="flight-icon"
+                      />
                     )}
                     {twoWayTripDetails?.flightName === "SalamAir" && (
-                      <img className="OV-logo-bd" src={salam} alt="flight-icon" />
+                      <img
+                        className="OV-logo-bd"
+                        src={salam}
+                        alt="flight-icon"
+                      />
                     )}
                   </div>
                   <div className="bd-ticket-wrapper">
@@ -1346,10 +1547,11 @@ const BookingDetails = ({
                       {twoWayTripDetails?.flightName}
                     </div>
                     <div className="flight-number">
-                      {`${twoWayTripDetails.flightNumber}${twoWayTripDetails?.flightNumber_RT
-                        ? ` / ${twoWayTripDetails?.flightNumber_RT}`
-                        : ""
-                        }`}
+                      {`${twoWayTripDetails.flightNumber}${
+                        twoWayTripDetails?.flightNumber_RT
+                          ? ` / ${twoWayTripDetails?.flightNumber_RT}`
+                          : ""
+                      }`}
                     </div>
                     <div className="seperator" />
                     <div className="cabin">{twoWayTripDetails?.cabin}</div>
@@ -1357,10 +1559,10 @@ const BookingDetails = ({
                       Class - {twoWayTripDetails?.resBookDesigCode}
                     </div>
                     <div className="design-code">
-                      Seats Available - {twoWayTripDetails?.resBookDesigQuantity}
+                      Seats Available -{" "}
+                      {twoWayTripDetails?.resBookDesigQuantity}
                     </div>
                   </div>
-
                 </div>
                 <div className="flight-city-details">
                   <div className="flight-city-left">
@@ -1372,13 +1574,13 @@ const BookingDetails = ({
                         }
                       </div> */}
                     <div className="flight-city-code">
-
                       <span className="flight-city-time">
                         {twoWayTripDetails?.departureTime}
                       </span>
                     </div>
                     <div className="flight-city-name">
-                      {twoWayTripDetails?.departureCity}.({twoWayTripDetails?.departureCityCode})
+                      {twoWayTripDetails?.departureCity}.(
+                      {twoWayTripDetails?.departureCityCode})
                     </div>
                   </div>
                   <div className="flight-city-seperator">
@@ -1386,20 +1588,21 @@ const BookingDetails = ({
                       {twoWayTripDetails?.flightDuration}
                     </div>
                     <div className="line-plane">
-
                       <FlightIcon
                         className="right-plane"
-                        sx={{ transform: 'rotate(270deg)' }}
+                        sx={{ transform: "rotate(270deg)" }}
                       />
                       <div className="line-seperator"></div>
                     </div>
-                    <div className="stop">{`${Number(twoWayTripDetails.stops) !== 0
-                      ? `${twoWayTripDetails.stops} stop`
-                      : "Non stop"
-                      } ${twoWayTripDetails?.stopOverCity
+                    <div className="stop">{`${
+                      Number(twoWayTripDetails.stops) !== 0
+                        ? `${twoWayTripDetails.stops} stop`
+                        : "Non stop"
+                    } ${
+                      twoWayTripDetails?.stopOverCity
                         ? `via ${twoWayTripDetails?.stopOverCity}`
                         : ""
-                      }`}</div>
+                    }`}</div>
                   </div>
                   <div className="flight-city-right">
                     {/* <div className="flight-city-name">
@@ -1413,79 +1616,78 @@ const BookingDetails = ({
                       <span className="flight-city-time">
                         {twoWayTripDetails?.arrivalTime}
                       </span>
-
                     </div>
                     <div className="flight-city-name">
-                      {twoWayTripDetails?.arrivalCity},({twoWayTripDetails?.arrivalCityCode})
+                      {twoWayTripDetails?.arrivalCity},(
+                      {twoWayTripDetails?.arrivalCityCode})
                     </div>
                   </div>
-
                 </div>
                 {TwoWayFareInfoList?.farePkgInfoList && (
                   <div className="flexi-selection-bd">
                     {TwoWayFareInfoList?.farePkgInfoList[0]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Standard Plus</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {TwoWayFareInfoList?.farePkgInfoList[0]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Standard Plus</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {TwoWayFareInfoList?.farePkgInfoList[0]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {TwoWayFareInfoList?.farePkgInfoList[1]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Comfort</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {TwoWayFareInfoList?.farePkgInfoList[1]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Comfort</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {TwoWayFareInfoList?.farePkgInfoList[1]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {TwoWayFareInfoList?.farePkgInfoList[2]?.selected ===
                       "true" && (
-                        <div className="flexi-selection-bd">
-                          <div className="header-bd">
-                            <div className="header-sub-bd">Comfort Plus</div>
-                          </div>
-                          <div className="flexi-features-bd">
-                            {TwoWayFareInfoList?.farePkgInfoList[2]?.pkgExplanationType?.pkgExplanationList?.map(
-                              (pkgfeature) => {
-                                return (
-                                  <div className="feature-bd">
-                                    {featureMapper[pkgfeature?.pkgExplanation]}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
+                      <div className="flexi-selection-bd">
+                        <div className="header-bd">
+                          <div className="header-sub-bd">Comfort Plus</div>
                         </div>
-                      )}
+                        <div className="flexi-features-bd">
+                          {TwoWayFareInfoList?.farePkgInfoList[2]?.pkgExplanationType?.pkgExplanationList?.map(
+                            (pkgfeature) => {
+                              return (
+                                <div className="feature-bd">
+                                  {featureMapper[pkgfeature?.pkgExplanation]}
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {TwoWayFareInfoList?.farePkgInfoList[0]?.selected !==
                       "true" &&
                       TwoWayFareInfoList?.farePkgInfoList[1]?.selected !==
-                      "true" &&
+                        "true" &&
                       TwoWayFareInfoList?.farePkgInfoList[2]?.selected !==
-                      "true" && (
+                        "true" && (
                         <div className="flexi-selection-bd">
                           <div className="header-bd">
                             <div className="header-sub-bd">Standard</div>
@@ -1517,7 +1719,8 @@ const BookingDetails = ({
               <span className="total-amount-bd">
                 {Math.round(
                   (Number(oneWayTripDetails?.totalAmount) +
-                    Number(twoWayTripDetails?.totalAmount)) * 100
+                    Number(twoWayTripDetails?.totalAmount)) *
+                    100
                 ) / 100}
               </span>
               {/* {`${oneWayTripDetails?.currencyCode} ${Math.round(
@@ -1575,84 +1778,85 @@ const BookingDetails = ({
         showBookingFail ||
         isOfflineBooking
       ) && (
-          <div className="Contact-Details-bd-wrapper">
-            {passengerDetailList && (
-              <Dialog
-                open={showConfirmDialog}
-                onClose={handleCloseConfirmationDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
+        <div className="Contact-Details-bd-wrapper">
+          {passengerDetailList && (
+            <Dialog
+              open={showConfirmDialog}
+              onClose={handleCloseConfirmationDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle
+                id="alert-dialog-title"
+                style={{ display: "flex", justifyContent: "center" }}
               >
-                <DialogTitle
-                  id="alert-dialog-title"
-                  style={{ display: "flex", justifyContent: "center" }}
-                >
-                  Confirmation
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
-                    <div>The booking will be created for the following:</div>
-                    <div className="pax-name">
-                      {Object.values(passengerDetailList)?.map((pax) => {
-                        if (pax?.passengerTypeCode === "INFT") {
-                          return <div>{`${pax?.name} ${pax?.surname}`}</div>;
-                        } else {
-                          return (
-                            <div>{`${pax?.nameTitle === "MRS" ? "Mrs." : "Mr."} ${pax?.fname
-                              } ${pax?.lname}`}</div>
-                          );
-                        }
-                      })}
-                    </div>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseConfirmationDialog}>
-                    Disagree
-                  </Button>
-                  <Button onClick={handleBooking} autoFocus>
-                    Agree
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            )}
-            <div className="Contact-Details-bd">CONTACT INFO</div>
-            <div className="Contact-Details-bd-seperator"></div>
-            <div className="email-no-wrapper-bd">
-              <div className="email-wrapper">
-                <FormControl fullWidth>
-                  <input
-                    //  className={`Input-bd ${isFocused ? "focused" : ""}`}
-                    className={`Input-bd ${
-                      showInputErrors &&
-                      (!email ||
-                        !String(email)
-                          ?.toLowerCase()
-                          ?.match(
-                            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                          ))
-                        ? "error"
-                        : ""
-                    }`}
-                    type="email"
-                    placeholder="Email ID*"
-                    value={email}
-                    fullWidth
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                    // error={
-                    //   showInputErrors &&
-                    //   (!email ||
-                    //     !String(email)
-                    //       ?.toLowerCase()
-                    //       ?.match(
-                    //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                    //       ))
-                    // }
-                  ></input>
-                </FormControl>
-                {/* <FormControl fullWidth>
+                Confirmation
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
+                  <div>The booking will be created for the following:</div>
+                  <div className="pax-name">
+                    {Object.values(passengerDetailList)?.map((pax) => {
+                      if (pax?.passengerTypeCode === "INFT") {
+                        return <div>{`${pax?.name} ${pax?.surname}`}</div>;
+                      } else {
+                        return (
+                          <div>{`${pax?.nameTitle === "MRS" ? "Mrs." : "Mr."} ${
+                            pax?.fname
+                          } ${pax?.lname}`}</div>
+                        );
+                      }
+                    })}
+                  </div>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseConfirmationDialog}>
+                  Disagree
+                </Button>
+                <Button onClick={handleBooking} autoFocus>
+                  Agree
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+          <div className="Contact-Details-bd">CONTACT INFO</div>
+          <div className="Contact-Details-bd-seperator"></div>
+          <div className="email-no-wrapper-bd">
+            <div className="email-wrapper">
+              <FormControl fullWidth>
+                <input
+                  //  className={`Input-bd ${isFocused ? "focused" : ""}`}
+                  className={`Input-bd ${
+                    showInputErrors &&
+                    (!email ||
+                      !String(email)
+                        ?.toLowerCase()
+                        ?.match(
+                          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        ))
+                      ? "error"
+                      : ""
+                  }`}
+                  type="email"
+                  placeholder="Email ID*"
+                  value={email}
+                  fullWidth
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                  // error={
+                  //   showInputErrors &&
+                  //   (!email ||
+                  //     !String(email)
+                  //       ?.toLowerCase()
+                  //       ?.match(
+                  //         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  //       ))
+                  // }
+                ></input>
+              </FormControl>
+              {/* <FormControl fullWidth>
                   <input
                     className="Input-bd"
                     type="email"
@@ -1672,322 +1876,140 @@ const BookingDetails = ({
                     }
                   ></input>
                 </FormControl> */}
-              </div>
+            </div>
 
-              <div className="mobileNo-wrapper-bd">
-                <div className="country-code-bd">
-                  <StyledFormControl fullWidth>
-                    <Select
-                      className="country-code-bd"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={code}
-                      label=""
-                      onChange={(event) => setCode(event.target.value)}
-                      name="Airline"
-                      style={{
-                        color: "#707271",
-                        fontFamily: "Inter",
-                        fontSize: "14px",
-                        fontWeight: "400",
-                        width: "110px",
-                        height: "55px",
-                        marginRight: "10px",
-                        boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
-                      }}
-                      IconComponent={(props) => (
-                        <ExpandMoreIcon
-                          {...props}
-                          style={{
-                            color: "#ff5722",
-                            marginRight: "8px",
-                          }}
-                        />
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {countryCodeArray?.map((countryCode) => {
-                        return (
-                          <MenuItem
-                            value={`+${countryCode?.code}`}
-                          >{`+${countryCode?.code}`}</MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </StyledFormControl>
-                </div>
-                <div className="mobile-no-wrapper">
-                  <FormControl fullWidth>
-                    <input
+            <div className="mobileNo-wrapper-bd">
+              <div className="country-code-bd">
+                <StyledFormControl fullWidth>
+                  <Select
+                    className="country-code-bd"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={code}
+                    label=""
+                    onChange={(event) => setCode(event.target.value)}
+                    name="Airline"
+                    style={{
+                      color: "#707271",
+                      fontFamily: "Inter",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      width: "110px",
+                      height: "55px",
+                      marginRight: "10px",
+                      boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
+                    }}
+                    IconComponent={(props) => (
+                      <ExpandMoreIcon
+                        {...props}
+                        style={{
+                          color: "#ff5722",
+                          marginRight: "8px",
+                        }}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {countryCodeArray?.map((countryCode) => {
+                      return (
+                        <MenuItem
+                          value={`+${countryCode?.code}`}
+                        >{`+${countryCode?.code}`}</MenuItem>
+                      );
+                    })}
+                  </Select>
+                </StyledFormControl>
+              </div>
+              <div className="mobile-no-wrapper">
+                <FormControl fullWidth>
+                  <input
                     className={`Input-bd ${
-                      showInputErrors && (!mobileNo || mobileNo?.length !== 10) ? "error" : ""
+                      showInputErrors && (!mobileNo || mobileNo?.length !== 10)
+                        ? "error"
+                        : ""
                     }`}
-                      type="number"
-                      placeholder="Mobile Number"
-                      value={mobileNo}
-                      fullWidth
-                      onChange={(event) => setMobileNo(event.target.value)}
-                      required
-                      // error={
-                      //   showInputErrors && (!mobileNo || mobileNo?.length !== 10)
-                      // }
-                    ></input>
-                  </FormControl>
-                </div>
+                    type="number"
+                    placeholder="Mobile Number"
+                    value={mobileNo}
+                    fullWidth
+                    onChange={(event) => setMobileNo(event.target.value)}
+                    required
+                    // error={
+                    //   showInputErrors && (!mobileNo || mobileNo?.length !== 10)
+                    // }
+                  ></input>
+                </FormControl>
               </div>
             </div>
           </div>
-        )
-      }
-      {
-        !(
-          showBookingSuccess ||
-          showPendingConfirmPNR ||
-          showBookingFail ||
-          isOfflineBooking
-        ) && (
-          <div className="pax-details-wrapper">
-            <div className="Contact-Details-bd">PASSENGER DETAILS</div>
-            <div className="Contact-Details-bd-seperator"></div>
-            {passengerDetailList &&
-              Object.keys(passengerDetailList)?.map((pax, index) => {
-                return (
-                  <div className="pax-details">
-                    <div className="header-pax"><AccountCircleRoundedIcon />{pax}</div>
-                    <div className="details-section">
-                      <div className="firstName-wrapper">
-                        {passengerDetailList[pax]?.passengerTypeCode !==
-                          "INFT" && (
-                            <div className="title">
-                              <StyledFormControl
-                                fullWidth
-                                error={
-                                  showInputErrors &&
-                                  passengerDetailList[pax]?.nameTitle === null
-                                }
-                              >
-                                {/* <InputLabel id="demo-simple-select-label">
-                                  Title
-                                </InputLabel> */}
-                                <Select
-                                  className="country-code-bd"
-                                  labelId="demo-simple-select-label"
-                                  id="demo-simple-select"
-                                  value={passengerDetailList[pax].nameTitle}
-                                  onChange={(event) =>
-                                    handlePassengerDetailUpdate(
-                                      pax,
-                                      event.target.value,
-                                      "nameTitle"
-                                    )
-                                  }
-                                  name="Airline"
-
-                                  required
-                                  displayEmpty
-                                  renderValue={(selected) => {
-                                    if (!selected) {
-                                      return <PlaceholderTypography>Tittle</PlaceholderTypography>;
-                                    }
-                                    return selected;
-                                  }}
-                                  style={{
-                                    color: "#707271",
-                                    fontFamily: "Inter",
-                                    fontSize: "14px",
-                                    fontWeight: "400",
-                                    width: "110px",
-                                    height: "50px",
-                                    boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
-                                  }}
-                                  IconComponent={(props) => (
-                                    <ExpandMoreIcon
-                                      {...props}
-                                      style={{
-                                        color: "#ff5722",
-                                        marginRight: "8px",
-                                      }}
-                                    />
-                                  )}
-                                >
-
-                                  <MenuItem value="MRS">Mrs.</MenuItem>
-                                  <MenuItem value="MR">Mr.</MenuItem>
-                                </Select>
-                              </StyledFormControl>
-                            </div>
-                          )}
-                        <div className="firstName-bd">
-                          <FormControl fullWidth>
-                            <input
-                              // error={
-                              //   showInputErrors &&
-                              //   (passengerDetailList[pax]?.passengerTypeCode !==
-                              //     "INFT"
-                              //     ? !passengerDetailList[pax]?.fname
-                              //     : !passengerDetailList[pax]?.name)
-                              // }
-                              
-                              // className="Input-bd-name"
-                              className={`Input-bd-name ${
-                                showInputErrors &&
-                                (passengerDetailList[pax]?.passengerTypeCode !== "INFT"
-                                  ? !passengerDetailList[pax]?.fname
-                                  : !passengerDetailList[pax]?.name)
-                                  ? "error"
-                                  : ""
-                              }`}
-                              required
-                              type="text"
-                              placeholder="First Name"
-                              value={passengerDetailList[pax].fname}
-                              fullWidth
-                              onChange={(event) =>
-                                handlePassengerDetailUpdate(
-                                  pax,
-                                  event.target.value,
-                                  passengerDetailList[pax]?.passengerTypeCode ===
-                                    "INFT"
-                                    ? "name"
-                                    : "fname"
-                                )
-                              }
-                            ></input>
-                          </FormControl>
-                        </div>
-                      </div>
-                      <div className="lastName-wrapper-bd">
-                        <FormControl fullWidth>
-                          <input
-                            // error={
-                            //   showInputErrors &&
-                            //   (passengerDetailList[pax]?.passengerTypeCode !==
-                            //     "INFT"
-                            //     ? !passengerDetailList[pax]?.lname
-                            //     : !passengerDetailList[pax]?.surname)
-                            // }
-                            // className="Input-bd-name"
-                            className={`Input-bd-name ${
-                              showInputErrors &&
-                              (passengerDetailList[pax]?.passengerTypeCode !== "INFT"
-                                ? !passengerDetailList[pax]?.lname
-                                : !passengerDetailList[pax]?.surname)
-                                ? "error"
-                                : ""
-                            }`}
-                            required
-                            type="text"
-                            placeholder="Last Name"
-                            value={passengerDetailList[pax].lname}
-                            fullWidth
-                            onChange={(event) =>
-                              handlePassengerDetailUpdate(
-                                pax,
-                                event.target.value,
-                                passengerDetailList[pax]?.passengerTypeCode ===
-                                  "INFT"
-                                  ? "surname"
-                                  : "lname"
-                              )
-                            }
-                          ></input>
-                        </FormControl>
-                      </div>
-                      <div className="birthdate-wrapper">
-                        <StyledFormControl fullWidth>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={["DatePicker"]}>
-                              <CustomDatePicker
-                                slotProps={{
-                                  textField: {
-                                    error:
-                                      showInputErrors &&
-                                      !passengerDetailList[pax]?.birthDate,
-
-                                  },
-                                }}
-                                label="Birth Date"
-                                onChange={(val) =>
-                                  handlePassengerDetailUpdate(
-                                    pax,
-                                    `${val["$y"]}-${val["$M"] + 1 < 10
-                                      ? `0${val["$M"] + 1}`
-                                      : `${val["$M"] + 1}`
-                                    }-${val["$D"] < 10 ? `0${val["$D"]}` : val["$D"]
-                                    }`,
-                                    "birthDate"
-                                  )
-                                }
-                                minDate={
-                                  passengerDetailList[pax]?.passengerTypeCode ===
-                                    "INFT"
-                                    ? dayjs(
-                                      oneWayTripDetails?.flightSegment
-                                        ?.departureDateTime
-                                    ).subtract(2, "year")
-                                    : passengerDetailList[pax]
-                                      ?.passengerTypeCode === "CHLD"
-                                      ? dayjs(
-                                        oneWayTripDetails?.flightSegment
-                                          ?.departureDateTime
-                                      ).subtract(12, "year")
-                                      : null
-                                }
-                                maxDate={
-                                  passengerDetailList[pax]?.passengerTypeCode ===
-                                    "INFT"
-                                    ? dayjs()
-                                    : passengerDetailList[pax]
-                                      ?.passengerTypeCode === "CHLD"
-                                      ? dayjs(
-                                        oneWayTripDetails?.flightSegment
-                                          ?.departureDateTime
-                                      ).subtract(2, "year")
-                                      : dayjs()
-                                }
-                              />
-                            </DemoContainer>
-                          </LocalizationProvider>
-
-                        </StyledFormControl>
-                      </div>
-                    </div>
-                    <div className="details-section">
-                      {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
-                        <div className="nationality">
+        </div>
+      )}
+      {!(
+        showBookingSuccess ||
+        showPendingConfirmPNR ||
+        showBookingFail ||
+        isOfflineBooking
+      ) && (
+        <div className="pax-details-wrapper">
+          <div className="Contact-Details-bd">PASSENGER DETAILS</div>
+          <div className="Contact-Details-bd-seperator"></div>
+          {passengerDetailList &&
+            Object.keys(passengerDetailList)?.map((pax, index) => {
+              return (
+                <div className="pax-details">
+                  <div className="header-pax">
+                    <AccountCircleRoundedIcon />
+                    {pax}
+                  </div>
+                  <div className="details-section">
+                    <div className="firstName-wrapper">
+                      {passengerDetailList[pax]?.passengerTypeCode !==
+                        "INFT" && (
+                        <div className="title">
                           <StyledFormControl
                             fullWidth
                             error={
                               showInputErrors &&
-                              !passengerDetailList[pax]?.docHolderNationality
+                              passengerDetailList[pax]?.nameTitle === null
                             }
                           >
+                            {/* <InputLabel id="demo-simple-select-label">
+                                  Title
+                                </InputLabel> */}
                             <Select
-                              className="Nationality-bd"
+                              className="country-code-bd"
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"
-                              value={
-                                Object.values(passengerDetailList)[index]
-                                  ?.docHolderNationality
-                              }
-
+                              value={passengerDetailList[pax].nameTitle}
                               onChange={(event) =>
                                 handlePassengerDetailUpdate(
                                   pax,
                                   event.target.value,
-                                  "docHolderNationality"
+                                  "nameTitle"
                                 )
                               }
-                              name="Nationality"
+                              name="Airline"
+                              required
+                              displayEmpty
+                              renderValue={(selected) => {
+                                if (!selected) {
+                                  return (
+                                    <PlaceholderTypography>
+                                      Tittle
+                                    </PlaceholderTypography>
+                                  );
+                                }
+                                return selected;
+                              }}
                               style={{
                                 color: "#707271",
                                 fontFamily: "Inter",
                                 fontSize: "14px",
                                 fontWeight: "400",
-                                width: "150px",
+                                width: "110px",
                                 height: "50px",
-                                marginRight: "10px",
-                                boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
+                                boxShadow:
+                                  "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
                               }}
                               IconComponent={(props) => (
                                 <ExpandMoreIcon
@@ -1998,237 +2020,424 @@ const BookingDetails = ({
                                   }}
                                 />
                               )}
-                              MenuProps={MenuProps}
                             >
-                              {countryCodeArray?.map((countryCode) => {
-                                return (
-                                  <MenuItem value={countryCode?.iso}>
-                                    {countryCode?.country}
-                                  </MenuItem>
-                                );
-                              })}
+                              <MenuItem value="MRS">Mrs.</MenuItem>
+                              <MenuItem value="MR">Mr.</MenuItem>
                             </Select>
                           </StyledFormControl>
                         </div>
                       )}
+                      <div className="firstName-bd">
+                        <FormControl fullWidth>
+                          <input
+                            // error={
+                            //   showInputErrors &&
+                            //   (passengerDetailList[pax]?.passengerTypeCode !==
+                            //     "INFT"
+                            //     ? !passengerDetailList[pax]?.fname
+                            //     : !passengerDetailList[pax]?.name)
+                            // }
 
-                      {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
-                        <div className="passport-number">
-                          <FormControl fullWidth>
-                            <input
-                              error={
-                                showInputErrors &&
-                                !passengerDetailList[pax]?.docID
-                              }
-                              required
-                              className="Input-bd-name"
-                              type="text"
-                              placeholder="Passport Number"
-                              fullWidth
-                              onChange={(event) =>
+                            // className="Input-bd-name"
+                            className={`Input-bd-name ${
+                              showInputErrors &&
+                              (passengerDetailList[pax]?.passengerTypeCode !==
+                              "INFT"
+                                ? !passengerDetailList[pax]?.fname
+                                : !passengerDetailList[pax]?.name)
+                                ? "error"
+                                : ""
+                            }`}
+                            required
+                            type="text"
+                            placeholder="First Name"
+                            value={passengerDetailList[pax].fname}
+                            fullWidth
+                            onChange={(event) =>
+                              handlePassengerDetailUpdate(
+                                pax,
+                                event.target.value,
+                                passengerDetailList[pax]?.passengerTypeCode ===
+                                  "INFT"
+                                  ? "name"
+                                  : "fname"
+                              )
+                            }
+                          ></input>
+                        </FormControl>
+                      </div>
+                    </div>
+                    <div className="lastName-wrapper-bd">
+                      <FormControl fullWidth>
+                        <input
+                          // error={
+                          //   showInputErrors &&
+                          //   (passengerDetailList[pax]?.passengerTypeCode !==
+                          //     "INFT"
+                          //     ? !passengerDetailList[pax]?.lname
+                          //     : !passengerDetailList[pax]?.surname)
+                          // }
+                          // className="Input-bd-name"
+                          className={`Input-bd-name ${
+                            showInputErrors &&
+                            (passengerDetailList[pax]?.passengerTypeCode !==
+                            "INFT"
+                              ? !passengerDetailList[pax]?.lname
+                              : !passengerDetailList[pax]?.surname)
+                              ? "error"
+                              : ""
+                          }`}
+                          required
+                          type="text"
+                          placeholder="Last Name"
+                          value={passengerDetailList[pax].lname}
+                          fullWidth
+                          onChange={(event) =>
+                            handlePassengerDetailUpdate(
+                              pax,
+                              event.target.value,
+                              passengerDetailList[pax]?.passengerTypeCode ===
+                                "INFT"
+                                ? "surname"
+                                : "lname"
+                            )
+                          }
+                        ></input>
+                      </FormControl>
+                    </div>
+                    <div className="birthdate-wrapper">
+                      <StyledFormControl fullWidth>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={["DatePicker"]}>
+                            <CustomDatePicker
+                              slotProps={{
+                                textField: {
+                                  error:
+                                    showInputErrors &&
+                                    !passengerDetailList[pax]?.birthDate,
+                                },
+                              }}
+                              label="Birth Date"
+                              onChange={(val) =>
                                 handlePassengerDetailUpdate(
                                   pax,
-                                  event.target.value,
-                                  "docID"
+                                  `${val["$y"]}-${
+                                    val["$M"] + 1 < 10
+                                      ? `0${val["$M"] + 1}`
+                                      : `${val["$M"] + 1}`
+                                  }-${
+                                    val["$D"] < 10 ? `0${val["$D"]}` : val["$D"]
+                                  }`,
+                                  "birthDate"
                                 )
                               }
-                            ></input>
-                          </FormControl>
-                        </div>
-                      )}
-                      {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
-                        <div className="passport-date">
-                          <StyledFormControl
-                            fullWidth
+                              minDate={
+                                passengerDetailList[pax]?.passengerTypeCode ===
+                                "INFT"
+                                  ? dayjs(
+                                      oneWayTripDetails?.flightSegment
+                                        ?.departureDateTime
+                                    ).subtract(2, "year")
+                                  : passengerDetailList[pax]
+                                      ?.passengerTypeCode === "CHLD"
+                                  ? dayjs(
+                                      oneWayTripDetails?.flightSegment
+                                        ?.departureDateTime
+                                    ).subtract(12, "year")
+                                  : null
+                              }
+                              maxDate={
+                                passengerDetailList[pax]?.passengerTypeCode ===
+                                "INFT"
+                                  ? dayjs()
+                                  : passengerDetailList[pax]
+                                      ?.passengerTypeCode === "CHLD"
+                                  ? dayjs(
+                                      oneWayTripDetails?.flightSegment
+                                        ?.departureDateTime
+                                    ).subtract(2, "year")
+                                  : dayjs()
+                              }
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </StyledFormControl>
+                    </div>
+                  </div>
+                  <div className="details-section">
+                    {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
+                      <div className="nationality">
+                        <StyledFormControl
+                          fullWidth
+                          error={
+                            showInputErrors &&
+                            !passengerDetailList[pax]?.docHolderNationality
+                          }
+                        >
+                          <Select
+                            className="Nationality-bd"
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={
+                              Object.values(passengerDetailList)[index]
+                                ?.docHolderNationality
+                            }
+                            onChange={(event) =>
+                              handlePassengerDetailUpdate(
+                                pax,
+                                event.target.value,
+                                "docHolderNationality"
+                              )
+                            }
+                            name="Nationality"
+                            style={{
+                              color: "#707271",
+                              fontFamily: "Inter",
+                              fontSize: "14px",
+                              fontWeight: "400",
+                              width: "150px",
+                              height: "50px",
+                              marginRight: "10px",
+                              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)", // Add your box shadow here
+                            }}
+                            IconComponent={(props) => (
+                              <ExpandMoreIcon
+                                {...props}
+                                style={{
+                                  color: "#ff5722",
+                                  marginRight: "8px",
+                                }}
+                              />
+                            )}
+                            MenuProps={MenuProps}
+                          >
+                            {countryCodeArray?.map((countryCode) => {
+                              return (
+                                <MenuItem value={countryCode?.iso}>
+                                  {countryCode?.country}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </StyledFormControl>
+                      </div>
+                    )}
+
+                    {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
+                      <div className="passport-number">
+                        <FormControl fullWidth>
+                          <input
                             error={
                               showInputErrors &&
-                              !passengerDetailList[pax]?.docExpireDate
+                              !passengerDetailList[pax]?.docID
                             }
-                          >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DemoContainer components={["DatePicker"]}
-                                sx={{ height: '55px' }}
-                              >
-
-                                <CustomDatePicker
-                                  slotProps={{
-                                    textField: {
-                                      error:
-                                        showInputErrors &&
-                                        !passengerDetailList[pax]?.docExpireDate,
-                                    },
-                                  }}
-
-                                  label="Passport Expiry Date"
-                                  onChange={(val) =>
-                                    handlePassengerDetailUpdate(
-                                      pax,
-                                      `${val["$y"]}-${val["$M"] + 1 < 10
+                            required
+                            className="Input-bd-name"
+                            type="text"
+                            placeholder="Passport Number"
+                            fullWidth
+                            onChange={(event) =>
+                              handlePassengerDetailUpdate(
+                                pax,
+                                event.target.value,
+                                "docID"
+                              )
+                            }
+                          ></input>
+                        </FormControl>
+                      </div>
+                    )}
+                    {passengerDetailList[pax]?.passengerTypeCode !== "INFT" && (
+                      <div className="passport-date">
+                        <StyledFormControl
+                          fullWidth
+                          error={
+                            showInputErrors &&
+                            !passengerDetailList[pax]?.docExpireDate
+                          }
+                        >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer
+                              components={["DatePicker"]}
+                              sx={{ height: "55px" }}
+                            >
+                              <CustomDatePicker
+                                slotProps={{
+                                  textField: {
+                                    error:
+                                      showInputErrors &&
+                                      !passengerDetailList[pax]?.docExpireDate,
+                                  },
+                                }}
+                                label="Passport Expiry Date"
+                                onChange={(val) =>
+                                  handlePassengerDetailUpdate(
+                                    pax,
+                                    `${val["$y"]}-${
+                                      val["$M"] + 1 < 10
                                         ? `0${val["$M"] + 1}`
                                         : `${val["$M"] + 1}`
-                                      }-${val["$D"] < 10
+                                    }-${
+                                      val["$D"] < 10
                                         ? `0${val["$D"]}`
                                         : val["$D"]
-                                      }`,
-                                      "docExpireDate"
-                                    )
-                                  }
-                                  minDate={
-                                    twoWayTripDetails
-                                      ? dayjs(
+                                    }`,
+                                    "docExpireDate"
+                                  )
+                                }
+                                minDate={
+                                  twoWayTripDetails
+                                    ? dayjs(
                                         twoWayTripDetails?.flightSegment
                                           ?.departureDateTime
                                       )
-                                      : dayjs(
+                                    : dayjs(
                                         oneWayTripDetails?.flightSegment
                                           ?.departureDateTime
                                       )
-                                  }
-                                />
-                              </DemoContainer>
-                            </LocalizationProvider>
-                          </StyledFormControl>
-                        </div>
-                      )}
-                    </div>
+                                }
+                              />
+                            </DemoContainer>
+                          </LocalizationProvider>
+                        </StyledFormControl>
+                      </div>
+                    )}
                   </div>
-                );
-              })}
-          </div>
-        )
-      }
-      {
-        !(
-          showBookingSuccess ||
-          showPendingConfirmPNR ||
-          showBookingFail ||
-          isOfflineBooking
-        ) && (
-          <div className="Book-btn-bd-wrapper">
-            <button className="Book-btn-bd" variant="contained" onClick={handleBookButtonClick}>
-              BOOK NOW
-            </button>
-          </div>
-         
-        )
-      }
-      {
-        (showBookingSuccess || showPendingConfirmPNR || isOfflineBooking) && (
-          <div className="success-wrapper">
-            <img src={successGIF} alt="" className="success-icon" />
-            {showBookingSuccess && (
-              <div className="success-msg">
-                Your Booking has been Successful !!
-                <div className="download -ticket-btn">
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      handleTicketDownload(
-                        bookingResponse?.data?.airBookingList?.airReservation
-                          ?.bookingReferenceIDList?.referenceID
-                      )
-                    }
-                  >
-                    Download Ticket
-                  </Button>
                 </div>
+              );
+            })}
+        </div>
+      )}
+      {!(
+        showBookingSuccess ||
+        showPendingConfirmPNR ||
+        showBookingFail ||
+        isOfflineBooking
+      ) && (
+        <div className="Book-btn-bd-wrapper">
+          <button
+            className="Book-btn-bd"
+            variant="contained"
+            onClick={handleBookButtonClick}
+          >
+            BOOK NOW
+          </button>
+        </div>
+      )}
+      {(showBookingSuccess || showPendingConfirmPNR || isOfflineBooking) && (
+        <div className="success-wrapper">
+          <img src={successGIF} alt="" className="success-icon" />
+          {showBookingSuccess && (
+            <div className="success-msg">
+              Your Booking has been Successful !!
+              <div className="download -ticket-btn">
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    handleTicketDownload(
+                      bookingResponse?.data?.airBookingList?.airReservation
+                        ?.bookingReferenceIDList?.referenceID
+                    )
+                  }
+                >
+                  Download Ticket
+                </Button>
               </div>
-            )}
-            {showPendingConfirmPNR && (
-              <div className="success-pending-msg">
-                <div className="success-msg-header">
-                  Booking has been created. Unfortunately, PNR has not been
-                  confirmed yet!!
-                </div>
-                {/* <div className="success-msg-subheader">
+            </div>
+          )}
+          {showPendingConfirmPNR && (
+            <div className="success-pending-msg">
+              <div className="success-msg-header">
+                Booking has been created. Unfortunately, PNR has not been
+                confirmed yet!!
+              </div>
+              {/* <div className="success-msg-subheader">
                   Please try confirming your PNR after sometime from Search PNR
                   screen!!
                 </div> */}
-              </div>
-            )}
-            {isOfflineBooking && (
-              <div className="success-pending-msg">
-                <div className="success-msg-header">
-                  {bookingResponse?.message}
-                </div>
-              </div>
-            )}
-            <div className="section">
-              {!isOfflineBooking && (
-                <div className="pnr">{`PNR - ${bookingResponse?.data?.airBookingList?.airReservation?.bookingReferenceIDList?.ID}`}</div>
-              )}
-              {!isOfflineBooking && (
-                <div className="ref">{`Reference Id - ${bookingResponse?.data?.airBookingList?.airReservation?.bookingReferenceIDList?.referenceID}`}</div>
-              )}
             </div>
-            <div className="section">
-              <div className="booked-pax-wrapper">
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead sx={{ backgroundColor: "#004e89" }}>
-                      <TableRow>
-                        <StyledTableCell>S.No.</StyledTableCell>
-                        <StyledTableCell align="left">
-                          Passenger Type
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          Passenger Name
-                        </StyledTableCell>
-                        <StyledTableCell align="left">Gender</StyledTableCell>
-                        <StyledTableCell align="left">
-                          Passport No.
-                        </StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Object.values(passengerDetailList)?.map((pax, index) => (
-                        <TableRow
-                          key={index}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell align="left">
-                            {pax?.passengerTypeCode === "ADLT" && `Adult`}
-                            {pax?.passengerTypeCode === "CHLD" && `Child`}
-                            {pax?.passengerTypeCode === "INFT" && `Infant`}
-                          </TableCell>
-                          <TableCell align="left">
-                            {pax?.passengerTypeCode === "INFT"
-                              ? `${pax?.name} ${pax?.surname}`
-                              : `${pax?.nameTitle === "MRS" ? "Mrs." : "Mr."} ${pax?.fname
+          )}
+          {isOfflineBooking && (
+            <div className="success-pending-msg">
+              <div className="success-msg-header">
+                {bookingResponse?.message}
+              </div>
+            </div>
+          )}
+          <div className="section">
+            {!isOfflineBooking && (
+              <div className="pnr">{`PNR - ${bookingResponse?.data?.airBookingList?.airReservation?.bookingReferenceIDList?.ID}`}</div>
+            )}
+            {!isOfflineBooking && (
+              <div className="ref">{`Reference Id - ${bookingResponse?.data?.airBookingList?.airReservation?.bookingReferenceIDList?.referenceID}`}</div>
+            )}
+          </div>
+          <div className="section">
+            <div className="booked-pax-wrapper">
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead sx={{ backgroundColor: "#004e89" }}>
+                    <TableRow>
+                      <StyledTableCell>S.No.</StyledTableCell>
+                      <StyledTableCell align="left">
+                        Passenger Type
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        Passenger Name
+                      </StyledTableCell>
+                      <StyledTableCell align="left">Gender</StyledTableCell>
+                      <StyledTableCell align="left">
+                        Passport No.
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {Object.values(passengerDetailList)?.map((pax, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell align="left">
+                          {pax?.passengerTypeCode === "ADLT" && `Adult`}
+                          {pax?.passengerTypeCode === "CHLD" && `Child`}
+                          {pax?.passengerTypeCode === "INFT" && `Infant`}
+                        </TableCell>
+                        <TableCell align="left">
+                          {pax?.passengerTypeCode === "INFT"
+                            ? `${pax?.name} ${pax?.surname}`
+                            : `${pax?.nameTitle === "MRS" ? "Mrs." : "Mr."} ${
+                                pax?.fname
                               } ${pax?.lname}`}
-                          </TableCell>
-                          <TableCell align="left">
-                            {pax?.passengerTypeCode === "INFT"
-                              ? ``
-                              : `${pax?.gender === "M" ? "Male" : "Female"}`}
-                          </TableCell>
-                          <TableCell>{pax?.docID}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </div>
+                        </TableCell>
+                        <TableCell align="left">
+                          {pax?.passengerTypeCode === "INFT"
+                            ? ``
+                            : `${pax?.gender === "M" ? "Male" : "Female"}`}
+                        </TableCell>
+                        <TableCell>{pax?.docID}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
-        )
-      }
-      {
-        showBookingFail && (
-          <div className="error-wrapper">
-            <img src={errorGIF} alt="" className="error-icon" />
-            <div className="error-msg">
-              OOPS!! Your booking cannot be confirmed at this moment.
-            </div>
+        </div>
+      )}
+      {showBookingFail && (
+        <div className="error-wrapper">
+          <img src={errorGIF} alt="" className="error-icon" />
+          <div className="error-msg">
+            OOPS!! Your booking cannot be confirmed at this moment.
           </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 
