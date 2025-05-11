@@ -2046,7 +2046,7 @@ if (Array.isArray(segments)) {
       }
     }
   }, [searchResultList]);
-
+ console.log(twoWayTripDetails);
   useEffect(() => {
     if (airline) {
       setShowLoader(true);

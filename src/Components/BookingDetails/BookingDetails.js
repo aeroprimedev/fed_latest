@@ -351,6 +351,7 @@ const BookingDetails = ({
   setFetchUserDetails,
   securityToken,
 }) => {
+  console.log("two way", twoWayTripDetails)
   const [passengerDetailList, setPassengerDetailList] = useState(null);
   const [email, setEmail] = useState(null);
   const [code, setCode] = useState("+91");
@@ -614,7 +615,7 @@ const BookingDetails = ({
               oneWayTripDetails?.flightSegment_Connecting?.departureDateTimeUTC,
             flightNumber:
               oneWayTripDetails?.flightSegment_Connecting?.flightNumber,
-            codeshare: oneWayTripDetails?.flightSegment?.codeshare,
+            codeshare: oneWayTripDetails?.flightSegment_Connecting?.codeshare,
             flightSegmentID:
               oneWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
             ondControlled:
@@ -691,11 +692,11 @@ const BookingDetails = ({
               ],
             },
             {
-              cabin: [twoWayTripDetails?.cabin],
-              resBookDesigCode: [twoWayTripDetails?.resBookDesigCode],
-              resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
+              cabin: [twoWayTripDetails?.cabin_Connecting],
+              resBookDesigCode: [twoWayTripDetails?.resBookDesigCode_Connecting],
+              resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity_Connecting],
               resBookDesigStatusCode: [
-                twoWayTripDetails?.resBookDesigStatusCode,
+                twoWayTripDetails?.resBookDesigStatusCode_Connecting,
               ],
             },
           ]
@@ -715,6 +716,7 @@ const BookingDetails = ({
               cabin: [fareInfo_RT[0]?.cabin],
               cabinClassCode: [fareInfo_RT[0]?.cabinClassCode],
               fareGroupName: [fareInfo_RT[0]?.fareGroupName],
+              
               fareReferenceCode: fareInfo_RT[0]?.fareReferenceCode,
               fareReferenceID: fareInfo_RT[0]?.fareReferenceID,
               fareReferenceName: fareInfo_RT[0]?.fareReferenceName,
@@ -729,7 +731,7 @@ const BookingDetails = ({
               fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
               fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
               flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
-              resBookDesigCode: fareInfo_RT[1]?.resBookDesigCode,
+              resBookDesigCode: twoWayTripDetails.resBookDesigCode_Connecting,
             },
           ]
         : {
@@ -823,7 +825,7 @@ const BookingDetails = ({
                   ?.departureDateTimeUTC,
               flightNumber:
                 twoWayTripDetails?.flightSegment_Connecting?.flightNumber,
-              codeshare: twoWayTripDetails?.flightSegment?.codeshare,
+              codeshare: twoWayTripDetails?.flightSegment_Connecting?.codeshare,
               flightSegmentID:
                 twoWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
               ondControlled:
