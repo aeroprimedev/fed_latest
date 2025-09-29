@@ -335,9 +335,9 @@ const AgentsScreen = () => {
   function createAirlineBalanceData(
     airlineCode,
     balance,
-    operatingAirlineCurrency
+    walletCurrency
   ) {
-    return { airlineCode, balance, operatingAirlineCurrency };
+    return { airlineCode, balance, walletCurrency};
   }
 
   const handleEditAgentOpen = useCallback((id) => {
@@ -493,7 +493,7 @@ const AgentsScreen = () => {
           const balances = airlineDetails.map((item) => ({
             airlineCode: item.airlineCode,
             balance: item.balance,
-            currency: item.operatingAirlineCurrency,
+            currency: item.walletCurrency
           }));
 
           setAirlineCodes(codes);

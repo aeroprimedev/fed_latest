@@ -519,14 +519,22 @@ const BookingDetails = ({
             resBookDesigCode: fareInfo[0]?.resBookDesigCode,
           },
           {
-            cabin: [fareInfo[0]?.cabin],
-            cabinClassCode: [fareInfo[0]?.cabinClassCode],
-            fareGroupName: [fareInfo[0]?.fareGroupName],
-            fareReferenceCode: fareInfo[0]?.fareReferenceCode,
-            fareReferenceID: fareInfo[0]?.fareReferenceID,
-            fareReferenceName: fareInfo[0]?.fareReferenceName,
-            flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
-            resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
+            cabin: [fareInfo[1]?.cabin],
+            cabinClassCode: [fareInfo[1]?.cabinClassCode],
+            fareGroupName: [fareInfo[1]?.fareGroupName],
+            fareReferenceCode: fareInfo[1]?.fareReferenceCode,
+            fareReferenceID: fareInfo[1]?.fareReferenceID,
+            fareReferenceName: fareInfo[1]?.fareReferenceName,
+            flightSegmentSequence: fareInfo[1]?.flightSegmentSequence,
+            resBookDesigCode: fareInfo[1]?.resBookDesigCode,
+            // cabin: [fareInfo[0]?.cabin],
+            // cabinClassCode: [fareInfo[0]?.cabinClassCode],
+            // fareGroupName: [fareInfo[0]?.fareGroupName],
+            // fareReferenceCode: fareInfo[0]?.fareReferenceCode,
+            // fareReferenceID: fareInfo[0]?.fareReferenceID,
+            // fareReferenceName: fareInfo[0]?.fareReferenceName,
+            // flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
+            // resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
           },
         ]
       : {
@@ -539,6 +547,7 @@ const BookingDetails = ({
           flightSegmentSequence: fareInfo?.flightSegmentSequence,
           resBookDesigCode: fareInfo?.resBookDesigCode,
         };
+
     let selectedFarePkg = [];
     fareInfo?.farePkgInfoList?.forEach((pkg) => {
       if (pkg?.selected === "true") {
@@ -716,7 +725,6 @@ const BookingDetails = ({
               cabin: [fareInfo_RT[0]?.cabin],
               cabinClassCode: [fareInfo_RT[0]?.cabinClassCode],
               fareGroupName: [fareInfo_RT[0]?.fareGroupName],
-              
               fareReferenceCode: fareInfo_RT[0]?.fareReferenceCode,
               fareReferenceID: fareInfo_RT[0]?.fareReferenceID,
               fareReferenceName: fareInfo_RT[0]?.fareReferenceName,
@@ -724,14 +732,22 @@ const BookingDetails = ({
               resBookDesigCode: fareInfo_RT[0]?.resBookDesigCode,
             },
             {
+              // cabin: [fareInfo_RT[1]?.cabin],
+              // cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
+              // fareGroupName: [fareInfo_RT[1]?.fareGroupName],
+              // fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
+              // fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
+              // fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
+              // flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
+              // resBookDesigCode: twoWayTripDetails.resBookDesigCode_Connecting,
               cabin: [fareInfo_RT[1]?.cabin],
-              cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
-              fareGroupName: [fareInfo_RT[1]?.fareGroupName],
-              fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
-              fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
-              fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
-              flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
-              resBookDesigCode: twoWayTripDetails.resBookDesigCode_Connecting,
+            cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
+            fareGroupName: [fareInfo_RT[1]?.fareGroupName],
+            fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
+            fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
+            fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
+            flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
+            resBookDesigCode: fareInfo_RT[1]?.resBookDesigCode,
             },
           ]
         : {
@@ -870,7 +886,7 @@ const BookingDetails = ({
 
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/createTicket?airlineCode=${airline}`,
+        `http://stg-api.aeroprime.in/airline-service/createTicket?version=v2?airlineCode=${airline}`,
         reqBody,
         {
           headers: {
@@ -1201,7 +1217,7 @@ const BookingDetails = ({
   const handleConfirmPNR = (refId, amount) => {
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/ticketReservationByRefId?airlineCode=${airline}`,
+        `http://stg-api.aeroprime.in/airline-service/ticketReservationByRefId?version=v2?airlineCode=${airline}`,
         {
           referenceID: refId,
           value: Number(amount),

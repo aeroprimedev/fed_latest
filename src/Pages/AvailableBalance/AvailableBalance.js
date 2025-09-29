@@ -69,9 +69,9 @@ const AvailableBalanceScreen = () => {
         airlineCode,
         balance,
         creditLimit,
-        operatingAirlineCurrency
+        walletCurrency
     ) {
-        return { airlineCode, balance, creditLimit, operatingAirlineCurrency };
+        return { airlineCode, balance, creditLimit, walletCurrency };
     }
 
     const airlineBalanceRows = currentUserAirlines?.map((airline) => {
@@ -79,7 +79,7 @@ const AvailableBalanceScreen = () => {
             airline.airlineCode,
             airline.balance,
             airline.creditLimit,
-            airline.operatingAirlineCurrency
+            airline.walletCurrency
         );
     });
 
@@ -109,7 +109,7 @@ const AvailableBalanceScreen = () => {
                                         </TableCell>
                                         <TableCell align="left">{row.airlineCode}</TableCell>
                                         <TableCell align="left">
-                                            {`${row.operatingAirlineCurrency} ${Math.round(
+                                            {`${row.walletCurrency} ${Math.round(
                                                 (Number(row.balance) + Number(row.creditLimit)) * 100
                                             ) / 100
                                                 }`}{" "}

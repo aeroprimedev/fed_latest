@@ -375,16 +375,16 @@ const AddBalanceScreen = () => {
   function createAirlineBalanceData(
     airlineCode,
     balance,
-    operatingAirlineCurrency
+    walletCurrency
   ) {
-    return { airlineCode, balance, operatingAirlineCurrency };
+    return { airlineCode, balance, walletCurrency };
   }
 
   const airlineBalanceRows = currentUserAirlines?.map((airline) => {
     return createAirlineBalanceData(
       airline.airlineCode,
       airline.balance,
-      airline.operatingAirlineCurrency
+      airline.walletCurrency
     );
   });
 
@@ -392,7 +392,7 @@ const AddBalanceScreen = () => {
     title: "Month Wise Breakup",
     chartArea: { width: "60%" },
     hAxis: {
-      title: `Amount (in ${selectedAirline?.operatingAirlineCurrency})`,
+      title: `Amount (in ${selectedAirline?.walletCurrency})`,
       minValue: 0,
     },
     vAxis: {
@@ -404,7 +404,7 @@ const AddBalanceScreen = () => {
     title: "Week Wise Breakup",
     chartArea: { width: "60%" },
     hAxis: {
-      title: `Amount (in ${selectedAirline?.operatingAirlineCurrency})`,
+      title: `Amount (in ${selectedAirline?.walletCurrency})`,
       minValue: 0,
     },
     vAxis: {
@@ -464,7 +464,7 @@ const AddBalanceScreen = () => {
                         {index + 1}
                       </TableCell>
                       <TableCell align="left">{row.airlineCode}</TableCell>
-                      <TableCell align="left">{`${row.operatingAirlineCurrency} ${row.balance}`}</TableCell>
+                      <TableCell align="left">{`${row.walletCurrency} ${row.balance}`}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -553,7 +553,7 @@ const AddBalanceScreen = () => {
               className="Input-balance"
               placeholder="Amount (in Rs)"
               min={0}
-              label={`Amount ${airline ? `(in ${selectedAirline.operatingAirlineCurrency})` : ""}`}
+              label={`Amount ${airline ? `(in ${selectedAirline.walletCurrency})` : ""}`}
               InputProps={{
                 inputProps: { min: 0 },
               }}

@@ -277,7 +277,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
 
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/getAvailability?airlineCode=${airline}&controlPanel=true`,
+        `https://api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
         reqBody,
         { headers }
       )
