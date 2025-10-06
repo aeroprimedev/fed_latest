@@ -221,7 +221,7 @@ background: #FFFFFF;
   cursor: pointer;
 }
 }
-@media (min-width: 1024px) and (max-width: 1439px){
+@media (min-width: 300px) and (max-width: 1439px){
 
   .search-pnr-wrapper {
     background-color: #ffffff;

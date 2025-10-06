@@ -137,7 +137,7 @@ const HeaderLanding = ({ fetchUserDetails, setFetchUserDetails }) => {
           <div className="nav-username">
             {loggedInUserDetails?.emailId && (
               <>
-                <span>Welcome : {' '}</span>
+                <span>Welcome {' '}</span>
                 <span1>{loggedInUserDetails?.name ?? loggedInUserDetails?.emailId}</span1>
               </>
             )}

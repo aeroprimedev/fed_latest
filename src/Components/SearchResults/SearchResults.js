@@ -7,6 +7,8 @@ import {
   FormControl,
   RadioGroup,
   FormControlLabel,
+  Select,
+  MenuItem,OutlinedInput,
   Radio,
   FormLabel,
 } from "@mui/material";
@@ -2532,7 +2534,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
     axios
       .post(
-        `https://api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
+        `http://stg-api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
         reqBody,
         { headers }
       )
@@ -4138,6 +4140,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
           )}
         </div>
         <div className="search-flights-section">
+          <div className="search-flights-section-1">
           {origin && (
             <div className="origin-selection1">
               <DropDown
@@ -4172,7 +4175,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
               </i>
             </div>
           )}
-
+          </div>
+          <div className="search-flights-section-2">
           <div className="date-selection">
             <DatePicker
               selected={departureDate}
@@ -4308,7 +4312,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
               )}
             </div>
           </div>
-          <div className="search-flights-section2">
+          </div>
+         <div className="search-flights-section-3">
             <div className="search-btn-wrapper">
               <FormControl>
                 <button

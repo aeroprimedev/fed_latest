@@ -28,6 +28,7 @@ import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SearchIcon from "@mui/icons-material/Search";
+import { OutlinedInput } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -277,7 +278,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
 
     axios
       .post(
-        `https://api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
+        `http://stg-api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
         reqBody,
         { headers }
       )
@@ -573,7 +574,7 @@ export function SearchFlightsTest2({ setSearchResult }) {
                     </div>
                   </div>
                   <div className="Search-Selection-Container">
-                    <div className="Origin-Selection">
+                    {/* <div className="Origin-Selection">
                       <DropDown
                         name="abcd"
                         className="Origin-Selection-dropdown"
@@ -604,7 +605,168 @@ export function SearchFlightsTest2({ setSearchResult }) {
                       <i className="icon-plane">
                         <FlightLandIcon />
                       </i>
-                    </div>
+                    </div> */}
+                    <StyledFormControl fullWidth>
+                      <Select
+                        id="origin-select"
+                        value={origin || ""}
+                        onChange={(event) =>
+                          handleOriginChange(event.target.value)
+                        }
+                        name="Origin"
+                        displayEmpty
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return (
+                              <PlaceholderTypography>
+                                Origin
+                              </PlaceholderTypography>
+                            );
+                          }
+                          return selected;
+                        }}
+                        input={
+                          <OutlinedInput
+                            sx={{
+                              "& fieldset": { border: "none" },
+                              "&:hover fieldset": {
+                                border: "1px solid",
+                              },
+                              "&.Mui-focused fieldset": {
+                                border: "1px solid",
+                              },
+                            }}
+                          />
+                        }
+                        style={{
+                          variant: "standard",
+                          color: "#000",
+                          fontSize: "15px",
+                          width: "200px",
+                          height: "50px",
+                          cursor: "pointer",
+                        }}
+                        IconComponent={(props) => (
+                          <FlightTakeoffIcon
+                            {...props}
+                            style={{
+                              color: "#ff5722",
+                              marginRight: "4px",
+                              transform: "none",
+                            }}
+                          />
+                        )}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              marginTop: "8px",
+                              maxHeight: "200px",
+                              overflow: "hidden",
+                            },
+                          },
+                          MenuListProps: {
+                            style: {
+                              padding: 0,
+                              maxHeight: "200px",
+                              overflowY: "auto",
+                              scrollbarWidth: "none",
+                              msOverflowStyle: "none",
+                            },
+                            "&::-webkit-scrollbar": {
+                              display: "none",
+                            },
+                          },
+                        }}
+                      >
+                        {originList?.map((city) => (
+                          <MenuItem key={city} value={city}>
+                            {city}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </StyledFormControl>
+                    <StyledFormControl fullWidth>
+                      <Select
+                        id="destination-select"
+                        value={destination || ""}
+                        onChange={(event) =>
+                          handleDestinationChange(event.target.value)
+                        }
+                        name="Destination"
+                        displayEmpty
+                        disabled={!origin} // disable until origin selected
+                        renderValue={(selected) => {
+                          if (!selected) {
+                            return (
+                              <PlaceholderTypography>
+                                Destination
+                              </PlaceholderTypography>
+                            );
+                          }
+                          return selected;
+                        }}
+                        input={
+                          <OutlinedInput
+                            sx={{
+                              "& fieldset": { border: "none" },
+                              "&:hover fieldset": {
+                                border: "1px solid",
+                              },
+                              "&.Mui-focused fieldset": {
+                                border: "1px solid",
+                              },
+                            }}
+                          />
+                        }
+                        style={{
+                          color: "#000",
+                          fontSize: "15px",
+                          width: "200px",
+                          height: "50px",
+                          cursor: !origin ? "not-allowed" : "pointer",
+                        }}
+                        IconComponent={(props) => (
+                          <FlightLandIcon
+                            {...props}
+                            style={{
+                              color: "#ff5722",
+                              marginRight: "4px",
+                              transform: "none",
+                            }}
+                          />
+                        )}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              border: "1px solid #E5E2DA",
+                              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+                              marginTop: "8px",
+                              borderRadius: "6px",
+                              maxHeight: "200px",
+                              overflow: "hidden",
+                            },
+                          },
+                          MenuListProps: {
+                            style: {
+                              padding: 0,
+                              maxHeight: "200px",
+                              overflowY: "auto",
+                              scrollbarWidth: "none",
+                              msOverflowStyle: "none",
+                            },
+                            "&::-webkit-scrollbar": {
+                              display: "none",
+                            },
+                          },
+                        }}
+                      >
+                        {destinationOptions?.map((city) => (
+                          <MenuItem key={city} value={city}>
+                            {city}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </StyledFormControl>
                     <div className="date-selection">
                       <DatePicker
                         selected={departureDate}

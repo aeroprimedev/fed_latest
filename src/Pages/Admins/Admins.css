@@ -147,7 +147,7 @@
     font-weight: bold;
   }
 }
-  @media (min-width: 1024px) and (max-width: 1439px){
+  @media (min-width: 300px) and (max-width: 1439px){
     .users-wrapper1 {
       margin-top: 50px;
       margin-left: 100px;

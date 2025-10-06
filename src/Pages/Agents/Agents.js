@@ -616,18 +616,18 @@ const AgentsScreen = () => {
           </Dialog> */}
           <TableContainer
             component={Paper}
-            style={{ borderRadius: "10px", overflow: "hidden" }}
+            style={{ borderRadius: "10px", overflow: "auto" }}
           >
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell align="left">Email</StyledTableCell>
-                  <StyledTableCell align="left">Agent Name</StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="center">Name</StyledTableCell>
+                  <StyledTableCell align="center">Email</StyledTableCell>
+                  <StyledTableCell align="center">Agent Name</StyledTableCell>
+                  <StyledTableCell align="center">
                     Enable/Disable Agent
                   </StyledTableCell>
-                  <StyledTableCell align="left">Action</StyledTableCell>
+                  <StyledTableCell align="center" sx={{width : "32%"}}>Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -640,11 +640,11 @@ const AgentsScreen = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell component="th" scope="row">
+                          <TableCell component="th" scope="row"  align="center">
                             {row.name}
                           </TableCell>
-                          <TableCell align="left">{row.email}</TableCell>
-                          <TableCell align="left">{row.clientName}</TableCell>
+                          <TableCell align="center">{row.email}</TableCell>
+                          <TableCell align="center">{row.clientName}</TableCell>
                           <TableCell align="center">
                             <FormControlLabel
                               control={
@@ -776,7 +776,7 @@ const AgentsScreen = () => {
                               {visibleRowId === row.clientId && (
                                 <TableContainer component={Paper} style={{ borderRadius: "10px", overflow: "hidden" }}>
                                   <Table
-                                    sx={{ minWidth: 350 }}
+                                    sx={{ tableLayout: "auto", width: "100%", overflow: "auto" }}
                                     aria-label="simple table"
                                   >
                                     <TableHead>

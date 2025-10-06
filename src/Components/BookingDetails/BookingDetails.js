@@ -2013,7 +2013,7 @@ const BookingDetails = ({
                                 if (!selected) {
                                   return (
                                     <PlaceholderTypography>
-                                      Tittle
+                                      Title
                                     </PlaceholderTypography>
                                   );
                                 }

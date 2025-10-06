@@ -149,7 +149,7 @@
     color: white;
 }
 }
-@media (min-width: 1024px) and (max-width: 1439px){
+@media (min-width: 300px) and (max-width: 1439px){
 /* .users-wrapper {
     background-color: #ffffff;
     padding: 20px;

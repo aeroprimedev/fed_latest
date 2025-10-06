@@ -212,6 +212,19 @@
     background-color: #E5E2DA;
 
 }
+@media (min-width: 300px) and (max-width: 1024px) {
+  html, body {
+    min-width: 1024px;   /* keep layout fixed to desktop width */
+    overflow-x: auto;    /* allow horizontal scroll */
+    overflow-y: auto;    /* normal vertical scroll */
+  }
+
+
+  .reports-wrapper {
+    width: 1024px;       /* force container to desktop size */
+    margin-left: 100px;      /* center it in screen */
+  }
+}
 
 @media (min-width: 1024px) and (max-width: 1439px) {
   .reports-wrapper {

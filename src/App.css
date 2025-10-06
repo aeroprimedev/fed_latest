@@ -40,3 +40,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* When screen width goes below 1024px */
+@media (max-width: 1024px) {
+  html, body {
+    min-width: 1024px;   /* stop layout shrinking */
+    overflow-x: auto;    /* allow horizontal scroll */
+    overflow-y: auto;
+  }
+}
+
+/* When screen width goes below 768px */
+@media (max-width: 768px) {
+  html, body {
+    min-width: 768px;    /* stop layout shrinking */
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;         /* Chrome, Safari, Edge */
+}

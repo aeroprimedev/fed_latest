@@ -136,7 +136,7 @@ line-height: 21.78px;
   transform: scale(1.05);
 }
 }
-@media (min-width: 1024px) and (max-width: 1439px){
+@media (min-width: 300px) and (max-width: 1439px){
   .booking-history-wrapper{
     margin-top: 50px;
     margin-left: 100px;
@@ -147,7 +147,8 @@ line-height: 21.78px;
     margin-bottom: 50px;
    }
    .content {
-     flex-grow: 1; /* Push footer down when content grows */
+     /* flex-grow: 1;  Push footer down when content grows */
+     overflow-x: auto; /* Push footer down when content grows */
    }
    .no-scroll {
      overflow: hidden;

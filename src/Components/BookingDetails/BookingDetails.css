@@ -804,7 +804,7 @@
 
 }
 }
-@media (min-width: 1024px) and (max-width: 1439px){
+@media (min-width: 300px) and (max-width: 1439px){
   .booking-details-wrapper {
     display: flex;
     flex-direction: column;
@@ -958,7 +958,7 @@
     display: flex;
     justify-content: center;
     align-items: baseline;
-    padding: 10px;
+    padding: 5px;
     gap: 5px;
   }
   
@@ -981,7 +981,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 35px;
+    padding: 34px;
     color: #EF5443;
     font-size: 18px;
     font-family: Inter;
@@ -1002,7 +1002,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px;
+    height: 40.67px;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
   }

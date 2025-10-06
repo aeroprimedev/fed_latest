@@ -24,7 +24,8 @@
 @media (min-width: 1024px) and (max-width: 1439px){
     .header-body-login{
         position: relative;
-        width: 169vh;
+        /* width: 169vh; */
+        width: 100%;
         height: 100px;
         top: 0px;
         gap: 0px;
@@ -44,4 +45,50 @@
         left: 65px;
     
     }
+}
+
+/* Tablet screens (between 768px and 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-body-login {
+    position: relative;
+    width: 100%;
+    height: 80px;  /* slightly bigger than mobile */
+    top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #E5E2DA;
+    padding: 0 20px;
+    overflow-x: hidden;
+  }
+
+  .logo-login {
+    position: relative;
+    width: 180px;  /* medium logo size */
+    top: unset;
+    left: unset;
+  }
+}
+
+/* Mobile screens and smaller (up to 767px) */
+@media (max-width: 767px) {
+  .header-body-login {
+    position: relative;
+    width: 100%;
+    height: 70px;  /* smaller height */
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid #E5E2DA;
+    padding: 0 10px; /* add some padding */
+  }
+
+  .logo-login {
+    position: relative;  /* remove absolute for better responsiveness */
+    width: 250px;  /* smaller logo size */
+    top: unset;
+    left: unset;
+  }
 }

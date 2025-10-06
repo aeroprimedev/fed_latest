@@ -188,6 +188,110 @@ margin-top: 50px;
     color:#EF5443;
 } */
 
+@media (max-width: 1023px) {
+  .login-form-container {
+    margin-left: 20px;   /* reduce left margin */
+    margin-top: 20px;
+    height: auto;        /* let content adjust dynamically */
+    width: auto;
+    align-items: center; 
+    overflow-x: hidden;/* center for small screens */
+  }
+
+  .login-form-container ::-webkit-scrollbar{
+    display: none;  /* hide scrollbar for webkit browsers */
+  }
+
+  .login-title {
+    font-size: 20px;     /* slightly smaller text */
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .login-Username, .login-Password {
+    width: 90%;          /* take most of screen width */
+    margin-top: 20px;
+    margin-left: 0;      /* remove extra margin */
+    font-size: 16px;
+  }
+
+  .forgot-password {
+    position: static;    /* avoid absolute positioning issues */
+    margin-top: 10px;
+    text-align: right;   /* keep it aligned properly */
+    width: 90%;
+  }
+
+  .login-button {
+    width: 95%;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    margin-top: 30px;
+    font-size: 16px;
+  }
+
+  .signup-link {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+    display: block;
+  }
+}
+@media (max-width: 430px) {
+  .login-form-container {
+    margin-left: 10px;       /* minimal margin */
+    margin-top: 10px;
+    height: auto;
+    align-items: center;  
+    overflow-x: hidden;   /* center content */
+  }
+  .login-form-container::-webkit-scrollbar{
+    display: none;  /* hide scrollbar for webkit browsers */
+  }
+
+  .login-title {
+    font-size: 18px;         /* smaller title text */
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .login-Username, .login-Password {
+    width: 90%;              /* almost full width */
+    margin: 15px auto 0;
+    font-size: 14px;
+    padding-left: 20px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .forgot-password {
+    position: static;
+    margin-top: 5px;
+    text-align: center;      /* centered for small screens */
+    width: 95%;
+  }
+
+  .login-button {
+    width: 95%;              /* almost full width */
+    height: 45px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  .signup-link {
+    font-size: 14px;         /* smaller font for mobile */
+    text-align: center;
+    margin-top: 15px;
+    display: block;
+  }
+
+  .break-line {
+    width: 50%;              /* scale line with container */
+    margin: 10px auto;       /* center the line */
+  }
+}
 
 @media (min-width: 1024px) and (max-width: 1439px) {
   .login-form-container{

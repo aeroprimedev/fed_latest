@@ -330,7 +330,7 @@ const Admins = () => {
       <div>
         <TableContainer
           component={Paper}
-          style={{ borderRadius: "10px", overflow: "hidden" }}
+          style={{ borderRadius: "10px", overflow: "auto" }}
         >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

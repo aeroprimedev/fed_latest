@@ -1,4 +1,4 @@
-@media (min-width: 1440px){
+@media (min-width: 980px){
 .no-flights-text {
     display: flex;
     align-items: center;
@@ -12,19 +12,35 @@
 
 .search-result-wrapper {
     /* height: 100vh; */
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: auto;       /* hide horizontal scroll */
+    overflow-y: auto;         /* allow vertical scroll */
+    scrollbar-width: none; 
+}
+.search-result-wrapper::-webkit-scrollbar {
+  display: none;            /* Chrome, Safari, Edge */
 }
 
 .search-result-wrapper .search-flights-wrapper {
-    padding: 20px;
+    padding: 10px;
     padding-top: 10px;
     padding-left: 50px;
     margin-top: 15px;
     height: 130px;
     background-color: #334555;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .search-btn2 {
-    width: 190px;
+    width: 13vw;
     height: 50px;
     background-color: #ef5443;
     color: #fff;
@@ -50,12 +66,29 @@
 
 .search-flights-section {
     display: flex;
-    gap: 30px;
-    align-items: center;
+    gap: 15px;
+    align-items: start;
 
 }
 
-
+.search-flights-section-1 {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+.search-flights-section-2 {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+.search-flights-section-3 {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
 
 .search-result-wrapper .search-result-cards-wrapper {
     display: flex;
@@ -1079,7 +1112,7 @@
 
     height: 50px;
     border: none;
-    width: 200px;
+    width: 13vw;
     padding: 18px;
     display: flex;
     align-items: center;
@@ -1108,7 +1141,7 @@ background-color: #EF5443;
 }
 
 .calender-button1 {
-    width: 200px;
+    width: 13vw;
     height: 50px;
     padding: 15px;
     background-color: #fff;
@@ -1121,7 +1154,7 @@ background-color: #EF5443;
 }
 
 .calender-button2 {
-    width: 200px;
+    width: 13vw;
     height: 50px;
     padding: 15px;
     background-color: #fff;
@@ -1338,7 +1371,7 @@ background-color: #EF5443;
     flex-direction: column;
     align-items: start;
     justify-content: start;
-    margin-left: 156px;
+    margin-left: 5vw;
     margin-top: 21px;
 }
 
@@ -1451,7 +1484,7 @@ background-color: #EF5443;
 }
 }
 
-@media (min-width: 1024px) and (max-width: 1439px){
+@media (max-width: 979px){
     .no-flights-text {
         display: flex;
         align-items: center;
@@ -1469,21 +1502,28 @@ background-color: #EF5443;
       }
     .search-result-wrapper {
         height: 100vh;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
     
     .search-result-wrapper .search-flights-wrapper {
         padding: 20px;
         padding-top: 10px;
-        padding-left: 20px;
+        padding-left: 40px;
         margin-top: 15px;
-        height: 130px;
+        height: 40vh;
         background-color: #334555;
-        width: 119%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
     }
     
     .search-btn2 {
-        width: 140px;
+        width: 25vw;
         height: 50px;
         background-color: #ef5443;
         color: #fff;
@@ -1511,15 +1551,30 @@ background-color: #EF5443;
         display: flex;
         gap: 20px;
         align-items: center;
-    
+        flex-direction: column;
     }
-    
-    
+    .search-flights-section-1 {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        justify-content: center;
+    }
+    .search-flights-section-2 {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+    .search-flights-section-3 {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
     
     .search-result-wrapper .search-result-cards-wrapper {
         display: flex;
         justify-content: center;
-        margin-left: 180px;
         height: inherit;
     
     }
@@ -1527,7 +1582,6 @@ background-color: #EF5443;
     .search-result-wrapper .search-result-col {
         display: flex;
         flex-direction: column;
-    
     }
     
     .legend {}
@@ -2287,7 +2341,7 @@ background-color: #EF5443;
     /* Main frame of buttom flight text */
     .search-result-wrapper .book-btn-wrapper {
         height: 130px;
-        width: 122%;
+        width: 100%;
         background-color: #334555;
         position: sticky;
         bottom: 0px;
@@ -2465,13 +2519,13 @@ background-color: #EF5443;
     /* workable  */
     .airline-trip-container {
         display: flex;
-        justify-content: flex-start;
-    
+        justify-content: center;
+        align-items: center;
         margin-top: 15px;
     }
     
     .search-trip-section {
-        margin-left: 150px;
+        margin-left: -19px;
     }
     
     .Search-Selection-Container {

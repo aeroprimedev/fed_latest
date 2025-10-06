@@ -544,7 +544,7 @@ const Reports = () => {
                   marginTop: "8px",
                   borderRadius: "6px",
                   maxHeight: "200px",
-                  overflow: "hidden",
+                  overflow: "auto",
                 },
               },
               MenuListProps: {
@@ -618,7 +618,7 @@ const Reports = () => {
                       borderRadius: "6px",
                       maxHeight: "200px",
                       maxWidth: "300px",
-                      overflow: "hidden",
+                      overflow: "auto",
                     },
                   },
                   MenuListProps: {
@@ -933,7 +933,7 @@ const Reports = () => {
             </div>
             <TableContainer
               component={Paper}
-              style={{ borderRadius: "10px", overflow: "hidden" }}
+              style={{ borderRadius: "10px", overflow: "auto" }}
             >
               <Table aria-label="simple table">
                 <TableHead>

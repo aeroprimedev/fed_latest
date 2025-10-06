@@ -61,7 +61,7 @@
 
 .nav-username span1 {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .nav-logout {
@@ -116,7 +116,7 @@
     justify-content: space-around;
     border-bottom: 2px solid #E5E2DA;   
     height: 100px;
-    width: 121%;
+    width: 100%;
     /* margin-right: 25px; */
   }
   
@@ -169,7 +169,7 @@
   }
   
   .nav-username span {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     color: #ef5443;
     /* Make the user's name or email bold and in a different color */
@@ -225,3 +225,28 @@
     /* Enlarge button slightly on hover */
   }
 }
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-body-landing {
+    height: 80px;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .logo-container .logo {
+    height: 45px;
+  }
+
+  .navbar ul {
+    gap: 10px;
+  }
+
+  .navbar a {
+    font-size: 14px;
+  }
+
+  .header-right {
+    gap: 10px;
+  }
+}
+
