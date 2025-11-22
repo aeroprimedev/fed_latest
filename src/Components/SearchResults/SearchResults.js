@@ -217,14 +217,58 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
     if (searchResultList?.success === true) {
       let flightClassListData = [];
       const oneWayFlightsData = [];
-      const oneWayTripFlights =
-        searchResultList?.tripType === "ROUND_TRIP"
-          ? searchResultList?.data?.availabilityResultList
-              ?.availabilityRouteList[0]?.availabilityByDateList
-              ?.originDestinationOptionList
-          : searchResultList?.data?.availabilityResultList
-              ?.availabilityRouteList?.availabilityByDateList
-              ?.originDestinationOptionList;
+      const rawRouteList =
+        searchResultList?.data?.availabilityResultList?.availabilityRouteList;
+
+      const normalizedRoutes = Array.isArray(rawRouteList)
+        ? rawRouteList
+        : rawRouteList
+        ? [rawRouteList]
+        : [];
+
+      const normalizeOriginDestinationOptionList = (optionList) => {
+        if (Array.isArray(optionList)) {
+          return optionList;
+        }
+        if (optionList) {
+          return [optionList];
+        }
+        return [];
+      };
+
+      const getOriginDestinationOptionList = (routeIndex = 0) => {
+        const selectedRoute = normalizedRoutes[routeIndex];
+        if (!selectedRoute) {
+          return [];
+        }
+        const availabilityByDateList = selectedRoute?.availabilityByDateList;
+
+        if (Array.isArray(availabilityByDateList)) {
+          for (const availabilityByDate of availabilityByDateList) {
+            const options = normalizeOriginDestinationOptionList(
+              availabilityByDate?.originDestinationOptionList
+            );
+            if (options.length) {
+              return options;
+            }
+          }
+          return normalizeOriginDestinationOptionList(
+            availabilityByDateList[0]?.originDestinationOptionList
+          );
+        }
+
+        if (availabilityByDateList?.originDestinationOptionList) {
+          return normalizeOriginDestinationOptionList(
+            availabilityByDateList?.originDestinationOptionList
+          );
+        }
+
+        return normalizeOriginDestinationOptionList(
+          selectedRoute?.originDestinationOptionList
+        );
+      };
+
+      const oneWayTripFlights = getOriginDestinationOptionList(0);
       if (Array.isArray(oneWayTripFlights)) {
         oneWayTripFlights?.map((flight) => {
           if (Array.isArray(flight?.fareComponentGroupList)) {
@@ -515,63 +559,121 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                     //     ?.availFlightSegmentList[1]?.flightSegment,
 
                     // Booking class for each segment
-    // 
-     const segments = flight?.fareComponentGroupList?.boundList?.availFlightSegmentList;
-              segments[0]?.bookingClassList?.forEach((bookingClass, index) => {
+            const segments =
+              flight?.fareComponentGroupList?.boundList?.availFlightSegmentList;
+            if (!segments?.length) {
+              return;
+            }
+
+            const formatTime = (dateTime) => {
+              const hours = getTimeInHours(dateTime);
+              const minutes = getTimeInMinutes(dateTime);
+              if (
+                typeof hours === "number" &&
+                !Number.isNaN(hours) &&
+                typeof minutes === "number" &&
+                !Number.isNaN(minutes)
+              ) {
+                return `${String(hours).padStart(2, "0")}:${String(
+                  minutes
+                ).padStart(2, "0")}`;
+              }
+              return "--:--";
+            };
+
+            const isConnecting = segments.length > 1;
+            const firstSegment = segments[0];
+            const lastSegment = segments[segments.length - 1];
+
+            firstSegment?.bookingClassList?.forEach((bookingClass, index) => {
     let baseAmountValue =
-      flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalAmount?.value;
+                flight?.fareComponentGroupList?.fareComponentList[index]
+                  ?.pricingOverview?.totalAmount?.value;
     if (
-      flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
+                flight?.fareComponentGroupList?.fareComponentList[index]
+                  ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
     ) {
       baseAmountValue =
         Number(baseAmountValue) +
         Number(
-          flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-        );
-    }
+                    flight?.fareComponentGroupList?.fareComponentList[index]
+                      ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
+                  );
+              }
 
-    // Try to get the connecting segment's booking class (if exists)
-    const connectingBookingClass = segments[1]?.bookingClassList
-      ? segments[1]?.bookingClassList[index] || segments[1]?.bookingClassList[0]
-      : bookingClass;
+              const connectingBookingClass = isConnecting
+                ? lastSegment?.bookingClassList?.[index] ||
+                  lastSegment?.bookingClassList?.[0] ||
+                  bookingClass
+                : null;
 
-      let flightData = {
-      connectingFlight: true,
-      flightName: segments[0]?.flightSegment?.airline?.companyFullName,
-      flightNumber: segments[0]?.flightSegment?.flightNumber,
-      flightNumber_RT: segments[1]?.flightSegment?.flightNumber ?? null,
+              const flightData = {
+                connectingFlight: isConnecting,
+                flightName:
+                  firstSegment?.flightSegment?.airline?.companyFullName,
+                flightNumber: firstSegment?.flightSegment?.flightNumber,
+                flightNumber_RT: isConnecting
+                  ? lastSegment?.flightSegment?.flightNumber ?? null
+                  : null,
       stops: segments.length - 1,
-      flightDuration: connectingFlightDuration(
-        segments[0]?.flightSegment?.departureDateTimeUTC,
-        segments[1]?.flightSegment?.arrivalDateTimeUTC
-      ),
-      departureCity: segments[0]?.flightSegment?.departureAirport?.locationName,
-      stopOverCity: segments[0]?.flightSegment?.arrivalAirport?.locationCode ?? null,
-      departureCityCode: segments[0]?.flightSegment?.departureAirport?.locationCode,
-      departureTime: `${getTimeInHours(segments[0]?.flightSegment?.departureDateTime).toString().padStart(2, "0")}:` +
-        `${getTimeInMinutes(segments[0]?.flightSegment?.departureDateTime).toString().padStart(2, "0")}`,
-      arrivalCity: segments[1]?.flightSegment?.arrivalAirport?.locationName,
-      arrivalCityCode: segments[1]?.flightSegment?.arrivalAirport?.locationCode,
-      arrivalTime: `${getTimeInHours(segments[1]?.flightSegment?.arrivalDateTime).toString().padStart(2, "0")}:` +
-        `${getTimeInMinutes(segments[1]?.flightSegment?.arrivalDateTime).toString().padStart(2, "0")}`,
+                flightDuration: isConnecting
+                  ? connectingFlightDuration(
+                      firstSegment?.flightSegment?.departureDateTimeUTC,
+                      lastSegment?.flightSegment?.arrivalDateTimeUTC
+                    )
+                  : firstSegment?.flightSegment?.journeyDuration?.slice(2),
+                departureCity:
+                  firstSegment?.flightSegment?.departureAirport?.locationName,
+                stopOverCity: isConnecting
+                  ? firstSegment?.flightSegment?.arrivalAirport?.locationCode ??
+                    null
+                  : null,
+                departureCityCode:
+                  firstSegment?.flightSegment?.departureAirport?.locationCode,
+                departureTime: formatTime(
+                  firstSegment?.flightSegment?.departureDateTime
+                ),
+                arrivalCity:
+                  lastSegment?.flightSegment?.arrivalAirport?.locationName,
+                arrivalCityCode:
+                  lastSegment?.flightSegment?.arrivalAirport?.locationCode,
+                arrivalTime: formatTime(
+                  lastSegment?.flightSegment?.arrivalDateTime
+                ),
 
-      // Use bookingClass for first segment, connectingBookingClass for second
+                fareGroupName: bookingClass?.fareGroupName,
+                cabinClassCode: bookingClass?.cabinClassCode
+                  ? bookingClass?.cabinClassCode
+                  : bookingClass?.resBookDesigCode,
        cabin: bookingClass?.cabin,
       resBookDesigCode: bookingClass?.resBookDesigCode,
       resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
       resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
 
+                fareGroupName_Connecting: connectingBookingClass?.fareGroupName,
+                cabinClassCode_Connecting: connectingBookingClass?.cabinClassCode
+                  ? connectingBookingClass?.cabinClassCode
+                  : connectingBookingClass?.resBookDesigCode,
       cabin_Connecting: connectingBookingClass?.cabin,
-      resBookDesigCode_Connecting: connectingBookingClass?.resBookDesigCode,
-      resBookDesigQuantity_Connecting: connectingBookingClass?.resBookDesigQuantity,
-      resBookDesigStatusCode_Connecting: connectingBookingClass?.resBookDesigStatusCode,
+                resBookDesigCode_Connecting:
+                  connectingBookingClass?.resBookDesigCode,
+                resBookDesigQuantity_Connecting:
+                  connectingBookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode_Connecting:
+                  connectingBookingClass?.resBookDesigStatusCode,
 
       baseAmount: baseAmountValue,
       totalAmount: baseAmountValue,
-      currencyCode: flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalAmount?.currency?.code,
-      passengerFareInfoList: flight?.fareComponentGroupList?.fareComponentList[index]?.passengerFareInfoList,
-      flightSegment: { ...segments[0]?.flightSegment },
-      flightSegment_Connecting: { ...segments[1]?.flightSegment },
+                currencyCode:
+                  flight?.fareComponentGroupList?.fareComponentList[index]
+                    ?.pricingOverview?.totalAmount?.currency?.code,
+                passengerFareInfoList:
+                  flight?.fareComponentGroupList?.fareComponentList[index]
+                    ?.passengerFareInfoList,
+                flightSegment: { ...firstSegment?.flightSegment },
+                flightSegment_Connecting: isConnecting
+                  ? { ...lastSegment?.flightSegment }
+                  : null,
     };
 
     oneWayFlightsData.push(flightData);
@@ -693,6 +795,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                           )
                     }`,
 
+                    fareGroupName: bookingClass?.fareGroupName,
+                    cabinClassCode: bookingClass?.cabinClassCode
+                      ? bookingClass?.cabinClassCode
+                      : bookingClass?.resBookDesigCode,
                     cabin: bookingClass?.cabin,
                     resBookDesigCode: bookingClass?.resBookDesigCode,
                     resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
@@ -1183,10 +1289,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
       if (searchResultList.tripType === "ROUND_TRIP") {
         const twoWayFlightsData = [];
-        const twoWayTripFlights =
-          searchResultList?.data?.availabilityResultList
-            ?.availabilityRouteList[1]?.availabilityByDateList
-            ?.originDestinationOptionList;
+        const twoWayTripFlights = getOriginDestinationOptionList(1);
 
         if (Array.isArray(twoWayTripFlights)) {
           twoWayTripFlights?.map((flight) => {
@@ -1304,85 +1407,362 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 }
               );
             } else {
-              if (
-                Array.isArray(
-                  flight?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList
-                )
-              ) {
-              //   flight?.fareComponentGroupList?.boundList?.availFlightSegmentList[0]?.bookingClassList.map(
-              //     (bookingClass, index) => {
-              //       let baseAmountValue =
-              //         flight?.fareComponentGroupList?.fareComponentList[index]
-              //           ?.pricingOverview?.totalAmount?.value;
-              //       if (
-              //         flight?.fareComponentGroupList?.fareComponentList[index]
-              //           ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-              //       ) {
-              //         baseAmountValue =
-              //           Number(baseAmountValue) +
-              //           Number(
-              //             flight?.fareComponentGroupList?.fareComponentList[
-              //               index
-              //             ]?.pricingOverview?.totalBaseFare?.extraCharges[0]
-              //               ?.value
-              //           );
-              //       }
-              //       let flightData = {
-              //         connectingFlight: true,
-              //         flightName:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment?.airline
-              //             ?.companyFullName,
-              //         flightNumber:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment
-              //             ?.flightNumber,
-              //         flightNumber_RT:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[1]?.flightSegment
-              //             ?.flightNumber ?? null,
-              //         stops:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList.length - 1,
+              const segments =
+                flight?.fareComponentGroupList?.boundList?.availFlightSegmentList;
+              if (!segments?.length) {
+                return;
+              }
 
-              //         flightDuration: connectingFlightDuration(
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment
-              //             ?.departureDateTimeUTC,
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[1]?.flightSegment
-              //             ?.arrivalDateTimeUTC
-              //         ),
-              //         departureCity:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment
-              //             ?.departureAirport?.locationName,
-              //         stopOverCity:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment
-              //             ?.arrivalAirport?.locationCode ?? null,
-              //         departureCityCode:
-              //           flight?.fareComponentGroupList?.boundList
-              //             ?.availFlightSegmentList[0]?.flightSegment
-              //             ?.departureAirport?.locationCode,
-              //         departureTime: `${
-              //           getTimeInHours(
-              //             flight?.fareComponentGroupList?.boundList
-              //               ?.availFlightSegmentList[0]?.flightSegment
-              //               ?.departureDateTime
-              //           ) < 10
-              //             ? `0${getTimeInHours(
-              //                 flight?.fareComponentGroupList?.boundList
-              //                   ?.availFlightSegmentList[0]?.flightSegment
-              //                   ?.departureDateTime
-              //               )}`
-              //             : getTimeInHours(
-              //                 flight?.fareComponentGroupList?.boundList
-              //                   ?.availFlightSegmentList[0]?.flightSegment
-              //                   ?.departureDateTime
-              //               )
-              //         }: ${
+              const formatTime = (dateTime) => {
+                const hours = getTimeInHours(dateTime);
+                const minutes = getTimeInMinutes(dateTime);
+                if (
+                  typeof hours === "number" &&
+                  !Number.isNaN(hours) &&
+                  typeof minutes === "number" &&
+                  !Number.isNaN(minutes)
+                ) {
+                  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+                }
+                return "--:--";
+              };
+
+              const isConnecting = segments.length > 1;
+              const firstSegment = segments[0];
+              const lastSegment = segments[segments.length - 1];
+
+              firstSegment?.bookingClassList?.forEach((bookingClass, index) => {
+                let baseAmountValue =
+                  flight?.fareComponentGroupList?.fareComponentList[index]
+                    ?.pricingOverview?.totalAmount?.value;
+                if (
+                  flight?.fareComponentGroupList?.fareComponentList[index]
+                    ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
+                ) {
+                  baseAmountValue =
+                    Number(baseAmountValue) +
+                    Number(
+                      flight?.fareComponentGroupList?.fareComponentList[index]
+                        ?.pricingOverview?.totalBaseFare?.extraCharges[0]
+                        ?.value
+                    );
+                }
+
+                const connectingBookingClass = isConnecting
+                  ? lastSegment?.bookingClassList?.[index] ||
+                    lastSegment?.bookingClassList?.[0] ||
+                    bookingClass
+                  : null;
+
+                const flightData = {
+                  connectingFlight: isConnecting,
+                  flightName:
+                    firstSegment?.flightSegment?.airline?.companyFullName,
+                  flightNumber: firstSegment?.flightSegment?.flightNumber,
+                  flightNumber_RT: isConnecting
+                    ? lastSegment?.flightSegment?.flightNumber ?? null
+                    : null,
+                  stops: segments.length - 1,
+                  flightDuration: isConnecting
+                    ? connectingFlightDuration(
+                        firstSegment?.flightSegment?.departureDateTimeUTC,
+                        lastSegment?.flightSegment?.arrivalDateTimeUTC
+                      )
+                    : firstSegment?.flightSegment?.journeyDuration?.slice(2),
+                  departureCity:
+                    firstSegment?.flightSegment?.departureAirport?.locationName,
+                  stopOverCity: isConnecting
+                    ? firstSegment?.flightSegment?.arrivalAirport?.locationCode ??
+                      null
+                    : null,
+                  departureCityCode:
+                    firstSegment?.flightSegment?.departureAirport?.locationCode,
+                  departureTime: formatTime(
+                    firstSegment?.flightSegment?.departureDateTime
+                  ),
+                  arrivalCity:
+                    lastSegment?.flightSegment?.arrivalAirport?.locationName,
+                  arrivalCityCode:
+                    lastSegment?.flightSegment?.arrivalAirport?.locationCode,
+                  arrivalTime: formatTime(
+                    lastSegment?.flightSegment?.arrivalDateTime
+                  ),
+
+                  fareGroupName: bookingClass?.fareGroupName,
+                  cabinClassCode: bookingClass?.cabinClassCode
+                    ? bookingClass?.cabinClassCode
+                    : bookingClass?.resBookDesigCode,
+                  cabin: bookingClass?.cabin,
+                  resBookDesigCode: bookingClass?.resBookDesigCode,
+                  resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
+                  resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
+
+                  fareGroupName_Connecting: connectingBookingClass?.fareGroupName,
+                  cabinClassCode_Connecting: connectingBookingClass?.cabinClassCode
+                    ? connectingBookingClass?.cabinClassCode
+                    : connectingBookingClass?.resBookDesigCode,
+                  cabin_Connecting: connectingBookingClass?.cabin,
+                  resBookDesigCode_Connecting:
+                    connectingBookingClass?.resBookDesigCode,
+                  resBookDesigQuantity_Connecting:
+                    connectingBookingClass?.resBookDesigQuantity,
+                  resBookDesigStatusCode_Connecting:
+                    connectingBookingClass?.resBookDesigStatusCode,
+
+                  baseAmount: baseAmountValue,
+                  totalAmount: baseAmountValue,
+                  currencyCode:
+                    flight?.fareComponentGroupList?.fareComponentList[index]
+                      ?.pricingOverview?.totalAmount?.currency?.code,
+                  passengerFareInfoList:
+                    flight?.fareComponentGroupList?.fareComponentList[index]
+                      ?.passengerFareInfoList,
+                  flightSegment: { ...firstSegment?.flightSegment },
+                  flightSegment_Connecting: isConnecting
+                    ? { ...lastSegment?.flightSegment }
+                    : null,
+                };
+
+                twoWayFlightsData.push(flightData);
+              });
+            }
+          });
+        } else {
+          // Handle when twoWayTripFlights is not an array (single object)
+          const segments =
+            twoWayTripFlights?.fareComponentGroupList?.boundList
+              ?.availFlightSegmentList;
+          if (segments && Array.isArray(segments) && segments.length > 0) {
+            const formatTime = (dateTime) => {
+              const hours = getTimeInHours(dateTime);
+              const minutes = getTimeInMinutes(dateTime);
+              if (
+                typeof hours === "number" &&
+                !Number.isNaN(hours) &&
+                typeof minutes === "number" &&
+                !Number.isNaN(minutes)
+              ) {
+                return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+              }
+              return "--:--";
+            };
+
+            const isConnecting = segments.length > 1;
+            const firstSegment = segments[0];
+            const lastSegment = segments[segments.length - 1];
+
+            firstSegment?.bookingClassList?.forEach((bookingClass, index) => {
+              let baseAmountValue =
+                twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
+                  index
+                ]?.pricingOverview?.totalAmount?.value;
+              if (
+                twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
+                  index
+                ]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
+              ) {
+                baseAmountValue =
+                  Number(baseAmountValue) +
+                  Number(
+                    twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
+                      index
+                    ]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
+                  );
+              }
+
+              const connectingBookingClass = isConnecting
+                ? lastSegment?.bookingClassList?.[index] ||
+                  lastSegment?.bookingClassList?.[0] ||
+                  bookingClass
+                : null;
+
+              const flightData = {
+                connectingFlight: isConnecting,
+                flightName:
+                  firstSegment?.flightSegment?.airline?.companyFullName,
+                flightNumber: firstSegment?.flightSegment?.flightNumber,
+                flightNumber_RT: isConnecting
+                  ? lastSegment?.flightSegment?.flightNumber ?? null
+                  : null,
+                stops: segments.length - 1,
+                flightDuration: isConnecting
+                  ? connectingFlightDuration(
+                      firstSegment?.flightSegment?.departureDateTimeUTC,
+                      lastSegment?.flightSegment?.arrivalDateTimeUTC
+                    )
+                  : firstSegment?.flightSegment?.journeyDuration?.slice(2),
+                departureCity:
+                  firstSegment?.flightSegment?.departureAirport?.locationName,
+                stopOverCity: isConnecting
+                  ? firstSegment?.flightSegment?.arrivalAirport?.locationCode ??
+                    null
+                  : null,
+                departureCityCode:
+                  firstSegment?.flightSegment?.departureAirport?.locationCode,
+                departureTime: formatTime(
+                  firstSegment?.flightSegment?.departureDateTime
+                ),
+                arrivalCity:
+                  lastSegment?.flightSegment?.arrivalAirport?.locationName,
+                arrivalCityCode:
+                  lastSegment?.flightSegment?.arrivalAirport?.locationCode,
+                arrivalTime: formatTime(
+                  lastSegment?.flightSegment?.arrivalDateTime
+                ),
+
+                fareGroupName: bookingClass?.fareGroupName,
+                cabinClassCode: bookingClass?.cabinClassCode
+                  ? bookingClass?.cabinClassCode
+                  : bookingClass?.resBookDesigCode,
+                cabin: bookingClass?.cabin,
+                resBookDesigCode: bookingClass?.resBookDesigCode,
+                resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
+
+                fareGroupName_Connecting: connectingBookingClass?.fareGroupName,
+                cabinClassCode_Connecting: connectingBookingClass?.cabinClassCode
+                  ? connectingBookingClass?.cabinClassCode
+                  : connectingBookingClass?.resBookDesigCode,
+                cabin_Connecting: connectingBookingClass?.cabin,
+                resBookDesigCode_Connecting:
+                  connectingBookingClass?.resBookDesigCode,
+                resBookDesigQuantity_Connecting:
+                  connectingBookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode_Connecting:
+                  connectingBookingClass?.resBookDesigStatusCode,
+
+                baseAmount: baseAmountValue,
+                totalAmount: baseAmountValue,
+                currencyCode:
+                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
+                    index
+                  ]?.pricingOverview?.totalAmount?.currency?.code,
+                passengerFareInfoList:
+                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
+                    index
+                  ]?.passengerFareInfoList,
+                flightSegment: { ...firstSegment?.flightSegment },
+                flightSegment_Connecting: isConnecting
+                  ? { ...lastSegment?.flightSegment }
+                  : null,
+              };
+
+              twoWayFlightsData.push(flightData);
+            });
+          }
+        }
+        flightClassListData.push(twoWayFlightsData.reverse());
+      }
+      setFlightClassList(JSON.parse(JSON.stringify(flightClassListData)));
+      setoneWayTripDetails(flightClassListData[0][0]);
+      if (flightClassListData[1]) {
+        setTwoWayTripDetails(flightClassListData[1][0]);
+      }
+    }
+  }, [searchResultList]);
+  
+  console.log(twoWayTripDetails);
+  
+  useEffect(() => {
+    if (airline) {
+      setShowLoader(true);
+      // setOrigin(null);
+      // setDestination(null);
+      const headers = {
+        Authorization: localStorage.getItem("AuthToken"),
+        Accept: "application/json",
+      };
+      axios
+        .get(
+          `http://stg-api.aeroprime.in/crm-service/search/originList?airlineCode=${airline}`,
+          { headers }
+        )
+        .then((response) => {
+          setFlightsAvailable(response.data);
+          setShowLoader(false);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            localStorage.clear();
+            window.location.href = "/";
+          }
+        });
+    }
+  }, [airline]);
+
+  const airlineOptions =
+    loggedInUserDetails?.airlineCodes?.map((airlineCode) => ({
+      label: airlineCode,
+      value: airlineCode,
+    })) || [];
+  const handleAirlineChange = (airline) => {
+    setAirline(airline);
+  };
+
+  const originOptions = flightsAvailable
+    ? Object.keys(flightsAvailable).map((city) => ({
+        label: city,
+        value: city,
+      }))
+    : [];
+
+  const destinationOptions =
+    flightsAvailable && origin
+      ? flightsAvailable[origin]?.map((city) => ({
+          label: city,
+          value: city,
+        })) || []
+      : [];
+
+  const handleOriginChange = (value) => {
+    setOrigin(value);
+  };
+
+  const handleDestinationChange = (value) => {
+    setDestination(value);
+  };
+
+  const handleClose = () => setShowBookingDetailsDialog(false);
+  const handleShow = () => setShowBookingDetailsDialog(true);
+
+  const formatDate = (date) => {
+    if (!date) return "";
+    return format(date, "yyyy-MM-dd");
+  };
+
+  const formatLocation = (location) => {
+    if (typeof location !== "string") {
+      return []; // Return an empty array for invalid inputs
+    }
+    const [code, name] = location.split(",");
+    return [code ? code.trim() : null, name ? name.trim() : null];
+  };
+
+  const handleSelection = (type, count) => {
+    if (type === "adult") {
+      setSelectedAdult(count);
+      if (selectedInfant > count) {
+        setSelectedInfant(count);
+      }
+    } else if (type === "child") {
+      setSelectedChild(selectedChild === count ? null : count);
+    } else if (type === "infant") {
+      setSelectedInfant(selectedInfant === count ? null : count);
+      if (count <= selectedAdult) {
+        setSelectedInfant(selectedInfant === count ? null : count);
+      }
+    }
+  };
+
+  const handleApply = () => {
+    const total = selectedAdult + selectedChild + selectedInfant;
+    setAdult(selectedAdult);
+    setChild(selectedChild);
+    setInfant(selectedInfant);
+    setTotalTravelers(total);
+    setPassengerCount(false);
+  };
+
               //           getTimeInMinutes(
               //             flight?.fareComponentGroupList?.boundList
               //               ?.availFlightSegmentList[0]?.flightSegment
@@ -1678,781 +2058,6 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 //                     twoWayFlightsData.push(flightData);
 //                   }
 // );
- const segments = flight?.fareComponentGroupList?.boundList?.availFlightSegmentList;
-              segments[0]?.bookingClassList?.forEach((bookingClass, index) => {
-    let baseAmountValue =
-      flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalAmount?.value;
-    if (
-      flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-    ) {
-      baseAmountValue =
-        Number(baseAmountValue) +
-        Number(
-          flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-        );
-    }
-
-    // Try to get the connecting segment's booking class (if exists)
-    const connectingBookingClass = segments[1]?.bookingClassList
-      ? segments[1]?.bookingClassList[index] || segments[1]?.bookingClassList[0]
-      : bookingClass;
-
-      let flightData = {
-      connectingFlight: true,
-      flightName: segments[0]?.flightSegment?.airline?.companyFullName,
-      flightNumber: segments[0]?.flightSegment?.flightNumber,
-      flightNumber_RT: segments[1]?.flightSegment?.flightNumber ?? null,
-      stops: segments.length - 1,
-      flightDuration: connectingFlightDuration(
-        segments[0]?.flightSegment?.departureDateTimeUTC,
-        segments[1]?.flightSegment?.arrivalDateTimeUTC
-      ),
-      departureCity: segments[0]?.flightSegment?.departureAirport?.locationName,
-      stopOverCity: segments[0]?.flightSegment?.arrivalAirport?.locationCode ?? null,
-      departureCityCode: segments[0]?.flightSegment?.departureAirport?.locationCode,
-      departureTime: `${getTimeInHours(segments[0]?.flightSegment?.departureDateTime).toString().padStart(2, "0")}:` +
-        `${getTimeInMinutes(segments[0]?.flightSegment?.departureDateTime).toString().padStart(2, "0")}`,
-      arrivalCity: segments[1]?.flightSegment?.arrivalAirport?.locationName,
-      arrivalCityCode: segments[1]?.flightSegment?.arrivalAirport?.locationCode,
-      arrivalTime: `${getTimeInHours(segments[1]?.flightSegment?.arrivalDateTime).toString().padStart(2, "0")}:` +
-        `${getTimeInMinutes(segments[1]?.flightSegment?.arrivalDateTime).toString().padStart(2, "0")}`,
-
-      // Use bookingClass for first segment, connectingBookingClass for second
-       cabin: bookingClass?.cabin,
-      resBookDesigCode: bookingClass?.resBookDesigCode,
-      resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
-      resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
-
-      cabin_Connecting: connectingBookingClass?.cabin,
-      resBookDesigCode_Connecting: connectingBookingClass?.resBookDesigCode,
-      resBookDesigQuantity_Connecting: connectingBookingClass?.resBookDesigQuantity,
-      resBookDesigStatusCode_Connecting: connectingBookingClass?.resBookDesigStatusCode,
-
-      baseAmount: baseAmountValue,
-      totalAmount: baseAmountValue,
-      currencyCode: flight?.fareComponentGroupList?.fareComponentList[index]?.pricingOverview?.totalAmount?.currency?.code,
-      passengerFareInfoList: flight?.fareComponentGroupList?.fareComponentList[index]?.passengerFareInfoList,
-      flightSegment: { ...segments[0]?.flightSegment },
-      flightSegment_Connecting: { ...segments[1]?.flightSegment },
-    };
-
-    twoWayFlightsData.push(flightData);
-  });
-              } else {  
-                flight?.fareComponentGroupList?.boundList?.availFlightSegmentList?.bookingClassList.map(
-                  (bookingClass, index) => {
-                    let baseAmountValue =
-                      flight?.fareComponentGroupList?.fareComponentList[index]
-                        ?.pricingOverview?.totalAmount?.value;
-                    if (
-                      flight?.fareComponentGroupList?.fareComponentList[index]
-                        ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-                    ) {
-                      baseAmountValue =
-                        Number(baseAmountValue) +
-                        Number(
-                          flight?.fareComponentGroupList?.fareComponentList[
-                            index
-                          ]?.pricingOverview?.totalBaseFare?.extraCharges[0]
-                            ?.value
-                        );
-                    }
-                    let flightData = {
-                      flightName:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment?.airline
-                          ?.companyFullName,
-                      flightNumber:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment?.flightNumber,
-                      stops:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment?.stopQuantity,
-                      flightDuration:
-                        flight?.fareComponentGroupList?.boundList?.availFlightSegmentList?.flightSegment?.journeyDuration?.slice(
-                          2
-                        ),
-                      departureCity:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureAirport?.locationName,
-                      departureCityCode:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureAirport?.locationCode,
-
-                      departureTime: `${
-                        getTimeInHours(
-                          flight?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList?.flightSegment
-                            ?.departureDateTime
-                        ) < 10
-                          ? `0${getTimeInHours(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.departureDateTime
-                            )}`
-                          : getTimeInHours(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.departureDateTime
-                            )
-                      }: ${
-                        getTimeInMinutes(
-                          flight?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList?.flightSegment
-                            ?.departureDateTime
-                        ) < 10
-                          ? `0${getTimeInMinutes(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.departureDateTime
-                            )}`
-                          : getTimeInMinutes(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.departureDateTime
-                            )
-                      }`,
-
-                      arrivalCity:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalAirport?.locationName,
-                      arrivalCityCode:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalAirport?.locationCode,
-                      arrivalTime: `${
-                        getTimeInHours(
-                          flight?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList?.flightSegment
-                            ?.arrivalDateTime
-                        ) < 10
-                          ? `0${getTimeInHours(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.arrivalDateTime
-                            )}`
-                          : getTimeInHours(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.arrivalDateTime
-                            )
-                      }: ${
-                        getTimeInMinutes(
-                          flight?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList?.flightSegment
-                            ?.arrivalDateTime
-                        ) < 10
-                          ? `0${getTimeInMinutes(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.arrivalDateTime
-                            )}`
-                          : getTimeInMinutes(
-                              flight?.fareComponentGroupList?.boundList
-                                ?.availFlightSegmentList?.flightSegment
-                                ?.arrivalDateTime
-                            )
-                      }`,
-
-                      cabin: bookingClass?.cabin,
-                      resBookDesigCode: bookingClass?.resBookDesigCode,
-                      resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
-                      resBookDesigStatusCode:
-                        bookingClass?.resBookDesigStatusCode,
-                      baseAmount: baseAmountValue,
-                      totalAmount: baseAmountValue,
-                      currencyCode:
-                        flight?.fareComponentGroupList?.fareComponentList[index]
-                          ?.pricingOverview?.totalAmount?.currency?.code,
-                      passengerFareInfoList:
-                        flight?.fareComponentGroupList?.fareComponentList[index]
-                          ?.passengerFareInfoList,
-                      flightSegment:
-                        flight?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment,
-                    };
-                    twoWayFlightsData.push(flightData);
-                  }
-                );
-              }
-
-            }
-          });
-        } else {
-          if (
-            Array.isArray(
-              twoWayTripFlights?.fareComponentGroupList?.boundList
-                ?.availFlightSegmentList
-            )
-          ) {
-            twoWayTripFlights?.fareComponentGroupList?.boundList?.availFlightSegmentList[0]?.bookingClassList.map(
-              (bookingClass, index) => {
-                let baseAmountValue =
-                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
-                    index
-                  ]?.pricingOverview?.totalAmount?.value;
-                if (
-                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList[
-                    index
-                  ]?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-                ) {
-                  baseAmountValue =
-                    Number(baseAmountValue) +
-                    Number(
-                      twoWayTripFlights?.fareComponentGroupList
-                        ?.fareComponentList[index]?.pricingOverview
-                        ?.totalBaseFare?.extraCharges[0]?.value
-                    );
-                }
-                let flightData = {
-                  connectingFlight: true,
-                  flightName:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment?.airline
-                      ?.companyFullName,
-                  flightNumber:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment?.flightNumber,
-                  flightNumber_RT:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[1]?.flightSegment
-                      ?.flightNumber ?? null,
-                  stops:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList.length - 1,
-
-                  flightDuration: connectingFlightDuration(
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment
-                      ?.departureDateTimeUTC,
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[1]?.flightSegment
-                      ?.arrivalDateTimeUTC
-                  ),
-                  departureCity:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment
-                      ?.departureAirport?.locationName,
-                  stopOverCity:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment?.arrivalAirport
-                      ?.locationCode ?? null,
-                  departureCityCode:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment
-                      ?.departureAirport?.locationCode,
-                  departureTime: `${
-                    getTimeInHours(
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList[0]?.flightSegment
-                        ?.departureDateTime
-                    ) < 10
-                      ? `0${getTimeInHours(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[0]?.flightSegment
-                            ?.departureDateTime
-                        )}`
-                      : getTimeInHours(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[0]?.flightSegment
-                            ?.departureDateTime
-                        )
-                  }: ${
-                    getTimeInMinutes(
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList[0]?.flightSegment
-                        ?.departureDateTime
-                    ) < 10
-                      ? `0${getTimeInMinutes(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[0]?.flightSegment
-                            ?.departureDateTime
-                        )}`
-                      : getTimeInMinutes(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[0]?.flightSegment
-                            ?.departureDateTime
-                        )
-                  }`,
-                  arrivalCity:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[1]?.flightSegment?.arrivalAirport
-                      ?.locationName,
-                  arrivalCityCode:
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[1]?.flightSegment?.arrivalAirport
-                      ?.locationCode,
-                  arrivalTime: `${
-                    getTimeInHours(
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList[1]?.flightSegment
-                        ?.arrivalDateTime
-                    ) < 10
-                      ? `0${getTimeInHours(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[1]?.flightSegment
-                            ?.arrivalDateTime
-                        )}`
-                      : getTimeInHours(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[1]?.flightSegment
-                            ?.arrivalDateTime
-                        )
-                  }: ${
-                    getTimeInMinutes(
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList[1]?.flightSegment
-                        ?.arrivalDateTime
-                    ) < 10
-                      ? `0${getTimeInMinutes(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[1]?.flightSegment
-                            ?.arrivalDateTime
-                        )}`
-                      : getTimeInMinutes(
-                          twoWayTripFlights?.fareComponentGroupList?.boundList
-                            ?.availFlightSegmentList[1]?.flightSegment
-                            ?.arrivalDateTime
-                        )
-                  }`,
-                  cabin: bookingClass?.cabin,
-                  resBookDesigCode: bookingClass?.resBookDesigCode,
-                  resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
-                  resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
-                  cabin_Connecting: bookingClass?.cabin,
-                  resBookDesigCode_Connecting: bookingClass?.resBookDesigCode,
-                  resBookDesigQuantity_Connecting:
-                    bookingClass?.resBookDesigQuantity,
-                  resBookDesigStatusCode_Connecting:
-                    bookingClass?.resBookDesigStatusCode,
-                  baseAmount: baseAmountValue,
-                  totalAmount: baseAmountValue,
-                  currencyCode:
-                    twoWayTripFlights?.fareComponentGroupList
-                      ?.fareComponentList[index]?.pricingOverview?.totalAmount
-                      ?.currency?.code,
-                  passengerFareInfoList:
-                    twoWayTripFlights?.fareComponentGroupList
-                      ?.fareComponentList[index]?.passengerFareInfoList,
-                  flightSegment: {
-                    ...twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[0]?.flightSegment,
-                  },
-                  flightSegment_Connecting: {
-                    ...twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList[1]?.flightSegment,
-                  },
-                };
-
-                twoWayFlightsData.push(flightData);
-              }
-            );
-          } else {
-            if (
-              Array.isArray(
-                twoWayTripFlights?.fareComponentGroupList?.boundList
-                  ?.availFlightSegmentList?.bookingClassList
-              )
-            ) {
-              twoWayTripFlights?.fareComponentGroupList?.boundList?.availFlightSegmentList?.bookingClassList.map(
-                (bookingClass, index) => {
-                  let baseAmountValue =
-                    twoWayTripFlights?.fareComponentGroupList
-                      ?.fareComponentList[index]?.pricingOverview?.totalAmount
-                      ?.value;
-                  if (
-                    twoWayTripFlights?.fareComponentGroupList
-                      ?.fareComponentList[index]?.pricingOverview?.totalBaseFare
-                      ?.extraCharges[0]?.value
-                  ) {
-                    baseAmountValue =
-                      Number(baseAmountValue) +
-                      Number(
-                        twoWayTripFlights?.fareComponentGroupList
-                          ?.fareComponentList[index]?.pricingOverview
-                          ?.totalBaseFare?.extraCharges[0]?.value
-                      );
-                  }
-                  let flightData = {
-                    flightName:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment?.airline
-                        ?.companyFullName,
-                    flightNumber:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment?.flightNumber,
-                    stops:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment?.stopQuantity,
-                    flightDuration:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList?.availFlightSegmentList?.flightSegment?.journeyDuration?.slice(
-                        2
-                      ),
-                    departureCity:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment
-                        ?.departureAirport?.locationName,
-                    departureCityCode:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment
-                        ?.departureAirport?.locationCode,
-
-                    departureTime: `${
-                      getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      ) < 10
-                        ? `0${getTimeInHours(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.departureDateTime
-                          )}`
-                        : getTimeInHours(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.departureDateTime
-                          )
-                    }: ${
-                      getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      ) < 10
-                        ? `0${getTimeInMinutes(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.departureDateTime
-                          )}`
-                        : getTimeInMinutes(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.departureDateTime
-                          )
-                    }`,
-
-                    arrivalCity:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment?.arrivalAirport
-                        ?.locationName,
-                    arrivalCityCode:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment?.arrivalAirport
-                        ?.locationCode,
-                    arrivalTime: `${
-                      getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      ) < 10
-                        ? `0${getTimeInHours(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.arrivalDateTime
-                          )}`
-                        : getTimeInHours(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.arrivalDateTime
-                          )
-                    }: ${
-                      getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      ) < 10
-                        ? `0${getTimeInMinutes(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.arrivalDateTime
-                          )}`
-                        : getTimeInMinutes(
-                            twoWayTripFlights?.fareComponentGroupList?.boundList
-                              ?.availFlightSegmentList?.flightSegment
-                              ?.arrivalDateTime
-                          )
-                    }`,
-
-                    cabin: bookingClass?.cabin,
-                    resBookDesigCode: bookingClass?.resBookDesigCode,
-                    resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
-                    resBookDesigStatusCode:
-                      bookingClass?.resBookDesigStatusCode,
-                    baseAmount: baseAmountValue,
-                    totalAmount: baseAmountValue,
-                    currencyCode:
-                      twoWayTripFlights?.fareComponentGroupList
-                        ?.fareComponentList[index]?.pricingOverview?.totalAmount
-                        ?.currency?.code,
-                    passengerFareInfoList:
-                      twoWayTripFlights?.fareComponentGroupList
-                        ?.fareComponentList[index]?.passengerFareInfoList,
-                    flightSegment:
-                      twoWayTripFlights?.fareComponentGroupList?.boundList
-                        ?.availFlightSegmentList?.flightSegment,
-                  };
-                  twoWayFlightsData.push(flightData);
-                }
-              );
-            } else {
-              let baseAmountValue =
-                twoWayTripFlights?.fareComponentGroupList?.fareComponentList
-                  ?.pricingOverview?.totalAmount?.value;
-              if (
-                twoWayTripFlights?.fareComponentGroupList?.fareComponentList
-                  ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-              ) {
-                baseAmountValue =
-                  Number(baseAmountValue) +
-                  Number(
-                    twoWayTripFlights?.fareComponentGroupList?.fareComponentList
-                      ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-                  );
-              }
-              let flightData = {
-                flightName:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.airline
-                    ?.companyFullName,
-                flightNumber:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.flightNumber,
-                stops:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.stopQuantity,
-                flightDuration:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList?.availFlightSegmentList?.flightSegment?.journeyDuration?.slice(
-                    2
-                  ),
-                departureCity:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.departureAirport
-                    ?.locationName,
-                departureCityCode:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.departureAirport
-                    ?.locationCode,
-
-                departureTime: `${
-                  getTimeInHours(
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList?.flightSegment?.departureDateTime
-                  ) < 10
-                    ? `0${getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      )}`
-                    : getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      )
-                }: ${
-                  getTimeInMinutes(
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList?.flightSegment?.departureDateTime
-                  ) < 10
-                    ? `0${getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      )}`
-                    : getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.departureDateTime
-                      )
-                }`,
-
-                arrivalCity:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.arrivalAirport
-                    ?.locationName,
-                arrivalCityCode:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment?.arrivalAirport
-                    ?.locationCode,
-                arrivalTime: `${
-                  getTimeInHours(
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList?.flightSegment?.arrivalDateTime
-                  ) < 10
-                    ? `0${getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      )}`
-                    : getTimeInHours(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      )
-                }: ${
-                  getTimeInMinutes(
-                    twoWayTripFlights?.fareComponentGroupList?.boundList
-                      ?.availFlightSegmentList?.flightSegment?.arrivalDateTime
-                  ) < 10
-                    ? `0${getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      )}`
-                    : getTimeInMinutes(
-                        twoWayTripFlights?.fareComponentGroupList?.boundList
-                          ?.availFlightSegmentList?.flightSegment
-                          ?.arrivalDateTime
-                      )
-                }`,
-
-                cabin:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.bookingClassList?.cabin,
-                resBookDesigCode:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.bookingClassList
-                    ?.resBookDesigCode,
-                resBookDesigQuantity:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.bookingClassList
-                    ?.resBookDesigQuantity,
-                resBookDesigStatusCode:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.bookingClassList
-                    ?.resBookDesigStatusCode,
-                baseAmount: baseAmountValue,
-                totalAmount: baseAmountValue,
-                currencyCode:
-                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList
-                    ?.pricingOverview?.totalAmount?.currency?.code,
-                passengerFareInfoList:
-                  twoWayTripFlights?.fareComponentGroupList?.fareComponentList
-                    ?.passengerFareInfoList,
-                flightSegment:
-                  twoWayTripFlights?.fareComponentGroupList?.boundList
-                    ?.availFlightSegmentList?.flightSegment,
-              };
-              twoWayFlightsData.push(flightData);
-            }
-          }
-        }
-        flightClassListData.push(twoWayFlightsData.reverse());
-      }
-      setFlightClassList(JSON.parse(JSON.stringify(flightClassListData)));
-      setoneWayTripDetails(flightClassListData[0][0]);
-      if (flightClassListData[1]) {
-        setTwoWayTripDetails(flightClassListData[1][0]);
-      }
-    }
-  }, [searchResultList]);
- console.log(twoWayTripDetails);
-  useEffect(() => {
-    if (airline) {
-      setShowLoader(true);
-      // setOrigin(null);
-      // setDestination(null);
-      const headers = {
-        Authorization: localStorage.getItem("AuthToken"),
-        Accept: "application/json",
-      };
-      axios
-        .get(
-          `http://stg-api.aeroprime.in/crm-service/search/originList?airlineCode=${airline}`,
-          { headers }
-        )
-        .then((response) => {
-          setFlightsAvailable(response.data);
-          setShowLoader(false);
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            localStorage.clear();
-            window.location.href = "/";
-          }
-        });
-    }
-  }, [airline]);
-
-  const airlineOptions =
-    loggedInUserDetails?.airlineCodes?.map((airlineCode) => ({
-      label: airlineCode,
-      value: airlineCode,
-    })) || [];
-  const handleAirlineChange = (airline) => {
-    setAirline(airline);
-  };
-
-  const originOptions = flightsAvailable
-    ? Object.keys(flightsAvailable).map((city) => ({
-        label: city,
-        value: city,
-      }))
-    : [];
-
-  const destinationOptions =
-    flightsAvailable && origin
-      ? flightsAvailable[origin]?.map((city) => ({
-          label: city,
-          value: city,
-        })) || []
-      : [];
-
-  const handleOriginChange = (value) => {
-    setOrigin(value);
-  };
-
-  const handleDestinationChange = (value) => {
-    setDestination(value);
-  };
-
-  const handleClose = () => setShowBookingDetailsDialog(false);
-  const handleShow = () => setShowBookingDetailsDialog(true);
-
-  const formatDate = (date) => {
-    if (!date) return "";
-    return format(date, "yyyy-MM-dd");
-  };
-
-  const handleSelection = (type, count) => {
-    if (type === "adult") {
-      setSelectedAdult(count);
-      if (selectedInfant > count) {
-        setSelectedInfant(count);
-      }
-    } else if (type === "child") {
-      setSelectedChild(selectedChild === count ? null : count);
-    } else if (type === "infant") {
-      setSelectedInfant(selectedInfant === count ? null : count);
-      if (count <= selectedAdult) {
-        setSelectedInfant(selectedInfant === count ? null : count);
-      }
-    }
-  };
-
-  const handleApply = () => {
-    const total = selectedAdult + selectedChild + selectedInfant;
-    setAdult(selectedAdult);
-    setChild(selectedChild);
-    setInfant(selectedInfant);
-    setTotalTravelers(total);
-    setPassengerCount(false);
-  };
-
-  // const formatLocation = (loc) => {
-  //   if (!loc) return [];
-  //   const [code, name] = loc.split(",");
-  //   return [code, name];
-  // };
-  const formatLocation = (location) => {
-    if (typeof location !== "string") {
-      return []; // Return an empty array for invalid inputs
-    }
-    const [code, name] = location.split(",");
-    return [code ? code.trim() : null, name ? name.trim() : null];
-  };
 
   const handleSearchFlights = () => {
     const adultCount = selectedAdult || 0;
@@ -2534,7 +2139,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/getAvailability?version=v2?airlineCode=${airline}&controlPanel=true`,
+        `http://stg-api.aeroprime.in/airline-service/getAvailability?version=v2&airlineCode=${airline}&controlPanel=true`,
         reqBody,
         { headers }
       )
@@ -2611,7 +2216,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
       let updatedFlightClassList = flightClassList[0]?.map((flightClass) => {
         if (
           flightClass?.flightNumber === list?.flightNumber &&
-          flightClass?.resBookDesigCode === list?.resBookDesigCode
+          flightClass?.resBookDesigStatusCode === list?.resBookDesigStatusCode
         ) {
           return {
             ...tripDetails,
@@ -2634,7 +2239,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
       let updatedFlightClassList = flightClassList[1]?.map((flightClass) => {
         if (
           flightClass?.flightNumber === list?.flightNumber &&
-          flightClass?.resBookDesigCode === list?.resBookDesigCode
+          flightClass?.resBookDesigStatusCode === list?.resBookDesigStatusCode
         ) {
           return {
             ...tripDetails,
@@ -2915,6 +2520,9 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   <div className="design-code">
                                     Class - {list?.resBookDesigCode}
                                   </div>
+                                  <div className="design-code">
+                                    {list?.fareGroupName}
+                                  </div>
                                   <div className="design-code1">
                                     Seats Available -{" "}
                                     {list?.resBookDesigQuantity}
@@ -3049,8 +2657,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                         checked={
                                           list?.flightNumber ===
                                             oneWayTripDetails?.flightNumber &&
-                                          list?.resBookDesigCode ===
-                                            oneWayTripDetails?.resBookDesigCode &&
+                                          list?.resBookDesigStatusCode ===
+                                            oneWayTripDetails?.resBookDesigStatusCode &&
                                           list?.flightNumber_RT ===
                                             oneWayTripDetails?.flightNumber_RT
                                         }
@@ -3450,6 +3058,9 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   <div className="design-code">
                                     Class - {list?.resBookDesigCode}
                                   </div>
+                                  <div className="design-code">
+                                    {list?.fareGroupName}
+                                  </div>
                                   <div className="design-code1">
                                     Seats Available -{" "}
                                     {list?.resBookDesigQuantity}
@@ -3588,8 +3199,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       checked={
                                         list?.flightNumber ===
                                           twoWayTripDetails?.flightNumber &&
-                                        list?.resBookDesigCode ===
-                                          twoWayTripDetails?.resBookDesigCode &&
+                                        list?.resBookDesigStatusCode ===
+                                          twoWayTripDetails?.resBookDesigStatusCode &&
                                         list?.flightNumber_RT ===
                                           twoWayTripDetails?.flightNumber_RT
                                       }

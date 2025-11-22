@@ -502,54 +502,61 @@ const BookingDetails = ({
           resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
         };
 
-    let fareInfo = Array.isArray(oneWayTripDetails?.passengerFareInfoList)
+    const fareInfoListRaw = Array.isArray(
+      oneWayTripDetails?.passengerFareInfoList
+    )
       ? oneWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
       : oneWayTripDetails?.passengerFareInfoList?.fareInfoList;
 
+    const fareInfoList = Array.isArray(fareInfoListRaw)
+      ? fareInfoListRaw
+      : fareInfoListRaw
+      ? [fareInfoListRaw]
+      : [];
+
+    const primaryFareInfo = fareInfoList[0] || {};
+    const secondaryFareInfo = fareInfoList[1] || {};
+
+    const buildFareInfoPayload = (fareInfo = {}, fallback = {}) => ({
+      cabin: [fareInfo?.cabin ?? fallback?.cabin ?? null],
+        cabinClassCode: [
+          fareInfo?.cabinClassCode !== undefined 
+            ? fareInfo.cabinClassCode 
+            : (fallback?.cabinClassCode !== undefined 
+                ? fallback.cabinClassCode 
+                : null)
+        ],
+      fareGroupName: [fareInfo?.fareGroupName ?? fallback?.fareGroupName ?? null],
+      fareReferenceCode: fareInfo?.fareReferenceCode ?? fallback?.fareReferenceCode ?? null,
+      fareReferenceID: fareInfo?.fareReferenceID ?? fallback?.fareReferenceID ?? null,
+      fareReferenceName: fareInfo?.fareReferenceName ?? fallback?.fareReferenceName ?? null,
+      flightSegmentSequence: fareInfo?.flightSegmentSequence ?? null,
+      resBookDesigCode: fareInfo?.resBookDesigCode ?? fallback?.resBookDesigCode,
+    });
+
+    const fallbackPrimaryFareDetails = {
+      cabin: oneWayTripDetails?.cabin,
+      cabinClassCode: oneWayTripDetails?.cabinClassCode,
+      fareGroupName: oneWayTripDetails?.fareGroupName,
+      resBookDesigCode: oneWayTripDetails?.resBookDesigCode,
+    };
+
+    const fallbackSecondaryFareDetails = {
+      cabin: oneWayTripDetails?.cabin_Connecting,
+      cabinClassCode: oneWayTripDetails?.cabinClassCode_Connecting,
+      fareGroupName: oneWayTripDetails?.fareGroupName_Connecting,
+      resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
+    };
+
     reqBody.fareInfo = oneWayTripDetails?.connectingFlight
       ? [
-          {
-            cabin: [fareInfo[0]?.cabin],
-            cabinClassCode: [fareInfo[0]?.cabinClassCode],
-            fareGroupName: [fareInfo[0]?.fareGroupName],
-            fareReferenceCode: fareInfo[0]?.fareReferenceCode,
-            fareReferenceID: fareInfo[0]?.fareReferenceID,
-            fareReferenceName: fareInfo[0]?.fareReferenceName,
-            flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
-            resBookDesigCode: fareInfo[0]?.resBookDesigCode,
-          },
-          {
-            cabin: [fareInfo[1]?.cabin],
-            cabinClassCode: [fareInfo[1]?.cabinClassCode],
-            fareGroupName: [fareInfo[1]?.fareGroupName],
-            fareReferenceCode: fareInfo[1]?.fareReferenceCode,
-            fareReferenceID: fareInfo[1]?.fareReferenceID,
-            fareReferenceName: fareInfo[1]?.fareReferenceName,
-            flightSegmentSequence: fareInfo[1]?.flightSegmentSequence,
-            resBookDesigCode: fareInfo[1]?.resBookDesigCode,
-            // cabin: [fareInfo[0]?.cabin],
-            // cabinClassCode: [fareInfo[0]?.cabinClassCode],
-            // fareGroupName: [fareInfo[0]?.fareGroupName],
-            // fareReferenceCode: fareInfo[0]?.fareReferenceCode,
-            // fareReferenceID: fareInfo[0]?.fareReferenceID,
-            // fareReferenceName: fareInfo[0]?.fareReferenceName,
-            // flightSegmentSequence: fareInfo[0]?.flightSegmentSequence,
-            // resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
-          },
+          buildFareInfoPayload(primaryFareInfo, fallbackPrimaryFareDetails),
+          buildFareInfoPayload(secondaryFareInfo, fallbackSecondaryFareDetails),
         ]
-      : {
-          cabin: [fareInfo?.cabin],
-          cabinClassCode: [fareInfo?.cabinClassCode],
-          fareGroupName: [fareInfo?.fareGroupName],
-          fareReferenceCode: fareInfo?.fareReferenceCode,
-          fareReferenceID: fareInfo?.fareReferenceID,
-          fareReferenceName: fareInfo?.fareReferenceName,
-          flightSegmentSequence: fareInfo?.flightSegmentSequence,
-          resBookDesigCode: fareInfo?.resBookDesigCode,
-        };
+      : buildFareInfoPayload(primaryFareInfo, fallbackPrimaryFareDetails);
 
     let selectedFarePkg = [];
-    fareInfo?.farePkgInfoList?.forEach((pkg) => {
+    primaryFareInfo?.farePkgInfoList?.forEach((pkg) => {
       if (pkg?.selected === "true") {
         selectedFarePkg.push(pkg);
       }
@@ -557,7 +564,8 @@ const BookingDetails = ({
 
     if (selectedFarePkg?.length > 0) {
       reqBody.fareInfo.farePkgInfoList = selectedFarePkg;
-      reqBody.fareInfo.fareBaggageAllowance = fareInfo?.fareBaggageAllowance;
+      reqBody.fareInfo.fareBaggageAllowance =
+        primaryFareInfo?.fareBaggageAllowance;
     }
 
     reqBody.flightSegment = oneWayTripDetails?.connectingFlight
@@ -715,63 +723,106 @@ const BookingDetails = ({
             resBookDesigQuantity: [twoWayTripDetails?.resBookDesigQuantity],
             resBookDesigStatusCode: [twoWayTripDetails?.resBookDesigStatusCode],
           };
-      let fareInfo_RT = Array.isArray(twoWayTripDetails?.passengerFareInfoList)
-        ? twoWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
-        : twoWayTripDetails?.passengerFareInfoList?.fareInfoList;
+      // let fareInfo_RT = Array.isArray(twoWayTripDetails?.passengerFareInfoList)
+      //   ? twoWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
+      //   : twoWayTripDetails?.passengerFareInfoList?.fareInfoList;
+      // For round trips: passengerFareInfoList[0] = outbound trip, passengerFareInfoList[1] = return trip
+      // Each trip has passengerFareInfoList array where [0] = ADLT passenger
+      // Structure: passengerFareInfoList[tripIndex][passengerIndex].fareInfoList
+      let fareInfo_RT;
+      if (Array.isArray(twoWayTripDetails?.passengerFareInfoList) && twoWayTripDetails.passengerFareInfoList.length > 1) {
+        // Round trip: index 1 is return trip
+        const returnTripPassengerFareInfo = twoWayTripDetails.passengerFareInfoList[1];
+        if (Array.isArray(returnTripPassengerFareInfo)) {
+          // Get ADLT passenger (index 0) fareInfoList
+          fareInfo_RT = returnTripPassengerFareInfo[0]?.fareInfoList;
+        } else if (returnTripPassengerFareInfo?.fareInfoList) {
+          // Direct fareInfoList if not array of passengers
+          fareInfo_RT = returnTripPassengerFareInfo.fareInfoList;
+        }
+      } else if (Array.isArray(twoWayTripDetails?.passengerFareInfoList)) {
+        // Single array structure - try to get first passenger's fareInfoList
+        fareInfo_RT = twoWayTripDetails.passengerFareInfoList[0]?.fareInfoList;
+      } else if (twoWayTripDetails?.passengerFareInfoList) {
+        // Direct object structure
+        fareInfo_RT = twoWayTripDetails.passengerFareInfoList?.fareInfoList || 
+                      (Array.isArray(twoWayTripDetails.passengerFareInfoList) 
+                        ? twoWayTripDetails.passengerFareInfoList[0]?.fareInfoList 
+                        : null);
+      }
+      
+      console.log("twoWayTripDetails.passengerFareInfoList:", JSON.stringify(twoWayTripDetails?.passengerFareInfoList, null, 2));
+      console.log("fareInfo_RT extracted:", JSON.stringify(fareInfo_RT, null, 2));
+
+
+
+
+
+
+
+      // Process fareInfo_RT similar to how outbound fareInfo is processed
+      const fareInfoListRT = Array.isArray(fareInfo_RT)
+        ? fareInfo_RT
+        : fareInfo_RT
+        ? [fareInfo_RT]
+        : [];
+
+      const fallbackPrimaryFareDetailsRT = {
+        cabin: twoWayTripDetails?.cabin,
+        cabinClassCode: twoWayTripDetails?.cabinClassCode,
+        fareGroupName: twoWayTripDetails?.fareGroupName,
+        resBookDesigCode: twoWayTripDetails?.resBookDesigCode,
+      };
+
+      const fallbackSecondaryFareDetailsRT = {
+        cabin: twoWayTripDetails?.cabin_Connecting,
+        cabinClassCode: twoWayTripDetails?.cabinClassCode_Connecting,
+        fareGroupName: twoWayTripDetails?.fareGroupName_Connecting,
+        resBookDesigCode: twoWayTripDetails?.resBookDesigCode_Connecting,
+      };
+
+      console.log("fareInfo_RT raw:", fareInfo_RT);
+      console.log("fareInfoListRT processed:", fareInfoListRT);
+
+      const primaryFareInfoRT = fareInfoListRT[0] || {};
+      const secondaryFareInfoRT = fareInfoListRT[1] || {};
+      
+      console.log("primaryFareInfoRT:", primaryFareInfoRT);
+      console.log("secondaryFareInfoRT:", secondaryFareInfoRT);
 
       reqBody.fareInfo_RT = twoWayTripDetails?.connectingFlight
         ? [
-            {
-              cabin: [fareInfo_RT[0]?.cabin],
-              cabinClassCode: [fareInfo_RT[0]?.cabinClassCode],
-              fareGroupName: [fareInfo_RT[0]?.fareGroupName],
-              fareReferenceCode: fareInfo_RT[0]?.fareReferenceCode,
-              fareReferenceID: fareInfo_RT[0]?.fareReferenceID,
-              fareReferenceName: fareInfo_RT[0]?.fareReferenceName,
-              flightSegmentSequence: fareInfo_RT[0]?.flightSegmentSequence,
-              resBookDesigCode: fareInfo_RT[0]?.resBookDesigCode,
-            },
-            {
-              // cabin: [fareInfo_RT[1]?.cabin],
-              // cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
-              // fareGroupName: [fareInfo_RT[1]?.fareGroupName],
-              // fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
-              // fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
-              // fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
-              // flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
-              // resBookDesigCode: twoWayTripDetails.resBookDesigCode_Connecting,
-              cabin: [fareInfo_RT[1]?.cabin],
-            cabinClassCode: [fareInfo_RT[1]?.cabinClassCode],
-            fareGroupName: [fareInfo_RT[1]?.fareGroupName],
-            fareReferenceCode: fareInfo_RT[1]?.fareReferenceCode,
-            fareReferenceID: fareInfo_RT[1]?.fareReferenceID,
-            fareReferenceName: fareInfo_RT[1]?.fareReferenceName,
-            flightSegmentSequence: fareInfo_RT[1]?.flightSegmentSequence,
-            resBookDesigCode: fareInfo_RT[1]?.resBookDesigCode,
-            },
+            buildFareInfoPayload(
+              primaryFareInfoRT,
+              fallbackPrimaryFareDetailsRT
+            ),
+            buildFareInfoPayload(
+              secondaryFareInfoRT,
+              fallbackSecondaryFareDetailsRT
+            ),
           ]
-        : {
-            cabin: [fareInfo_RT?.cabin],
-            cabinClassCode: [fareInfo_RT?.cabinClassCode],
-            fareGroupName: [fareInfo_RT?.fareGroupName],
-            fareReferenceCode: fareInfo_RT?.fareReferenceCode,
-            fareReferenceID: fareInfo_RT?.fareReferenceID,
-            fareReferenceName: fareInfo_RT?.fareReferenceName,
-            flightSegmentSequence: fareInfo_RT?.flightSegmentSequence,
-            resBookDesigCode: fareInfo_RT?.resBookDesigCode,
-          };
-
-      let selectedFarePkg = [];
-      fareInfo_RT?.farePkgInfoList?.forEach((pkg) => {
+        : buildFareInfoPayload(primaryFareInfoRT, fallbackPrimaryFareDetailsRT);
+      
+      console.log(reqBody.fareInfo_RT, "fareInfo_RT after build");
+      console.log(reqBody, "reqBody");
+      
+      let selectedFarePkg_RT = [];
+      primaryFareInfoRT?.farePkgInfoList?.forEach((pkg) => {
         if (pkg?.selected === "true") {
-          selectedFarePkg.push(pkg);
+          selectedFarePkg_RT.push(pkg);
         }
       });
 
-      if (selectedFarePkg?.length > 0) {
-        reqBody.fareInfo_RT.farePkgInfoList = selectedFarePkg;
-        reqBody.fareInfo_RT.fareBaggageAllowance =
-          fareInfo_RT?.fareBaggageAllowance;
+      if (selectedFarePkg_RT?.length > 0) {
+        if (Array.isArray(reqBody.fareInfo_RT)) {
+          reqBody.fareInfo_RT[0].farePkgInfoList = selectedFarePkg_RT;
+          reqBody.fareInfo_RT[0].fareBaggageAllowance =
+            primaryFareInfoRT?.fareBaggageAllowance;
+        } else {
+          reqBody.fareInfo_RT.farePkgInfoList = selectedFarePkg_RT;
+          reqBody.fareInfo_RT.fareBaggageAllowance =
+            primaryFareInfoRT?.fareBaggageAllowance;
+        }
       }
 
       reqBody.flightSegment_RT = twoWayTripDetails?.connectingFlight
@@ -886,7 +937,7 @@ const BookingDetails = ({
 
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/createTicket?version=v2?airlineCode=${airline}`,
+        `http://stg-api.aeroprime.in/airline-service/createTicket?version=v2&airlineCode=${airline}`,
         reqBody,
         {
           headers: {
@@ -1217,7 +1268,7 @@ const BookingDetails = ({
   const handleConfirmPNR = (refId, amount) => {
     axios
       .post(
-        `http://stg-api.aeroprime.in/airline-service/ticketReservationByRefId?version=v2?airlineCode=${airline}`,
+        `http://stg-api.aeroprime.in/airline-service/ticketReservationByRefId?version=v2&airlineCode=${airline}`,
         {
           referenceID: refId,
           value: Number(amount),
