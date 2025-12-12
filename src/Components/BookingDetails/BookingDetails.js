@@ -502,23 +502,18 @@ const BookingDetails = ({
           resBookDesigStatusCode: [oneWayTripDetails?.resBookDesigStatusCode],
         };
 
-    const fareInfoListRaw = Array.isArray(
+    // Extract passengerFareInfoList - it should be an array with entries for each passenger type (ADLT, CHLD, INFT)
+    const passengerFareInfoListArray = Array.isArray(
       oneWayTripDetails?.passengerFareInfoList
     )
-      ? oneWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
-      : oneWayTripDetails?.passengerFareInfoList?.fareInfoList;
-
-    const fareInfoList = Array.isArray(fareInfoListRaw)
-      ? fareInfoListRaw
-      : fareInfoListRaw
-      ? [fareInfoListRaw]
+      ? oneWayTripDetails?.passengerFareInfoList
+      : oneWayTripDetails?.passengerFareInfoList
+      ? [oneWayTripDetails?.passengerFareInfoList]
       : [];
 
-    const primaryFareInfo = fareInfoList[0] || {};
-    const secondaryFareInfo = fareInfoList[1] || {};
-
-    const buildFareInfoPayload = (fareInfo = {}, fallback = {}) => ({
-      cabin: [fareInfo?.cabin ?? fallback?.cabin ?? null],
+    const buildFareInfoPayload = (fareInfo = {}, fallback = {}) => {
+      const payload = {
+        cabin: [fareInfo?.cabin ?? fallback?.cabin ?? null],
         cabinClassCode: [
           fareInfo?.cabinClassCode !== undefined 
             ? fareInfo.cabinClassCode 
@@ -526,13 +521,16 @@ const BookingDetails = ({
                 ? fallback.cabinClassCode 
                 : null)
         ],
-      fareGroupName: [fareInfo?.fareGroupName ?? fallback?.fareGroupName ?? null],
-      fareReferenceCode: fareInfo?.fareReferenceCode ?? fallback?.fareReferenceCode ?? null,
-      fareReferenceID: fareInfo?.fareReferenceID ?? fallback?.fareReferenceID ?? null,
-      fareReferenceName: fareInfo?.fareReferenceName ?? fallback?.fareReferenceName ?? null,
-      flightSegmentSequence: fareInfo?.flightSegmentSequence ?? null,
-      resBookDesigCode: fareInfo?.resBookDesigCode ?? fallback?.resBookDesigCode,
-    });
+        fareGroupName: [fareInfo?.fareGroupName ?? fallback?.fareGroupName ?? null],
+        fareReferenceCode: fareInfo?.fareReferenceCode ?? fallback?.fareReferenceCode ?? null,
+        fareReferenceID: fareInfo?.fareReferenceID ?? fallback?.fareReferenceID ?? null,
+        fareReferenceName: fareInfo?.fareReferenceName ?? fallback?.fareReferenceName ?? null,
+        flightSegmentSequence: fareInfo?.flightSegmentSequence ?? null,
+        resBookDesigCode: fareInfo?.resBookDesigCode ?? fallback?.resBookDesigCode,
+      };
+
+      return payload;
+    };
 
     const fallbackPrimaryFareDetails = {
       cabin: oneWayTripDetails?.cabin,
@@ -548,127 +546,74 @@ const BookingDetails = ({
       resBookDesigCode: oneWayTripDetails?.resBookDesigCode_Connecting,
     };
 
-    reqBody.fareInfo = oneWayTripDetails?.connectingFlight
-      ? [
-          buildFareInfoPayload(primaryFareInfo, fallbackPrimaryFareDetails),
-          buildFareInfoPayload(secondaryFareInfo, fallbackSecondaryFareDetails),
-        ]
-      : buildFareInfoPayload(primaryFareInfo, fallbackPrimaryFareDetails);
+    // Use the first passenger's fareInfo (usually ADLT) - simplified to single object
+    const firstPassengerFareInfo = passengerFareInfoListArray.length > 0
+      ? (Array.isArray(passengerFareInfoListArray[0]?.fareInfoList)
+          ? passengerFareInfoListArray[0]?.fareInfoList[0]
+          : passengerFareInfoListArray[0]?.fareInfoList)
+      : null;
 
-    let selectedFarePkg = [];
-    primaryFareInfo?.farePkgInfoList?.forEach((pkg) => {
-      if (pkg?.selected === "true") {
-        selectedFarePkg.push(pkg);
-      }
-    });
+    const fareInfoListRaw = firstPassengerFareInfo || (Array.isArray(
+      oneWayTripDetails?.passengerFareInfoList
+    )
+      ? oneWayTripDetails?.passengerFareInfoList[0]?.fareInfoList
+      : oneWayTripDetails?.passengerFareInfoList?.fareInfoList);
 
-    if (selectedFarePkg?.length > 0) {
-      reqBody.fareInfo.farePkgInfoList = selectedFarePkg;
-      reqBody.fareInfo.fareBaggageAllowance =
-        primaryFareInfo?.fareBaggageAllowance;
-    }
+    const fareInfoList = Array.isArray(fareInfoListRaw)
+      ? fareInfoListRaw
+      : fareInfoListRaw
+      ? [fareInfoListRaw]
+      : [];
 
-    reqBody.flightSegment = oneWayTripDetails?.connectingFlight
-      ? [
+    const primaryFareInfo = fareInfoList[0] || {};
+
+    reqBody.fareInfo = buildFareInfoPayload(primaryFareInfo, fallbackPrimaryFareDetails);
+
+    // Build flightSegment - simplified structure with only required fields
+    const buildFlightSegment = (segment) => {
+      if (!segment) return null;
+      
+      return {
+        airline: [
           {
-            ...oneWayTripDetails?.flightSegment,
-            airline: [
-              {
-                code: [oneWayTripDetails?.flightSegment?.airline?.code],
-                companyFullName: [
-                  oneWayTripDetails?.flightSegment?.airline?.companyFullName,
-                ],
-              },
-            ],
-            arrivalAirport: JSON.parse(
-              JSON.stringify(oneWayTripDetails?.flightSegment?.arrivalAirport)
-            ),
-            arrivalDateTime: oneWayTripDetails?.flightSegment?.arrivalDateTime,
-            arrivalDateTimeUTC:
-              oneWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-            departureAirport: JSON.parse(
-              JSON.stringify(oneWayTripDetails?.flightSegment?.departureAirport)
-            ),
-            departureDateTime:
-              oneWayTripDetails?.flightSegment?.departureDateTime,
-            departureDateTimeUTC:
-              oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
-            flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
-            codeshare: oneWayTripDetails?.flightSegment?.codeshare,
-            flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
-            ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
-            sector: oneWayTripDetails?.flightSegment?.sector,
+            code: [segment?.airline?.code],
+            companyFullName: [segment?.airline?.companyFullName],
           },
-          {
-            ...oneWayTripDetails?.flightSegment_Connecting,
-            airline: [
-              {
-                code: [
-                  oneWayTripDetails?.flightSegment_Connecting?.airline?.code,
-                ],
-                companyFullName: [
-                  oneWayTripDetails?.flightSegment_Connecting?.airline
-                    ?.companyFullName,
-                ],
-              },
-            ],
-            arrivalAirport: JSON.parse(
-              JSON.stringify(
-                oneWayTripDetails?.flightSegment_Connecting?.arrivalAirport
-              )
-            ),
-            arrivalDateTime:
-              oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
-            arrivalDateTimeUTC:
-              oneWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
-            departureAirport: JSON.parse(
-              JSON.stringify(
-                oneWayTripDetails?.flightSegment_Connecting?.departureAirport
-              )
-            ),
-            departureDateTime:
-              oneWayTripDetails?.flightSegment_Connecting?.departureDateTime,
-            departureDateTimeUTC:
-              oneWayTripDetails?.flightSegment_Connecting?.departureDateTimeUTC,
-            flightNumber:
-              oneWayTripDetails?.flightSegment_Connecting?.flightNumber,
-            codeshare: oneWayTripDetails?.flightSegment_Connecting?.codeshare,
-            flightSegmentID:
-              oneWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
-            ondControlled:
-              oneWayTripDetails?.flightSegment_Connecting?.ondControlled,
-            sector: oneWayTripDetails?.flightSegment_Connecting?.sector,
-          },
-        ]
-      : {
-          ...oneWayTripDetails?.flightSegment,
-          airline: [
-            {
-              code: [oneWayTripDetails?.flightSegment?.airline?.code],
-              companyFullName: [
-                oneWayTripDetails?.flightSegment?.airline?.companyFullName,
-              ],
-            },
-          ],
-          arrivalAirport: JSON.parse(
-            JSON.stringify(oneWayTripDetails?.flightSegment?.arrivalAirport)
-          ),
-          arrivalDateTime: oneWayTripDetails?.flightSegment?.arrivalDateTime,
-          arrivalDateTimeUTC:
-            oneWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-          departureAirport: JSON.parse(
-            JSON.stringify(oneWayTripDetails?.flightSegment?.departureAirport)
-          ),
-          departureDateTime:
-            oneWayTripDetails?.flightSegment?.departureDateTime,
-          departureDateTimeUTC:
-            oneWayTripDetails?.flightSegment?.departureDateTimeUTC,
-          flightNumber: oneWayTripDetails?.flightSegment?.flightNumber,
-          codeshare: oneWayTripDetails?.flightSegment?.codeshare,
-          flightSegmentID: oneWayTripDetails?.flightSegment?.flightSegmentID,
-          ondControlled: oneWayTripDetails?.flightSegment?.ondControlled,
-          sector: oneWayTripDetails?.flightSegment?.sector,
-        };
+        ],
+        arrivalAirport: JSON.parse(
+          JSON.stringify(segment?.arrivalAirport)
+        ),
+        arrivalDateTime: segment?.arrivalDateTime,
+        arrivalDateTimeUTC: segment?.arrivalDateTimeUTC,
+        departureAirport: JSON.parse(
+          JSON.stringify(segment?.departureAirport)
+        ),
+        departureDateTime: segment?.departureDateTime,
+        departureDateTimeUTC: segment?.departureDateTimeUTC,
+        flightNumber: segment?.flightNumber,
+        flightNumberWithoutAirlineCode: segment?.flightNumberWithoutAirlineCode || segment?.flightNumber?.replace(/^[A-Z0-9]+/, '') || segment?.flightNumber,
+        flightSegmentID: segment?.flightSegmentID || "1",
+        ondControlled: null,
+        sector: null,
+        accumulatedDuration: null,
+        codeshare: null,
+        distance: null,
+        equipment: segment?.equipment || null,
+        flightNotes: null,
+        flownMileageQty: null,
+        groundDuration: null,
+        iatciFlight: null,
+        journeyDuration: segment?.journeyDuration || null,
+        onTimeRate: null,
+        secureFlightDataRequired: null,
+        stopQuantity: null,
+        ticketType: null,
+        trafficRestriction: null,
+        stopOver: null,
+      };
+    };
+
+    reqBody.flightSegment = buildFlightSegment(oneWayTripDetails?.flightSegment);
 
     // if (oneWayTripDetails?.flightNumber_RT) {
     //   reqBody.flightSegment.flightNumber_RT =
@@ -729,43 +674,35 @@ const BookingDetails = ({
       // For round trips: passengerFareInfoList[0] = outbound trip, passengerFareInfoList[1] = return trip
       // Each trip has passengerFareInfoList array where [0] = ADLT passenger
       // Structure: passengerFareInfoList[tripIndex][passengerIndex].fareInfoList
-      let fareInfo_RT;
+      // For round trips: Extract return trip passengerFareInfoList
+      // Structure: passengerFareInfoList[tripIndex] where tripIndex 0 = outbound, 1 = return
+      // Each trip has passengerFareInfoList array with entries for each passenger type (ADLT, CHLD, INFT)
+      let returnTripPassengerFareInfoList = [];
       if (Array.isArray(twoWayTripDetails?.passengerFareInfoList) && twoWayTripDetails.passengerFareInfoList.length > 1) {
         // Round trip: index 1 is return trip
-        const returnTripPassengerFareInfo = twoWayTripDetails.passengerFareInfoList[1];
-        if (Array.isArray(returnTripPassengerFareInfo)) {
-          // Get ADLT passenger (index 0) fareInfoList
-          fareInfo_RT = returnTripPassengerFareInfo[0]?.fareInfoList;
-        } else if (returnTripPassengerFareInfo?.fareInfoList) {
-          // Direct fareInfoList if not array of passengers
-          fareInfo_RT = returnTripPassengerFareInfo.fareInfoList;
-        }
+        const returnTripData = twoWayTripDetails.passengerFareInfoList[1];
+        returnTripPassengerFareInfoList = Array.isArray(returnTripData)
+          ? returnTripData
+          : returnTripData
+          ? [returnTripData]
+          : [];
       } else if (Array.isArray(twoWayTripDetails?.passengerFareInfoList)) {
-        // Single array structure - try to get first passenger's fareInfoList
-        fareInfo_RT = twoWayTripDetails.passengerFareInfoList[0]?.fareInfoList;
+        // Single array structure - use the first entry
+        returnTripPassengerFareInfoList = Array.isArray(twoWayTripDetails.passengerFareInfoList[0])
+          ? twoWayTripDetails.passengerFareInfoList[0]
+          : [twoWayTripDetails.passengerFareInfoList[0]];
       } else if (twoWayTripDetails?.passengerFareInfoList) {
         // Direct object structure
-        fareInfo_RT = twoWayTripDetails.passengerFareInfoList?.fareInfoList || 
-                      (Array.isArray(twoWayTripDetails.passengerFareInfoList) 
-                        ? twoWayTripDetails.passengerFareInfoList[0]?.fareInfoList 
-                        : null);
+        returnTripPassengerFareInfoList = Array.isArray(twoWayTripDetails.passengerFareInfoList)
+          ? twoWayTripDetails.passengerFareInfoList
+          : [twoWayTripDetails.passengerFareInfoList];
       }
-      
-      console.log("twoWayTripDetails.passengerFareInfoList:", JSON.stringify(twoWayTripDetails?.passengerFareInfoList, null, 2));
-      console.log("fareInfo_RT extracted:", JSON.stringify(fareInfo_RT, null, 2));
 
 
 
 
 
 
-
-      // Process fareInfo_RT similar to how outbound fareInfo is processed
-      const fareInfoListRT = Array.isArray(fareInfo_RT)
-        ? fareInfo_RT
-        : fareInfo_RT
-        ? [fareInfo_RT]
-        : [];
 
       const fallbackPrimaryFareDetailsRT = {
         cabin: twoWayTripDetails?.cabin,
@@ -774,160 +711,29 @@ const BookingDetails = ({
         resBookDesigCode: twoWayTripDetails?.resBookDesigCode,
       };
 
-      const fallbackSecondaryFareDetailsRT = {
-        cabin: twoWayTripDetails?.cabin_Connecting,
-        cabinClassCode: twoWayTripDetails?.cabinClassCode_Connecting,
-        fareGroupName: twoWayTripDetails?.fareGroupName_Connecting,
-        resBookDesigCode: twoWayTripDetails?.resBookDesigCode_Connecting,
-      };
+      // Use the first passenger's fareInfo for return trip (usually ADLT) - simplified to single object
+      const firstPassengerFareInfoRT = returnTripPassengerFareInfoList.length > 0
+        ? (Array.isArray(returnTripPassengerFareInfoList[0]?.fareInfoList)
+            ? returnTripPassengerFareInfoList[0]?.fareInfoList[0]
+            : returnTripPassengerFareInfoList[0]?.fareInfoList)
+        : null;
 
-      console.log("fareInfo_RT raw:", fareInfo_RT);
-      console.log("fareInfoListRT processed:", fareInfoListRT);
-
-      const primaryFareInfoRT = fareInfoListRT[0] || {};
-      const secondaryFareInfoRT = fareInfoListRT[1] || {};
-      
-      console.log("primaryFareInfoRT:", primaryFareInfoRT);
-      console.log("secondaryFareInfoRT:", secondaryFareInfoRT);
-
-      reqBody.fareInfo_RT = twoWayTripDetails?.connectingFlight
-        ? [
-            buildFareInfoPayload(
-              primaryFareInfoRT,
-              fallbackPrimaryFareDetailsRT
-            ),
-            buildFareInfoPayload(
-              secondaryFareInfoRT,
-              fallbackSecondaryFareDetailsRT
-            ),
-          ]
-        : buildFareInfoPayload(primaryFareInfoRT, fallbackPrimaryFareDetailsRT);
-      
-      console.log(reqBody.fareInfo_RT, "fareInfo_RT after build");
-      console.log(reqBody, "reqBody");
-      
-      let selectedFarePkg_RT = [];
-      primaryFareInfoRT?.farePkgInfoList?.forEach((pkg) => {
-        if (pkg?.selected === "true") {
-          selectedFarePkg_RT.push(pkg);
-        }
-      });
-
-      if (selectedFarePkg_RT?.length > 0) {
-        if (Array.isArray(reqBody.fareInfo_RT)) {
-          reqBody.fareInfo_RT[0].farePkgInfoList = selectedFarePkg_RT;
-          reqBody.fareInfo_RT[0].fareBaggageAllowance =
-            primaryFareInfoRT?.fareBaggageAllowance;
-        } else {
-          reqBody.fareInfo_RT.farePkgInfoList = selectedFarePkg_RT;
-          reqBody.fareInfo_RT.fareBaggageAllowance =
-            primaryFareInfoRT?.fareBaggageAllowance;
-        }
+      let fareInfo_RT = firstPassengerFareInfoRT;
+      if (!fareInfo_RT && returnTripPassengerFareInfoList.length > 0) {
+        fareInfo_RT = returnTripPassengerFareInfoList[0]?.fareInfoList;
       }
 
-      reqBody.flightSegment_RT = twoWayTripDetails?.connectingFlight
-        ? [
-            {
-              airline: [
-                {
-                  code: [twoWayTripDetails?.flightSegment?.airline?.code],
-                  companyFullName: [
-                    twoWayTripDetails?.flightSegment?.airline?.companyFullName,
-                  ],
-                },
-              ],
-              arrivalAirport: JSON.parse(
-                JSON.stringify(twoWayTripDetails?.flightSegment?.arrivalAirport)
-              ),
-              arrivalDateTime:
-                twoWayTripDetails?.flightSegment?.arrivalDateTime,
-              arrivalDateTimeUTC:
-                twoWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-              departureAirport: JSON.parse(
-                JSON.stringify(
-                  twoWayTripDetails?.flightSegment?.departureAirport
-                )
-              ),
-              departureDateTime:
-                twoWayTripDetails?.flightSegment?.departureDateTime,
-              departureDateTimeUTC:
-                twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
-              flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
-              codeshare: twoWayTripDetails?.flightSegment?.codeshare,
-              flightSegmentID:
-                twoWayTripDetails?.flightSegment?.flightSegmentID,
-              ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
-              sector: twoWayTripDetails?.flightSegment?.sector,
-            },
-            {
-              airline: [
-                {
-                  code: [
-                    twoWayTripDetails?.flightSegment_Connecting?.airline?.code,
-                  ],
-                  companyFullName: [
-                    twoWayTripDetails?.flightSegment_Connecting?.airline
-                      ?.companyFullName,
-                  ],
-                },
-              ],
-              arrivalAirport: JSON.parse(
-                JSON.stringify(
-                  twoWayTripDetails?.flightSegment_Connecting?.arrivalAirport
-                )
-              ),
-              arrivalDateTime:
-                twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTime,
-              arrivalDateTimeUTC:
-                twoWayTripDetails?.flightSegment_Connecting?.arrivalDateTimeUTC,
-              departureAirport: JSON.parse(
-                JSON.stringify(
-                  twoWayTripDetails?.flightSegment_Connecting?.departureAirport
-                )
-              ),
-              departureDateTime:
-                twoWayTripDetails?.flightSegment_Connecting?.departureDateTime,
-              departureDateTimeUTC:
-                twoWayTripDetails?.flightSegment_Connecting
-                  ?.departureDateTimeUTC,
-              flightNumber:
-                twoWayTripDetails?.flightSegment_Connecting?.flightNumber,
-              codeshare: twoWayTripDetails?.flightSegment_Connecting?.codeshare,
-              flightSegmentID:
-                twoWayTripDetails?.flightSegment_Connecting?.flightSegmentID,
-              ondControlled:
-                twoWayTripDetails?.flightSegment_Connecting?.ondControlled,
-              sector: twoWayTripDetails?.flightSegment_Connecting?.sector,
-            },
-          ]
-        : {
-            airline: [
-              {
-                code: [twoWayTripDetails?.flightSegment?.airline?.code],
-                companyFullName: [
-                  twoWayTripDetails?.flightSegment?.airline?.companyFullName,
-                ],
-              },
-            ],
-            arrivalAirport: JSON.parse(
-              JSON.stringify(twoWayTripDetails?.flightSegment?.arrivalAirport)
-            ),
-            arrivalDateTime: twoWayTripDetails?.flightSegment?.arrivalDateTime,
-            arrivalDateTimeUTC:
-              twoWayTripDetails?.flightSegment?.arrivalDateTimeUTC,
-            departureAirport: JSON.parse(
-              JSON.stringify(twoWayTripDetails?.flightSegment?.departureAirport)
-            ),
-            departureDateTime:
-              twoWayTripDetails?.flightSegment?.departureDateTime,
-            departureDateTimeUTC:
-              twoWayTripDetails?.flightSegment?.departureDateTimeUTC,
-            flightNumber: twoWayTripDetails?.flightSegment?.flightNumber,
-            codeshare: twoWayTripDetails?.flightSegment?.codeshare,
-            flightSegmentID: twoWayTripDetails?.flightSegment?.flightSegmentID,
-            ondControlled: twoWayTripDetails?.flightSegment?.ondControlled,
-            sector: twoWayTripDetails?.flightSegment?.sector,
-          };
+      const fareInfoListRT = Array.isArray(fareInfo_RT)
+        ? fareInfo_RT
+        : fareInfo_RT
+        ? [fareInfo_RT]
+        : [];
+
+      const primaryFareInfoRT = fareInfoListRT[0] || {};
+
+      reqBody.fareInfo_RT = buildFareInfoPayload(primaryFareInfoRT, fallbackPrimaryFareDetailsRT);
+
+      reqBody.flightSegment_RT = buildFlightSegment(twoWayTripDetails?.flightSegment);
 
       // if (twoWayTripDetails?.flightNumber_RT) {
       //   reqBody.flightSegment.flightNumber_RT =

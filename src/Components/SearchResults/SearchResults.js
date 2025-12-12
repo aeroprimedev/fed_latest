@@ -269,7 +269,25 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
       };
 
       const oneWayTripFlights = getOriginDestinationOptionList(0);
-      if (Array.isArray(oneWayTripFlights)) {
+      
+      // Check if airline is 8D - if so, skip regular processing (will be handled in round trip section)
+      const firstOutboundFlight = Array.isArray(oneWayTripFlights)
+        ? oneWayTripFlights[0]
+        : oneWayTripFlights;
+      const firstOutboundFareGroup = firstOutboundFlight?.fareComponentGroupList;
+      const firstOutboundBound = Array.isArray(firstOutboundFareGroup)
+        ? firstOutboundFareGroup[0]?.boundList
+        : firstOutboundFareGroup?.boundList;
+      const firstOutboundSegments = Array.isArray(firstOutboundBound?.availFlightSegmentList)
+        ? firstOutboundBound?.availFlightSegmentList
+        : firstOutboundBound?.availFlightSegmentList
+        ? [firstOutboundBound?.availFlightSegmentList]
+        : [];
+      const isAirline8D = firstOutboundSegments[0]?.flightSegment?.airline?.code === "8D";
+      
+      // Skip regular processing for airline 8D round trips (will be processed in round trip section)
+      if (!(isAirline8D && searchResultList.tripType === "ROUND_TRIP")) {
+        if (Array.isArray(oneWayTripFlights)) {
         oneWayTripFlights?.map((flight) => {
           if (Array.isArray(flight?.fareComponentGroupList)) {
             flight?.fareComponentGroupList[0]?.boundList?.availFlightSegmentList?.bookingClassList.map(
@@ -586,16 +604,16 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
             const lastSegment = segments[segments.length - 1];
 
             firstSegment?.bookingClassList?.forEach((bookingClass, index) => {
-    let baseAmountValue =
+              let baseAmountValue =
                 flight?.fareComponentGroupList?.fareComponentList[index]
                   ?.pricingOverview?.totalAmount?.value;
-    if (
+              if (
                 flight?.fareComponentGroupList?.fareComponentList[index]
                   ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
-    ) {
-      baseAmountValue =
-        Number(baseAmountValue) +
-        Number(
+              ) {
+                baseAmountValue =
+                  Number(baseAmountValue) +
+                  Number(
                     flight?.fareComponentGroupList?.fareComponentList[index]
                       ?.pricingOverview?.totalBaseFare?.extraCharges[0]?.value
                   );
@@ -615,7 +633,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 flightNumber_RT: isConnecting
                   ? lastSegment?.flightSegment?.flightNumber ?? null
                   : null,
-      stops: segments.length - 1,
+                stops: segments.length - 1,
                 flightDuration: isConnecting
                   ? connectingFlightDuration(
                       firstSegment?.flightSegment?.departureDateTimeUTC,
@@ -645,16 +663,16 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 cabinClassCode: bookingClass?.cabinClassCode
                   ? bookingClass?.cabinClassCode
                   : bookingClass?.resBookDesigCode,
-       cabin: bookingClass?.cabin,
-      resBookDesigCode: bookingClass?.resBookDesigCode,
-      resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
-      resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
+                cabin: bookingClass?.cabin,
+                resBookDesigCode: bookingClass?.resBookDesigCode,
+                resBookDesigQuantity: bookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode: bookingClass?.resBookDesigStatusCode,
 
                 fareGroupName_Connecting: connectingBookingClass?.fareGroupName,
                 cabinClassCode_Connecting: connectingBookingClass?.cabinClassCode
                   ? connectingBookingClass?.cabinClassCode
                   : connectingBookingClass?.resBookDesigCode,
-      cabin_Connecting: connectingBookingClass?.cabin,
+                cabin_Connecting: connectingBookingClass?.cabin,
                 resBookDesigCode_Connecting:
                   connectingBookingClass?.resBookDesigCode,
                 resBookDesigQuantity_Connecting:
@@ -662,8 +680,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 resBookDesigStatusCode_Connecting:
                   connectingBookingClass?.resBookDesigStatusCode,
 
-      baseAmount: baseAmountValue,
-      totalAmount: baseAmountValue,
+                baseAmount: baseAmountValue,
+                totalAmount: baseAmountValue,
                 currencyCode:
                   flight?.fareComponentGroupList?.fareComponentList[index]
                     ?.pricingOverview?.totalAmount?.currency?.code,
@@ -674,12 +692,12 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 flightSegment_Connecting: isConnecting
                   ? { ...lastSegment?.flightSegment }
                   : null,
-    };
+              };
 
-    oneWayFlightsData.push(flightData);
-  });
+              oneWayFlightsData.push(flightData);
+            });
 
-            } else {
+          } else {
               flight?.fareComponentGroupList?.boundList?.availFlightSegmentList?.bookingClassList.map(
                 (bookingClass, index) => {
                   let baseAmountValue =
@@ -1139,6 +1157,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                     flightSegment:
                       oneWayTripFlights?.fareComponentGroupList?.boundList
                         ?.availFlightSegmentList?.flightSegment,
+                    
+                    // Store combination info for matching
+                    specialFareCombinationId: bookingClass?.specialFareCombinationId || null,
+                    matchingJourneyDetails: bookingClass?.matchingJourneyDetails || null,
                   };
                   oneWayFlightsData.push(flightData);
                 }
@@ -1279,19 +1301,434 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 flightSegment:
                   oneWayTripFlights?.fareComponentGroupList?.boundList
                     ?.availFlightSegmentList?.flightSegment,
+                
+                // Store combination info for matching
+                specialFareCombinationId: oneWayTripFlights?.fareComponentGroupList?.boundList
+                  ?.availFlightSegmentList?.bookingClassList?.specialFareCombinationId || null,
+                matchingJourneyDetails: oneWayTripFlights?.fareComponentGroupList?.boundList
+                  ?.availFlightSegmentList?.bookingClassList?.matchingJourneyDetails || null,
               };
               oneWayFlightsData.push(flightData);
             }
           }
         }
       }
+      }
       flightClassListData.push(oneWayFlightsData.reverse());
 
       if (searchResultList.tripType === "ROUND_TRIP") {
         const twoWayFlightsData = [];
+        const oneWayTripFlights = getOriginDestinationOptionList(0);
         const twoWayTripFlights = getOriginDestinationOptionList(1);
 
-        if (Array.isArray(twoWayTripFlights)) {
+        // Check if airline is 8D by checking the first flight's airline code
+        const firstOutboundFlight = Array.isArray(oneWayTripFlights)
+          ? oneWayTripFlights[0]
+          : oneWayTripFlights;
+        const airlineCode =
+          firstOutboundFlight?.fareComponentGroupList?.boundList
+            ?.availFlightSegmentList?.[0]?.flightSegment?.airline?.code ||
+          (Array.isArray(firstOutboundFlight?.fareComponentGroupList)
+            ? firstOutboundFlight?.fareComponentGroupList[0]?.boundList
+                ?.availFlightSegmentList?.[0]?.flightSegment?.airline?.code
+            : null);
+
+        // Process fare combinations for airline 8D
+        if (airlineCode === "8D" && oneWayTripFlights && twoWayTripFlights) {
+          const formatTime = (dateTime) => {
+            const hours = getTimeInHours(dateTime);
+            const minutes = getTimeInMinutes(dateTime);
+            if (
+              typeof hours === "number" &&
+              !Number.isNaN(hours) &&
+              typeof minutes === "number" &&
+              !Number.isNaN(minutes)
+            ) {
+              return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+            }
+            return "--:--";
+          };
+
+          // Normalize to arrays
+          const outboundFlights = Array.isArray(oneWayTripFlights)
+            ? oneWayTripFlights
+            : [oneWayTripFlights];
+          const inboundFlights = Array.isArray(twoWayTripFlights)
+            ? twoWayTripFlights
+            : [twoWayTripFlights];
+
+          // Process each outbound flight
+          outboundFlights.forEach((outboundFlight) => {
+            const outboundFareGroup =
+              outboundFlight?.fareComponentGroupList;
+            // Extract outbound journeyReference
+            let outboundJourneyRef = null;
+            if (Array.isArray(outboundFareGroup)) {
+              outboundJourneyRef = outboundFareGroup[0]?.journeyReference;
+            } else if (outboundFareGroup?.journeyReference) {
+              outboundJourneyRef = outboundFareGroup.journeyReference;
+            } else if (outboundFlight?.fareComponentGroupList) {
+              const fcg = Array.isArray(outboundFlight.fareComponentGroupList)
+                ? outboundFlight.fareComponentGroupList[0]
+                : outboundFlight.fareComponentGroupList;
+              outboundJourneyRef = fcg?.journeyReference;
+            }
+            const outboundBound =
+              Array.isArray(outboundFareGroup)
+                ? outboundFareGroup[0]?.boundList
+                : outboundFareGroup?.boundList;
+            const outboundSegments =
+              Array.isArray(outboundBound?.availFlightSegmentList)
+                ? outboundBound?.availFlightSegmentList
+                : outboundBound?.availFlightSegmentList
+                ? [outboundBound?.availFlightSegmentList]
+                : [];
+
+            if (!outboundSegments.length) return;
+
+            const outboundFirstSegment = outboundSegments[0];
+            const outboundLastSegment =
+              outboundSegments[outboundSegments.length - 1];
+            const outboundBookingClasses =
+              outboundFirstSegment?.bookingClassList || [];
+
+            // Process each booking class in outbound
+            outboundBookingClasses.forEach((outboundBookingClass, outboundIndex) => {
+              // Get matching journey details
+              const matchingJourneyId =
+                outboundBookingClass?.matchingJourneyDetails?.journeyId;
+              const matchingReturnClass =
+                outboundBookingClass?.matchingJourneyDetails
+                  ?.returnResBookDesigCode;
+              const specialFareCombinationId =
+                outboundBookingClass?.specialFareCombinationId;
+
+              // Find matching inbound flight and booking class
+              let matchingInboundFlight = null;
+              let matchingInboundBookingClass = null;
+              let matchingInboundFareComponent = null;
+
+              inboundFlights.forEach((inboundFlight) => {
+                const inboundFareGroup =
+                  inboundFlight?.fareComponentGroupList;
+                const inboundBound =
+                  Array.isArray(inboundFareGroup)
+                    ? inboundFareGroup[0]?.boundList
+                    : inboundFareGroup?.boundList;
+                const inboundSegments =
+                  Array.isArray(inboundBound?.availFlightSegmentList)
+                    ? inboundBound?.availFlightSegmentList
+                    : inboundBound?.availFlightSegmentList
+                    ? [inboundBound?.availFlightSegmentList]
+                    : [];
+
+                if (!inboundSegments.length) return;
+
+                const inboundFirstSegment = inboundSegments[0];
+                const inboundBookingClasses =
+                  inboundFirstSegment?.bookingClassList || [];
+
+                // Find matching booking class
+                inboundBookingClasses.forEach((inboundBookingClass, inboundIndex) => {
+                  // Extract journeyReference - it can be at different levels
+                  let inboundJourneyRef = null;
+                  if (Array.isArray(inboundFareGroup)) {
+                    inboundJourneyRef = inboundFareGroup[0]?.journeyReference;
+                  } else if (inboundFareGroup?.journeyReference) {
+                    inboundJourneyRef = inboundFareGroup.journeyReference;
+                  } else if (inboundFlight?.fareComponentGroupList) {
+                    const fcg = Array.isArray(inboundFlight.fareComponentGroupList)
+                      ? inboundFlight.fareComponentGroupList[0]
+                      : inboundFlight.fareComponentGroupList;
+                    inboundJourneyRef = fcg?.journeyReference;
+                  }
+
+                  // Match by specialFareCombinationId or matchingJourneyDetails
+                  const matchesByCombinationId =
+                    specialFareCombinationId &&
+                    inboundBookingClass?.specialFareCombinationId ===
+                      specialFareCombinationId;
+                  const matchesByJourneyDetails =
+                    matchingJourneyId &&
+                    String(inboundJourneyRef) === String(matchingJourneyId) &&
+                    inboundBookingClass?.resBookDesigCode === matchingReturnClass;
+
+                  if (matchesByCombinationId || matchesByJourneyDetails) {
+                    matchingInboundFlight = inboundFlight;
+                    matchingInboundBookingClass = inboundBookingClass;
+                    // Get the corresponding fare component - try by index first, then by matching resBookDesigCode
+                    const inboundFareComponents =
+                      Array.isArray(inboundFareGroup)
+                        ? inboundFareGroup[0]?.fareComponentList
+                        : inboundFareGroup?.fareComponentList;
+                    // Try to find by index first
+                    if (inboundFareComponents?.[inboundIndex]) {
+                      matchingInboundFareComponent =
+                        inboundFareComponents[inboundIndex];
+                    } else if (inboundFareComponents) {
+                      // Fallback: find by matching resBookDesigCode in fareInfoList
+                      matchingInboundFareComponent = inboundFareComponents.find(
+                        (fc) =>
+                          fc?.passengerFareInfoList?.[0]?.fareInfoList?.[0]
+                            ?.resBookDesigCode ===
+                          inboundBookingClass?.resBookDesigCode
+                      );
+                    }
+                  }
+                });
+              });
+
+              // If no match found, skip this combination
+              if (!matchingInboundFlight || !matchingInboundBookingClass) {
+                return;
+              }
+
+              // Get inbound segments and extract journeyReference from matching flight
+              const inboundFareGroup =
+                matchingInboundFlight?.fareComponentGroupList;
+              // Extract journeyReference from the matching inbound flight
+              let inboundJourneyRef = null;
+              if (Array.isArray(inboundFareGroup)) {
+                inboundJourneyRef = inboundFareGroup[0]?.journeyReference;
+              } else if (inboundFareGroup?.journeyReference) {
+                inboundJourneyRef = inboundFareGroup.journeyReference;
+              } else if (matchingInboundFlight?.fareComponentGroupList) {
+                const fcg = Array.isArray(matchingInboundFlight.fareComponentGroupList)
+                  ? matchingInboundFlight.fareComponentGroupList[0]
+                  : matchingInboundFlight.fareComponentGroupList;
+                inboundJourneyRef = fcg?.journeyReference;
+              }
+              const inboundBound =
+                Array.isArray(inboundFareGroup)
+                  ? inboundFareGroup[0]?.boundList
+                  : inboundFareGroup?.boundList;
+              const inboundSegments =
+                Array.isArray(inboundBound?.availFlightSegmentList)
+                  ? inboundBound?.availFlightSegmentList
+                  : inboundBound?.availFlightSegmentList
+                  ? [inboundBound?.availFlightSegmentList]
+                  : [];
+              const inboundFirstSegment = inboundSegments[0];
+              const inboundLastSegment =
+                inboundSegments[inboundSegments.length - 1];
+
+              // Get pricing from outbound fare component
+              const outboundFareComponents =
+                Array.isArray(outboundFareGroup)
+                  ? outboundFareGroup[0]?.fareComponentList
+                  : outboundFareGroup?.fareComponentList;
+              const outboundFareComponent =
+                outboundFareComponents?.[outboundIndex];
+
+              // Get individual amounts for outbound and inbound
+              let outboundAmount =
+                outboundFareComponent?.pricingOverview?.totalAmount?.value || 0;
+              let inboundAmount =
+                matchingInboundFareComponent?.pricingOverview?.totalAmount
+                  ?.value || 0;
+              // For round trip, we'll use individual amounts for each leg
+              const totalAmount = Number(outboundAmount) + Number(inboundAmount);
+
+              // Build flight data
+              const isOutboundConnecting = outboundSegments.length > 1;
+              const isInboundConnecting = inboundSegments.length > 1;
+
+              const flightData = {
+                // Outbound flight details
+                connectingFlight: isOutboundConnecting,
+                flightName:
+                  outboundFirstSegment?.flightSegment?.airline?.companyFullName,
+                flightNumber: outboundFirstSegment?.flightSegment?.flightNumber,
+                flightNumber_RT: isOutboundConnecting
+                  ? outboundLastSegment?.flightSegment?.flightNumber ?? null
+                  : null,
+                stops: outboundSegments.length - 1,
+                flightDuration: isOutboundConnecting
+                  ? connectingFlightDuration(
+                      outboundFirstSegment?.flightSegment?.departureDateTimeUTC,
+                      outboundLastSegment?.flightSegment?.arrivalDateTimeUTC
+                    )
+                  : outboundFirstSegment?.flightSegment?.journeyDuration?.slice(
+                      2
+                    ),
+                departureCity:
+                  outboundFirstSegment?.flightSegment?.departureAirport
+                    ?.locationName,
+                stopOverCity: isOutboundConnecting
+                  ? outboundFirstSegment?.flightSegment?.arrivalAirport
+                      ?.locationCode ?? null
+                  : null,
+                departureCityCode:
+                  outboundFirstSegment?.flightSegment?.departureAirport
+                    ?.locationCode,
+                departureTime: formatTime(
+                  outboundFirstSegment?.flightSegment?.departureDateTime
+                ),
+                arrivalCity:
+                  outboundLastSegment?.flightSegment?.arrivalAirport
+                    ?.locationName,
+                arrivalCityCode:
+                  outboundLastSegment?.flightSegment?.arrivalAirport
+                    ?.locationCode,
+                arrivalTime: formatTime(
+                  outboundLastSegment?.flightSegment?.arrivalDateTime
+                ),
+
+                // Outbound booking class details
+                fareGroupName: outboundBookingClass?.fareGroupName,
+                cabinClassCode: outboundBookingClass?.cabinClassCode
+                  ? outboundBookingClass?.cabinClassCode
+                  : outboundBookingClass?.resBookDesigCode,
+                cabin: outboundBookingClass?.cabin,
+                resBookDesigCode: outboundBookingClass?.resBookDesigCode,
+                resBookDesigQuantity: outboundBookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode:
+                  outboundBookingClass?.resBookDesigStatusCode,
+
+                // Inbound flight details
+                returnFlightName:
+                  inboundFirstSegment?.flightSegment?.airline?.companyFullName,
+                returnFlightNumber:
+                  inboundFirstSegment?.flightSegment?.flightNumber,
+                returnFlightNumber_RT: isInboundConnecting
+                  ? inboundLastSegment?.flightSegment?.flightNumber ?? null
+                  : null,
+                returnStops: inboundSegments.length - 1,
+                returnFlightDuration: isInboundConnecting
+                  ? connectingFlightDuration(
+                      inboundFirstSegment?.flightSegment?.departureDateTimeUTC,
+                      inboundLastSegment?.flightSegment?.arrivalDateTimeUTC
+                    )
+                  : inboundFirstSegment?.flightSegment?.journeyDuration?.slice(
+                      2
+                    ),
+                returnDepartureCity:
+                  inboundFirstSegment?.flightSegment?.departureAirport
+                    ?.locationName,
+                returnStopOverCity: isInboundConnecting
+                  ? inboundFirstSegment?.flightSegment?.arrivalAirport
+                      ?.locationCode ?? null
+                  : null,
+                returnDepartureCityCode:
+                  inboundFirstSegment?.flightSegment?.departureAirport
+                    ?.locationCode,
+                returnDepartureTime: formatTime(
+                  inboundFirstSegment?.flightSegment?.departureDateTime
+                ),
+                returnArrivalCity:
+                  inboundLastSegment?.flightSegment?.arrivalAirport
+                    ?.locationName,
+                returnArrivalCityCode:
+                  inboundLastSegment?.flightSegment?.arrivalAirport
+                    ?.locationCode,
+                returnArrivalTime: formatTime(
+                  inboundLastSegment?.flightSegment?.arrivalDateTime
+                ),
+
+                // Inbound booking class details
+                returnFareGroupName: matchingInboundBookingClass?.fareGroupName,
+                returnCabinClassCode: matchingInboundBookingClass?.cabinClassCode
+                  ? matchingInboundBookingClass?.cabinClassCode
+                  : matchingInboundBookingClass?.resBookDesigCode,
+                returnCabin: matchingInboundBookingClass?.cabin,
+                returnResBookDesigCode:
+                  matchingInboundBookingClass?.resBookDesigCode,
+                returnResBookDesigQuantity:
+                  matchingInboundBookingClass?.resBookDesigQuantity,
+                returnResBookDesigStatusCode:
+                  matchingInboundBookingClass?.resBookDesigStatusCode,
+
+                // Pricing - use outbound amount only for outbound flight display
+                baseAmount: Number(outboundAmount),
+                totalAmount: Number(outboundAmount),
+                currencyCode:
+                  outboundFareComponent?.pricingOverview?.totalAmount?.currency
+                    ?.code ||
+                  matchingInboundFareComponent?.pricingOverview?.totalAmount
+                    ?.currency?.code,
+                passengerFareInfoList:
+                  outboundFareComponent?.passengerFareInfoList,
+                returnPassengerFareInfoList:
+                  matchingInboundFareComponent?.passengerFareInfoList,
+
+                // Flight segments
+                flightSegment: { ...outboundFirstSegment?.flightSegment },
+                flightSegment_Connecting: isOutboundConnecting
+                  ? { ...outboundLastSegment?.flightSegment }
+                  : null,
+                returnFlightSegment: { ...inboundFirstSegment?.flightSegment },
+                returnFlightSegment_Connecting: isInboundConnecting
+                  ? { ...inboundLastSegment?.flightSegment }
+                  : null,
+
+                // Store fare combination info
+                specialFareCombinationId: specialFareCombinationId,
+                matchingJourneyDetails: outboundBookingClass?.matchingJourneyDetails || null,
+                journeyReference: outboundJourneyRef, // Store outbound journeyReference
+              };
+
+              // Push outbound flight data (for UI display in outbound section)
+              oneWayFlightsData.push(flightData);
+
+              // Create separate return flight entry for UI display (using standard field names)
+              const returnFlightData = {
+                // Return flight details (using standard field names for UI compatibility)
+                connectingFlight: isInboundConnecting,
+                flightName: inboundFirstSegment?.flightSegment?.airline?.companyFullName,
+                flightNumber: inboundFirstSegment?.flightSegment?.flightNumber,
+                flightNumber_RT: isInboundConnecting
+                  ? inboundLastSegment?.flightSegment?.flightNumber ?? null
+                  : null,
+                stops: inboundSegments.length - 1,
+                flightDuration: isInboundConnecting
+                  ? connectingFlightDuration(
+                      inboundFirstSegment?.flightSegment?.departureDateTimeUTC,
+                      inboundLastSegment?.flightSegment?.arrivalDateTimeUTC
+                    )
+                  : inboundFirstSegment?.flightSegment?.journeyDuration?.slice(2),
+                departureCity: inboundFirstSegment?.flightSegment?.departureAirport?.locationName,
+                stopOverCity: isInboundConnecting
+                  ? inboundFirstSegment?.flightSegment?.arrivalAirport?.locationCode ?? null
+                  : null,
+                departureCityCode: inboundFirstSegment?.flightSegment?.departureAirport?.locationCode,
+                departureTime: formatTime(inboundFirstSegment?.flightSegment?.departureDateTime),
+                arrivalCity: inboundLastSegment?.flightSegment?.arrivalAirport?.locationName,
+                arrivalCityCode: inboundLastSegment?.flightSegment?.arrivalAirport?.locationCode,
+                arrivalTime: formatTime(inboundLastSegment?.flightSegment?.arrivalDateTime),
+
+                // Return booking class details
+                fareGroupName: matchingInboundBookingClass?.fareGroupName,
+                cabinClassCode: matchingInboundBookingClass?.cabinClassCode
+                  ? matchingInboundBookingClass?.cabinClassCode
+                  : matchingInboundBookingClass?.resBookDesigCode,
+                cabin: matchingInboundBookingClass?.cabin,
+                resBookDesigCode: matchingInboundBookingClass?.resBookDesigCode,
+                resBookDesigQuantity: matchingInboundBookingClass?.resBookDesigQuantity,
+                resBookDesigStatusCode: matchingInboundBookingClass?.resBookDesigStatusCode,
+
+                // Pricing
+                baseAmount: inboundAmount,
+                totalAmount: inboundAmount,
+                currencyCode: matchingInboundFareComponent?.pricingOverview?.totalAmount?.currency?.code,
+                passengerFareInfoList: matchingInboundFareComponent?.passengerFareInfoList,
+
+                // Flight segments
+                flightSegment: { ...inboundFirstSegment?.flightSegment },
+                flightSegment_Connecting: isInboundConnecting
+                  ? { ...inboundLastSegment?.flightSegment }
+                  : null,
+
+                // Store combination info for matching
+                specialFareCombinationId: specialFareCombinationId,
+                matchingJourneyDetails: matchingInboundBookingClass?.matchingJourneyDetails || null,
+                journeyReference: inboundJourneyRef, // Store return journeyReference
+              };
+
+              // Push return flight data (for UI display in return section)
+              twoWayFlightsData.push(returnFlightData);
+            });
+          });
+        } else if (Array.isArray(twoWayTripFlights)) {
           twoWayTripFlights?.map((flight) => {
             if (Array.isArray(flight?.fareComponentGroupList)) {
               flight?.fareComponentGroupList[0]?.boundList?.availFlightSegmentList?.bookingClassList.map(
@@ -1401,6 +1838,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                       flight?.fareComponentGroupList[0]?.fareComponentList[
                         index
                       ]?.pricingOverview?.totalAmount?.value,
+                    
+                    // Store combination ID for matching
+                    specialFareCombinationId: bookingClass?.specialFareCombinationId || null,
+                    matchingJourneyDetails: bookingClass?.matchingJourneyDetails,
                   };
                   twoWayFlightsData.push(flightData);
 
@@ -1453,6 +1894,9 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                     lastSegment?.bookingClassList?.[0] ||
                     bookingClass
                   : null;
+
+                // Extract specialFareCombinationId from booking class for airline 8D
+                const specialFareCombinationId = bookingClass?.specialFareCombinationId || null;
 
                 const flightData = {
                   connectingFlight: isConnecting,
@@ -1521,6 +1965,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                   flightSegment_Connecting: isConnecting
                     ? { ...lastSegment?.flightSegment }
                     : null,
+                  
+                  // Store combination ID for matching
+                  specialFareCombinationId: specialFareCombinationId,
+                  matchingJourneyDetails: bookingClass?.matchingJourneyDetails,
                 };
 
                 twoWayFlightsData.push(flightData);
@@ -1645,6 +2093,10 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 flightSegment_Connecting: isConnecting
                   ? { ...lastSegment?.flightSegment }
                   : null,
+                
+                // Store combination ID for matching
+                specialFareCombinationId: bookingClass?.specialFareCombinationId || null,
+                matchingJourneyDetails: bookingClass?.matchingJourneyDetails,
               };
 
               twoWayFlightsData.push(flightData);
@@ -1724,6 +2176,123 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
   const handleClose = () => setShowBookingDetailsDialog(false);
   const handleShow = () => setShowBookingDetailsDialog(true);
+
+  // Clear selection function
+  const handleClearSelection = () => {
+    setoneWayTripDetails(null);
+    setTwoWayTripDetails(null);
+  };
+
+  // Check if a return flight is a valid combination with the selected outbound flight
+  const isValidCombination = (returnFlight, outboundFlight) => {
+    if (!outboundFlight || !returnFlight) return true; // If no outbound selected, all are valid
+    
+    // Get outbound and return journeyReferences (this is what matchingJourneyDetails.journeyId refers to)
+    const outboundJourneyRef = outboundFlight?.journeyReference;
+    const returnJourneyRef = returnFlight?.journeyReference;
+    
+    // Get outbound and return flight numbers (for fallback matching)
+    const outboundFlightNumber = outboundFlight?.flightSegment?.flightNumber ||
+                                outboundFlight?.flightNumber;
+    const returnFlightNumber = returnFlight?.returnFlightSegment?.flightNumber ||
+                              returnFlight?.returnFlightNumber ||
+                              returnFlight?.flightSegment?.flightNumber ||
+                              returnFlight?.flightNumber;
+    
+    // Get outbound and return flight classes
+    // Handle both regular structure and combined structure (for airline 8D)
+    const outboundClass = outboundFlight?.resBookDesigCode;
+    const returnFlightClass = returnFlight?.returnResBookDesigCode ||
+                              returnFlight?.resBookDesigCode;
+    
+    // Check if this is airline 8D (has combination info)
+    const outboundCombinationId = outboundFlight?.specialFareCombinationId;
+    const returnCombinationId = returnFlight?.specialFareCombinationId;
+    const hasOutboundMatchingDetails = outboundFlight?.matchingJourneyDetails;
+    const hasReturnMatchingDetails = returnFlight?.matchingJourneyDetails;
+    const isAirline8D = !!(outboundCombinationId || hasOutboundMatchingDetails || returnCombinationId || hasReturnMatchingDetails);
+    
+    // If not airline 8D (no combination info), allow all combinations
+    if (!isAirline8D) {
+      return true;
+    }
+    
+    // Method 1: Check specialFareCombinationId match (exact match)
+    if (outboundCombinationId && returnCombinationId) {
+      if (outboundCombinationId === returnCombinationId) {
+        return true; // Exact match
+      }
+    }
+    
+    // Method 2: Use matchingJourneyDetails from outbound
+    // Outbound's matchingJourneyDetails tells us which return journeyReference to look for
+    if (hasOutboundMatchingDetails) {
+      const requiredReturnJourney = outboundFlight.matchingJourneyDetails.journeyId;
+      const requiredReturnClass = outboundFlight.matchingJourneyDetails.returnResBookDesigCode;
+      
+      // Check if return flight's journeyReference matches what outbound expects
+      const matchesJourney = returnJourneyRef && String(returnJourneyRef) === String(requiredReturnJourney);
+      const matchesClass = returnFlightClass === requiredReturnClass;
+      
+      if (matchesJourney && matchesClass) {
+        return true;
+      }
+    }
+    
+    // Method 3: Use matchingJourneyDetails from return flight
+    // Return flight's matchingJourneyDetails tells us which outbound journeyReference it matches
+    if (hasReturnMatchingDetails) {
+      const matchingOutboundJourney = returnFlight.matchingJourneyDetails.journeyId;
+      const matchingOutboundClass = returnFlight.matchingJourneyDetails.returnResBookDesigCode;
+      
+      // Check if outbound's journeyReference matches what return expects
+      const matchesOutboundJourney = outboundJourneyRef && String(outboundJourneyRef) === String(matchingOutboundJourney);
+      const matchesOutboundClass = outboundClass === matchingOutboundClass;
+      
+      if (matchesOutboundJourney && matchesOutboundClass) {
+        return true;
+      }
+    }
+    
+    // Method 4: Parse specialFareCombinationId from outbound
+    if (outboundCombinationId) {
+      const parts = outboundCombinationId.split('-');
+      if (parts.length >= 4) {
+        const outboundJourney = parts[0]; // e.g., "833" from "833-V-834-V"
+        const outboundClassFromId = parts[1];   // e.g., "V" from "833-V-834-V"
+        const returnJourney = parts[2];   // e.g., "834" from "833-V-834-V"
+        const returnClass = parts[3];     // e.g., "V" from "833-V-834-V"
+        
+        // Verify outbound matches the combination ID (using journeyReference if available, otherwise flightNumber)
+        const outboundMatches = (outboundJourneyRef && String(outboundJourneyRef) === String(outboundJourney)) ||
+                               (outboundFlightNumber && String(outboundFlightNumber) === String(outboundJourney));
+        const outboundClassMatches = outboundClass === outboundClassFromId;
+        
+        if (outboundMatches && outboundClassMatches) {
+          // Check if return flight matches the combination (using journeyReference if available, otherwise flightNumber)
+          const matchesReturnJourney = (returnJourneyRef && String(returnJourneyRef) === String(returnJourney)) ||
+                                     (returnFlightNumber && String(returnFlightNumber) === String(returnJourney));
+          const matchesReturnClass = returnFlightClass === returnClass;
+          
+          if (matchesReturnJourney && matchesReturnClass) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    // If we have combination info (airline 8D) but couldn't match by any method, it's not valid
+    return false;
+  };
+
+  // Generate unique ID for flight selection
+  const getFlightUniqueId = (flight) => {
+    if (!flight) return null;
+    // Use resBookDesigStatusCode if available (for airlines like OV where multiple options have same resBookDesigCode)
+    // Otherwise fall back to resBookDesigCode
+    const classIdentifier = flight.resBookDesigStatusCode || flight.resBookDesigCode || '';
+    return `${flight.flightNumber || ''}-${classIdentifier}-${flight.flightNumber_RT || ''}-${flight.specialFareCombinationId || ''}`;
+  };
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -2058,7 +2627,7 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 //                     twoWayFlightsData.push(flightData);
 //                   }
 // );
-
+  
   const handleSearchFlights = () => {
     const adultCount = selectedAdult || 0;
     const childCount = selectedChild || 0;
@@ -2216,7 +2785,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
       let updatedFlightClassList = flightClassList[0]?.map((flightClass) => {
         if (
           flightClass?.flightNumber === list?.flightNumber &&
-          flightClass?.resBookDesigStatusCode === list?.resBookDesigStatusCode
+          (flightClass?.resBookDesigStatusCode || flightClass?.resBookDesigCode) === 
+          (list?.resBookDesigStatusCode || list?.resBookDesigCode)
         ) {
           return {
             ...tripDetails,
@@ -2239,7 +2809,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
       let updatedFlightClassList = flightClassList[1]?.map((flightClass) => {
         if (
           flightClass?.flightNumber === list?.flightNumber &&
-          flightClass?.resBookDesigStatusCode === list?.resBookDesigStatusCode
+          (flightClass?.resBookDesigStatusCode || flightClass?.resBookDesigCode) === 
+          (list?.resBookDesigStatusCode || list?.resBookDesigCode)
         ) {
           return {
             ...tripDetails,
@@ -2374,6 +2945,26 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                 <div className="onward-return-wrapper">
                   {tripType === "ROUND_TRIP" ? (
                     <>
+                      {/* Clear Selection Button */}
+                      {(oneWayTripDetails || twoWayTripDetails) && (
+                        <div style={{ marginBottom: "10px", textAlign: "right" }}>
+                          <button
+                            onClick={handleClearSelection}
+                            style={{
+                              padding: "8px 16px",
+                              backgroundColor: "#ef5443",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "14px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Clear Selection
+                          </button>
+                        </div>
+                      )}
                       {/* <FormLabel className="" component="legend">Choose an option:</FormLabel> */}
                       <div className="onward-btn-wrapper">
                         <button
@@ -2517,11 +3108,13 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   </div>
                                   <div className="seperator" />
                                   <div className="cabin">{list?.cabin}</div>
+                                  {list?.fareGroupName && (
+                                    <div className="design-code">
+                                       {list?.fareGroupName}
+                                    </div>
+                                  )}
                                   <div className="design-code">
                                     Class - {list?.resBookDesigCode}
-                                  </div>
-                                  <div className="design-code">
-                                    {list?.fareGroupName}
                                   </div>
                                   <div className="design-code1">
                                     Seats Available -{" "}
@@ -2655,21 +3248,19 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       <Radio
                                         className="check-btn"
                                         checked={
-                                          list?.flightNumber ===
-                                            oneWayTripDetails?.flightNumber &&
-                                          list?.resBookDesigStatusCode ===
-                                            oneWayTripDetails?.resBookDesigStatusCode &&
-                                          list?.flightNumber_RT ===
-                                            oneWayTripDetails?.flightNumber_RT
+                                          getFlightUniqueId(list) ===
+                                          getFlightUniqueId(oneWayTripDetails)
                                         }
-                                        onChange={() =>
+                                        onChange={() => {
                                           setoneWayTripDetails(
                                             JSON.parse(JSON.stringify(list))
-                                          )
-                                        }
-                                        value="a"
-                                        name="radio-buttons"
-                                        inputProps={{ "aria-label": "A" }}
+                                          );
+                                          // Clear return selection when outbound changes
+                                          setTwoWayTripDetails(null);
+                                        }}
+                                        value={getFlightUniqueId(list) || `outbound-${index}`}
+                                        name="outbound-radio-buttons"
+                                        inputProps={{ "aria-label": `Outbound flight ${index}` }}
                                         // disabled={loggedInUserDetails?.role === "admin"}
 
                                         sx={{
@@ -2924,8 +3515,8 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       checked={
                                         list?.flightNumber ===
                                           oneWayTripDetails?.flightNumber &&
-                                        list?.resBookDesigCode ===
-                                          oneWayTripDetails?.resBookDesigCode &&
+                                        (list?.resBookDesigStatusCode || list?.resBookDesigCode) ===
+                                          (oneWayTripDetails?.resBookDesigStatusCode || oneWayTripDetails?.resBookDesigCode) &&
                                         list?.flightNumber_RT ===
                                           oneWayTripDetails?.flightNumber_RT
                                       }
@@ -2966,7 +3557,26 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
                 {selectedValue === "return" && (
                   <div className="search-result-col">
+                    {/* Show combination message when outbound is selected */}
+                    {oneWayTripDetails && (
+                      <div
+                        style={{
+                          padding: "12px",
+                          marginBottom: "15px",
+                          backgroundColor: "#fff3cd",
+                          border: "1px solid #ffc107",
+                          borderRadius: "4px",
+                          color: "#856404",
+                          fontSize: "14px",
+                        }}
+                      >
+                        <strong>Note:</strong> Only flights with valid fare combinations are selectable. 
+                        Please select a return flight that matches your selected depart flight.
+                      </div>
+                    )}
                     {flightClassList[1]?.map((list, index) => {
+                      const isValid = isValidCombination(list, oneWayTripDetails);
+                      const isDisabled = oneWayTripDetails && !isValid;
                       let passengerFareInfoList = Array.isArray(
                         list?.passengerFareInfoList
                       )
@@ -3013,8 +3623,101 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
 
                       // round trip
                       return (
-                        <div>
-                          <div className="flight-card-wrapper">
+                        <div
+                          key={getFlightUniqueId(list) || index}
+                          style={{
+                            opacity: isDisabled ? 0.3 : 1,
+                            filter: isDisabled ? "blur(5px) grayscale(80%)" : "none",
+                            position: "relative",
+                            cursor: isDisabled ? "not-allowed" : "pointer",
+                            userSelect: isDisabled ? "none" : "auto",
+                          }}
+                          onClick={(e) => {
+                            if (isDisabled) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              return false;
+                            }
+                          }}
+                          onMouseDown={(e) => {
+                            if (isDisabled) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              return false;
+                            }
+                          }}
+                        >
+                          {isDisabled && (
+                            <div
+                              style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                zIndex: 10000,
+                                borderRadius: "8px",
+                                pointerEvents: "auto",
+                                cursor: "not-allowed",
+                              }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                              }}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                              }}
+                              onTouchStart={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                              }}
+                            >
+                              <div
+                                style={{
+                                  backgroundColor: "rgba(239, 84, 67, 0.9)",
+                                  color: "#fff",
+                                  padding: "12px 24px",
+                                  borderRadius: "6px",
+                                  fontSize: "14px",
+                                  fontWeight: "600",
+                                  whiteSpace: "nowrap",
+                                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                                  pointerEvents: "none",
+                                }}
+                              >
+                                Not a valid combination
+                              </div>
+                            </div>
+                          )}
+                          <div 
+                            className="flight-card-wrapper"
+                            style={{
+                              pointerEvents: isDisabled ? "none" : "auto",
+                              cursor: isDisabled ? "not-allowed" : "pointer",
+                            }}
+                            onClick={(e) => {
+                              if (isDisabled) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                              }
+                            }}
+                            onMouseDown={(e) => {
+                              if (isDisabled) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                              }
+                            }}
+                          >
                             <div className="flight-section-info">
                               <div className="flight-name-details">
                                 <div className="flight-logo">
@@ -3055,11 +3758,13 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   </div>
                                   <div className="seperator" />
                                   <div className="cabin">{list?.cabin}</div>
+                                  {list?.fareGroupName && (
+                                    <div className="design-code">
+                                      Fare - {list?.fareGroupName}
+                                    </div>
+                                  )}
                                   <div className="design-code">
                                     Class - {list?.resBookDesigCode}
-                                  </div>
-                                  <div className="design-code">
-                                    {list?.fareGroupName}
                                   </div>
                                   <div className="design-code1">
                                     Seats Available -{" "}
@@ -3146,10 +3851,22 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     //   )
                                     // }
                                     disabled={
-                                      loggedInUserDetails?.role !== "admin" &&
+                                      isDisabled ||
+                                      (loggedInUserDetails?.role !== "admin" &&
                                       loggedInUserDetails?.can_create_booking !==
-                                        1
+                                        1)
                                     }
+                                    onClick={(e) => {
+                                      if (isDisabled) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        return false;
+                                      }
+                                    }}
+                                    style={{
+                                      cursor: isDisabled ? "not-allowed" : "pointer",
+                                      opacity: isDisabled ? 0.5 : 1,
+                                    }}
                                   >
                                     {passengerFareInfoList?.fareInfoList
                                       ?.farePkgInfoList &&
@@ -3197,22 +3914,30 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                   </div> */}
                                     <Radio
                                       checked={
-                                        list?.flightNumber ===
-                                          twoWayTripDetails?.flightNumber &&
-                                        list?.resBookDesigStatusCode ===
-                                          twoWayTripDetails?.resBookDesigStatusCode &&
-                                        list?.flightNumber_RT ===
-                                          twoWayTripDetails?.flightNumber_RT
+                                        getFlightUniqueId(list) ===
+                                        getFlightUniqueId(twoWayTripDetails)
                                       }
-                                      onChange={() =>
+                                      onChange={(e) => {
+                                        if (isDisabled) {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          return false;
+                                        }
                                         setTwoWayTripDetails(
                                           JSON.parse(JSON.stringify(list))
-                                        )
-                                      }
-                                      value="a"
-                                      name="radio-buttons"
-                                      inputProps={{ "aria-label": "A" }}
-                                      // disabled={loggedInUserDetails?.role === "admin"}
+                                        );
+                                      }}
+                                      onClick={(e) => {
+                                        if (isDisabled) {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          return false;
+                                        }
+                                      }}
+                                      value={getFlightUniqueId(list) || `return-${index}`}
+                                      name="return-radio-buttons"
+                                      inputProps={{ "aria-label": `Return flight ${index}` }}
+                                      disabled={isDisabled || (loggedInUserDetails?.role !== "admin" && loggedInUserDetails?.can_create_booking !== 1)}
 
                                       sx={{
                                         color: "#ffffff", // Unchecked radio button color
@@ -3263,7 +3988,23 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                     )}
                                  */}
 
-                                  <div className="caret-wrapper">
+                                  <div 
+                                    className="caret-wrapper"
+                                    onClick={(e) => {
+                                      if (isDisabled) {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                      } else {
+                                        setShowTwoWayFlexiFareCard(prevIndex =>
+                                          prevIndex === index ? null : index
+                                        );
+                                      }
+                                    }}
+                                    style={{
+                                      cursor: isDisabled ? "not-allowed" : "pointer",
+                                      pointerEvents: isDisabled ? "none" : "auto",
+                                    }}
+                                  >
                                     <span
                                       className={`caret ${
                                         showTwoWayFlexiFareCard === index
@@ -3285,13 +4026,20 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                 <div className="head-card-wrapper">
                                   <div
                                     className="flexi-fare-card"
-                                    onClick={() =>
-                                      handleFlexiSelectOnList(
-                                        list,
-                                        null,
-                                        "twoWay"
-                                      )
-                                    }
+                                    onClick={() => {
+                                      if (!isDisabled) {
+                                        handleFlexiSelectOnList(
+                                          list,
+                                          null,
+                                          "twoWay"
+                                        );
+                                      }
+                                    }}
+                                    style={{
+                                      cursor: isDisabled ? "not-allowed" : "pointer",
+                                      pointerEvents: isDisabled ? "none" : "auto",
+                                      opacity: isDisabled ? 0.5 : 1,
+                                    }}
                                   >
                                     <div className="flexi-fare-name-wrapper">
                                       <div className="flexi-fare-name">
@@ -3314,13 +4062,20 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                       return (
                                         <div
                                           className="flexi-fare-card"
-                                          onClick={() =>
-                                            handleFlexiSelectOnList(
-                                              list,
-                                              pkg,
-                                              "twoWay"
-                                            )
-                                          }
+                                          onClick={() => {
+                                            if (!isDisabled) {
+                                              handleFlexiSelectOnList(
+                                                list,
+                                                pkg,
+                                                "twoWay"
+                                              );
+                                            }
+                                          }}
+                                          style={{
+                                            cursor: isDisabled ? "not-allowed" : "pointer",
+                                            pointerEvents: isDisabled ? "none" : "auto",
+                                            opacity: isDisabled ? 0.5 : 1,
+                                          }}
                                         >
                                           {index === 0 && (
                                             <div className="flexi-fare-name-wrapper">
@@ -3353,13 +4108,19 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                           {index === 1 && (
                                             <div
                                               className="flexi-fare-name-wrapper"
-                                              onClick={() =>
-                                                handleFlexiSelectOnList(
-                                                  list,
-                                                  pkg,
-                                                  "twoWay"
-                                                )
-                                              }
+                                              onClick={() => {
+                                                if (!isDisabled) {
+                                                  handleFlexiSelectOnList(
+                                                    list,
+                                                    pkg,
+                                                    "twoWay"
+                                                  );
+                                                }
+                                              }}
+                                              style={{
+                                                cursor: isDisabled ? "not-allowed" : "pointer",
+                                                pointerEvents: isDisabled ? "none" : "auto",
+                                              }}
                                             >
                                               <div className="header">
                                                 Comfort
@@ -3390,13 +4151,19 @@ const SearchResults = ({ searchResult, setFetchUserDetails }) => {
                                           {index === 2 && (
                                             <div
                                               className="flexi-fare-name-wrapper"
-                                              onClick={() =>
-                                                handleFlexiSelectOnList(
-                                                  list,
-                                                  pkg,
-                                                  "twoWay"
-                                                )
-                                              }
+                                              onClick={() => {
+                                                if (!isDisabled) {
+                                                  handleFlexiSelectOnList(
+                                                    list,
+                                                    pkg,
+                                                    "twoWay"
+                                                  );
+                                                }
+                                              }}
+                                              style={{
+                                                cursor: isDisabled ? "not-allowed" : "pointer",
+                                                pointerEvents: isDisabled ? "none" : "auto",
+                                              }}
                                             >
                                               <div className="header">
                                                 Comfort Plus
